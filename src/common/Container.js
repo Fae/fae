@@ -21,6 +21,7 @@ export default class Container {
         this.indices = new Uint16Array();
 
 
+
         this.texture = texture;
         this.transform = mat4.create();
         this.vertices = new Float32Array(20); // 4 * (vec2-position + vec2-tex-coord + uint8-color)
