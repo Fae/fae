@@ -2,19 +2,30 @@
     <head>
         <script src="../../node_modules/gl-matrix/dist/gl-matrix-min.js"></script>
 
-        <script src="../../src/Color.js"></script>
-        <script src="../../src/RenderStates.js"></script>
-        <script src="../../src/RenderTarget.js"></script>
-        <script src="../../src/Sprite.js"></script>
-        <script src="../../src/Renderer.js"></script>
+        <script src="../../src/core/Consts.js"></script>
+        <script src="../../src/core/VertexView.js"></script>
+        <script src="../../src/core/VertexArray.js"></script>
+        <script src="../../src/core/RenderStates.js"></script>
+        <script src="../../src/core/RenderTarget.js"></script>
+        <script src="../../src/core/Renderer.js"></script>
+
+        <script src="../../src/common/Color.js"></script>
+        <script src="../../src/common/Sprite.js"></script>
     </head>
     <body>
         <canvas id="view" width="1024" height="1024" />
 
         <script>
-            var renderer = new Renderer(document.getElementById('view'));
-            var sprite = new Sprite()
-            renderer.draw
+            let renderer = new Renderer(document.getElementById('view'));
+            let image = new Image();
+
+            img.src = 'bunny.png';
+            img.addEventListener('load', function ()
+            {
+                let sprite = new Sprite(renderer.createTexture(img));
+
+                renderer.draw(sprite);
+            });
         </script>
     </body>
 </html>

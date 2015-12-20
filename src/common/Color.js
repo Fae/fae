@@ -1,7 +1,7 @@
 'use strict';
 
-export default class Color {
-
+class Color
+{
     constructor(r, g, b, a)
     {
         this[0] = r;
@@ -22,18 +22,41 @@ export default class Color {
         this[2] = (v & 0xFF);
     }
 
-    get red() { return this[0]; }
-    set red(v) { this[0] = v; }
+    get red()
+    {
+        return this[0];
+    }
+    set red(v)
+    {
+        this[0] = v;
+    }
 
-    get green() { return this[1]; }
-    set green(v) { this[1] = v; }
+    get green()
+    {
+        return this[1];
+    }
+    set green(v)
+    {
+        this[1] = v;
+    }
 
-    get blue() { return this[2]; }
-    set blue(v) { this[2] = v; }
+    get blue()
+    {
+        return this[2];
+    }
+    set blue(v)
+    {
+        this[2] = v;
+    }
 
-    get alpha() { return this[3]; }
-    set alpha(v) { this[3] = v; }
-
+    get alpha()
+    {
+        return this[3];
+    }
+    set alpha(v)
+    {
+        this[3] = v;
+    }
 }
 
 Color.BLACK = new Color(0, 0, 0, 255);

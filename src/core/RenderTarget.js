@@ -1,14 +1,16 @@
 'use strict';
 
-export default class RenderTarget {
-
+class RenderTarget
+{
     /**
      * Creates a new render target.
      *
      * @param {!WebGLContext} gl - The WebGL context to draw with.
+     * @param {!number} width - The width of the target.
+     * @param {!number} height - The height of the target.
      * @param {boolean} root - Whether this is the root render target or not.
      */
-    constructor(gl, root = false)
+    constructor(gl, width, height, root = false)
     {
         this.gl = gl;
         this.root = root;
@@ -52,6 +54,8 @@ export default class RenderTarget {
             gl.bindFramebuffer(gl.FRAMEBUFFER, this.frameBuffer);
             gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.texture, 0);
         }
+
+        this.resize(width, height);
     }
 
     /**
@@ -63,16 +67,16 @@ export default class RenderTarget {
     clear(color = Color.BLACK)
     {
         this.gl.clearColor(color[0], color[1], color[2], color[3]);
-        this.gl.clear(gl.COLOR_BUFFER_BIT);
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     }
 
     /**
      * Draws a drawable object to the
      *
      * @param {!Drawable} drawable - The drawable object to draw.
-     * @param {RenderStates} [states=RenderStates.default] - The render states to draw with.
+     * @param {!RenderStates} states - The render states to draw with.
      */
-    draw(drawable, states = RenderStates.default)
+    draw(drawable, states)
     {
         drawable.draw(this, states);
     }
@@ -80,13 +84,14 @@ export default class RenderTarget {
     /**
      * Draws a drawable object to the
      *
-     * @param {!(Array.<number>|Float32Array)} vertices - An array of vertices to draw.
-     * @param {!WebGLDrawType} type - The draw type (gl.TRIANGLES, etc).
-     * @param {RenderStates} [states=RenderStates.default] - The render states to draw with.
+     * @param {!(Array.<number>|ArrayBuffer)} vertices - An array of vertices to draw.
+     * @param {!(Array.<number>|Uint16Array)} indices - An array of indices into the vertex array.
+     * @param {!number} type - The WebGL draw type to use, e.g. Consts.DRAW_TYPE.TRIANGLES.
+     * @param {!RenderStates} states - The render states to draw with.
      */
-    draw(vertices, type, states = RendererStates.default)
+    draw(vertices, indices, type, states)
     {
-        if (!verticies || !vertices.length)
+        if (!vertices || !vertices.length)
             return;
 
         // activate framebuffer and set viewport
@@ -97,7 +102,9 @@ export default class RenderTarget {
 
     activate()
     {
-        this.gl.bindFramebuffer(gl.FRAMEBUFFER, this.framebuffer);
+        let gl = this.gl;
+
+        gl.bindFramebuffer(gl.FRAMEBUFFER, this.framebuffer);
 
         this._updateProjection(this.size);
 
@@ -113,7 +120,9 @@ export default class RenderTarget {
 
         if (!this.root)
         {
-            this.gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            let gl = this.gl;
+
+            gl.bindTexture(gl.TEXTURE_2D, this.texture);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
         }
     }
@@ -176,5 +185,4 @@ export default class RenderTarget {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     }
-
 }

@@ -52,7 +52,7 @@
     "requireAlignedMultilineParams": "firstParam",
     "requireBlocksOnNewline": false,
     "requireCamelCaseOrUpperCaseIdentifiers": true,
-    "requireNewlineBeforeBlockStatements": true,
+    // "requireNewlineBeforeBlockStatements": true,
     "requireCapitalizedConstructors": true,
     "requireCommaBeforeLineBreak": true,
     "requireCurlyBraces": [
