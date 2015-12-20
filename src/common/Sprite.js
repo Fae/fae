@@ -12,9 +12,8 @@ export default class Sprite
         this.texture = texture;
         this.transform = mat4.create();
 
-        // still thinking about batching, just wanted to get drawing working right now
+        // still thinking about batching...
         this.vertexArray = new VertexArray(target.gl, 4, 6, true, true, false, false);
-        // this.vertexView = this.vertexArray.getView(0);
     }
 
     /**
