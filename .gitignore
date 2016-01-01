@@ -10,6 +10,7 @@ npm-debug.log
 
 # project files
 .project
+.idea
 
 # vim swap files
 *.sw*
@@ -21,9 +22,7 @@ npm-debug.log
 # project ignores
 !.gitkeep
 *__temp
-node_modules
+.commithash
+node_modules/
 docs/
-examples_old/
-
-# jetBrains IDE ignores
-.idea
+dist/

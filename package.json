@@ -1,0 +1,36 @@
+{
+  "name": "fay",
+  "version": "1.0.0",
+  "description": "The next generation of pixi.js",
+  "author": "Chad Engler <chad@pantherdev.com>",
+  "license": "MIT",
+  "main": "./dist/fay.js",
+  "homepage": "https://github.com/englercj/fay#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/englercj/fay.git"
+  },
+  "bugs": {
+    "url": "https://github.com/englercj/fay/issues"
+  },
+  "directories": {
+    "lib": "./src",
+    "example": "./examples"
+  },
+  "scripts": {
+    "build": "git rev-parse HEAD > .commithash && rollup -c -o dist/rollup.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "babel": "^6.3.26",
+    "babel-preset-es2015-rollup": "^1.0.0",
+    "eslint": "^1.10.3",
+    "jscs": "^2.7.0",
+    "rollup": "^0.23.1",
+    "rollup-plugin-babel": "^2.3.3",
+    "rollup-plugin-commonjs": "^2.1.0",
+    "rollup-plugin-multi-entry": "^1.0.1",
+    "rollup-plugin-npm": "^1.2.0",
+    "rollup-plugin-replace": "^1.1.0"
+  }
+}

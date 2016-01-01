@@ -1,6 +1,8 @@
-'use strict';
+export default class Consts {}
 
-class Consts {}
+Consts.VERSION = '{{version}}';
+
+Consts.BLACK = [0, 0, 0, 255];
 
 // provide easy access to the GL draw types
 Consts.DRAW_TYPE = {

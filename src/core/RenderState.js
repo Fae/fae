@@ -1,6 +1,4 @@
-'use strict';
-
-class RenderStates
+export default class RenderState
 {
     constructor()
     {
@@ -17,4 +15,4 @@ class RenderStates
     }
 }
 
-RenderStates.default = new RenderStates();
+RenderState.default = new RenderState();

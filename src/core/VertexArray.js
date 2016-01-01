@@ -1,14 +1,8 @@
-'use strict';
+import Consts from './Consts.js';
 
-// component size of the elements in the vertex array
-const POSITION_SIZE_2D = 2;
-const POSITION_SIZE_3D = 3;
-const c.COLOR = 1;
-const TEX_COORDS_SIZE = 2;
-const NORMAL_SIZE = 3;
+const C = Consts.COMPONENT_SIZE;
 
-
-class VertexArray
+export default class VertexArray
 {
     /**
      * Create a new vertex array.
@@ -23,16 +17,14 @@ class VertexArray
      */
     constructor(gl, maxVertices, maxIndices, hasTexCoords = true, hasColor = true, hasNormals = false, use3D = false)
     {
-        let c = Consts.COMPONENT_SIZE;
-
         this.hasTexCoords = hasTexCoords;
         this.hasColor = hasColor;
         this.hasNormals = hasNormals;
 
-        this.positionSize = (use3D ? c.POSITION_3D : c.POSITION_2D);
+        this.positionSize = (use3D ? C.POSITION_3D : C.POSITION_2D);
 
-        this.vertexStride = this.positionSize + (hasColor ? c.COLOR : 0) +
-            (hasTexCoords ? c.TEX_COORDS : 0) + (hasNormals ? c.NORMAL : 0);
+        this.vertexStride = this.positionSize + (hasColor ? C.COLOR : 0) +
+            (hasTexCoords ? C.TEX_COORDS : 0) + (hasNormals ? C.NORMAL : 0);
 
         this.vertexByteSize = this.vertexStride * 4;
 
@@ -60,11 +52,6 @@ class VertexArray
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this.indices, gl.STATIC_DRAW);
     }
 
-    getView(index)
-    {
-        return new VertexView(this, index);
-    }
-
     /**
      * Binds the buffer to the shader's attribute locations.
      *
@@ -79,7 +66,6 @@ class VertexArray
 
 
         let gl = this.gl;
-        let c = Consts.COMPONENT_SIZE;
         let stride = this.vertexByteSize;
         let offset = 0;
 
@@ -94,22 +80,22 @@ class VertexArray
         // bind texture coord
         if (this.hasTexCoords)
         {
-            gl.vertexAttribPointer(aTextureCoord, c.TEX_COORDS, gl.FLOAT, false, stride, offset);
-            offset += c.TEX_COORDS * 4;
+            gl.vertexAttribPointer(aTextureCoord, C.TEX_COORDS, gl.FLOAT, false, stride, offset);
+            offset += C.TEX_COORDS * 4;
         }
 
         // bind the color, we are interpretting the Uint32 color as 4 unsigned bytes
         if (this.hasColor)
         {
-            gl.vertexAttribPointer(aColor, c.COLOR * 4, gl.UNSIGNED_BYTE, true, stride, offset);
-            offset += c.COLOR * 4;
+            gl.vertexAttribPointer(aColor, C.COLOR * 4, gl.UNSIGNED_BYTE, true, stride, offset);
+            offset += C.COLOR * 4;
         }
 
         // bind the normals
         if (this.hasNormals)
         {
-            gl.vertexAttribPointer(aTextureCoord, c.NORMAL, gl.FLOAT, false, stride, offset);
-            offset += c.NORMAL * 4;
+            gl.vertexAttribPointer(aNormals, C.NORMAL, gl.FLOAT, false, stride, offset);
+            offset += C.NORMAL * 4;
         }
     }
 }

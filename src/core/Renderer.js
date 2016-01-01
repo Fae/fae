@@ -1,6 +1,7 @@
-'use strict';
+import RenderTarget from './RenderTarget.js';
+import RenderState from './RenderState.js';
 
-class Renderer
+export default class Renderer
 {
     /**
      * Creates a new renderer.
@@ -17,7 +18,7 @@ class Renderer
         gl.enable(gl.BLEND);
 
         this.screen = new RenderTarget(gl, this.gl.canvas.width, this.gl.canvas.height, true);
-        this.states = new RenderStates();
+        this.state = new RenderState();
     }
 
     /**
@@ -28,8 +29,8 @@ class Renderer
      */
     draw(drawable, target = this.screen)
     {
-        this.states.reset();
-        drawable.draw(target, this.states);
+        this.state.reset();
+        drawable.draw(target, this.state);
     }
 
     /**

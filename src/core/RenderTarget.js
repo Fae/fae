@@ -1,6 +1,6 @@
-'use strict';
+import Consts from './Consts.js';
 
-class RenderTarget
+export default class RenderTarget
 {
     /**
      * Creates a new render target.
@@ -64,32 +64,21 @@ class RenderTarget
      *
      * @param {Color|Array.<number>|Float32Array} [color=Color.Black] - The color to clear with.
      */
-    clear(color = Color.BLACK)
+    clear(color = Consts.BLACK)
     {
         this.gl.clearColor(color[0], color[1], color[2], color[3]);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     }
 
     /**
-     * Draws a drawable object to the
-     *
-     * @param {!Drawable} drawable - The drawable object to draw.
-     * @param {!RenderStates} states - The render states to draw with.
-     */
-    draw(drawable, states)
-    {
-        drawable.draw(this, states);
-    }
-
-    /**
-     * Draws a drawable object to the
+     * Draws vertices to the buffer via a shader.
      *
      * @param {!(Array.<number>|ArrayBuffer)} vertices - An array of vertices to draw.
      * @param {!(Array.<number>|Uint16Array)} indices - An array of indices into the vertex array.
      * @param {!number} type - The WebGL draw type to use, e.g. Consts.DRAW_TYPE.TRIANGLES.
-     * @param {!RenderStates} states - The render states to draw with.
+     * @param {!RenderState} state - The render state to draw with.
      */
-    draw(vertices, indices, type, states)
+    draw(vertices, indices, type, state)
     {
         if (!vertices || !vertices.length)
             return;
@@ -97,7 +86,17 @@ class RenderTarget
         // activate framebuffer and set viewport
         this.activate();
 
-        // TODO: draw verts
+        let gl = this.gl;
+
+        // upload the index data
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this.indices, gl.STATIC_DRAW);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.DYNAMIC_DRAW);
+
+        // bind texture
+        gl.bindTexture(gl.TEXDTURE_2D, state.texture);
     }
 
     activate()
@@ -162,11 +161,11 @@ class RenderTarget
         }
     }
 
-    _applyTexture(states)
+    _applyTexture(state)
     {
         let gl = this.gl;
 
-        gl.bindTexture(gl.TEXTURE_2D,  states.texture);
+        gl.bindTexture(gl.TEXTURE_2D,  state.texture);
 
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);

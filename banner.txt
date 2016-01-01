@@ -1,0 +1,10 @@
+/**
+ * Fay.js v{{version}}
+ *
+ * {{compileDate}} - {{commitHash}}
+ *
+ * {{homepage}}
+ *
+ * Released under the MIT License.
+ *
+ */

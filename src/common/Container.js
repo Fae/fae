@@ -1,6 +1,4 @@
-'use strict';
-
-class Container
+export default class Container
 {
     /**
      * Creates a new sprite.
@@ -16,9 +14,9 @@ class Container
      * Draws the sprite.
      *
      * @param {!RenderTarget} target - The target to draw to.
-     * @param {!RenderStates} states - The states object to setup state on.
+     * @param {!RenderState} state - The state object to setup for this draw.
      */
-    draw(target, states)
+    draw(target, state)
     {
 
     }
