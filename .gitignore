@@ -22,7 +22,7 @@ npm-debug.log
 # project ignores
 !.gitkeep
 *__temp
-.commithash
+*.sqlite
+.snyk
 node_modules/
-docs/
 dist/

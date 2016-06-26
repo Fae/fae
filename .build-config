@@ -1,0 +1,2 @@
+module.exports = {
+    DEBUG:${process.env.NODE_ENV === 'production' ? 'undefined' : 'true'}}

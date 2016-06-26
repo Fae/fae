@@ -1,13 +1,20 @@
 import Consts from './Consts.js';
 
+// @ifdef DEBUG
+import DEBUG from './debug';
+// @endif
+
 const C = Consts.COMPONENT_SIZE;
 
+/**
+ * @class
+ */
 export default class VertexArray
 {
     /**
      * Create a new vertex array.
      *
-     * @param {!WebGLRenderingContext} gl - The rendering context
+     * @param {!WebGLRenderingContext} gl - The rendering context.
      * @param {!number} maxVertices - The maximum number of vertices allowed in the buffer.
      * @param {!number} maxIndices - The maximum number of vertices allowed in the buffer.
      * @param {number} [hasTexCoords=true] - Does the buffer contain color texture UV data?
@@ -38,6 +45,9 @@ export default class VertexArray
         this.setContext(gl);
     }
 
+    /**
+     * @param {!WebGLRenderingContext} gl - The rendering context.
+     */
     setContext(gl)
     {
         this.gl = gl;
@@ -62,8 +72,7 @@ export default class VertexArray
      */
     bind(aVertexPosition, aTextureCoord = -1, aColor = -1, aNormals = -1)
     {
-        Consts.ASSERT(this.hasTexCoords && aTextureCoord !== -1);
-
+        DEBUG.ASSERT(this.hasTexCoords && aTextureCoord !== -1);
 
         let gl = this.gl;
         let stride = this.vertexByteSize;

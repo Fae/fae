@@ -1,3 +1,4 @@
+import { mat4 } from 'gl-matrix';
 import VertexArray from '../core/VertexArray.js';
 
 export default class Sprite
