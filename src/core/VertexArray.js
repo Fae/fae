@@ -27,14 +27,16 @@ export default class VertexArray
         this.hasTexCoords = hasTexCoords;
         this.hasColor = hasColor;
         this.hasNormals = hasNormals;
+        this.use3D = use3D;
 
         this.positionSize = (use3D ? C.POSITION_3D : C.POSITION_2D);
 
-        this.vertexStride = this.positionSize + (hasColor ? C.COLOR : 0) +
-            (hasTexCoords ? C.TEX_COORDS : 0) + (hasNormals ? C.NORMAL : 0);
+        this.vertexStride = this.positionSize + (hasColor ? C.COLOR : 0)
+            + (hasTexCoords ? C.TEX_COORDS : 0) + (hasNormals ? C.NORMAL : 0);
 
-        this.vertexByteSize = this.vertexStride * 4;
+        this.vertexByteSize = this.vertexStride * 4; // 4 bytes
 
+        // the actual buffers
         this.vertices = new ArrayBuffer(this.vertexByteSize);
         this.indices = new Uint16Array(maxIndices);
 
@@ -65,17 +67,19 @@ export default class VertexArray
     /**
      * Binds the buffer to the shader's attribute locations.
      *
-     * @param {!number} aVertexPosition - The attribute index of the position attribute (vec2 or vec3 depending on use3D).
+     * @param {!number} aVertexPosition - The attribute index of the position attribute (vec2/vec3 depending on use3D).
      * @param {!number} [aTextureCoord=-1] - The attribute index of the texture coord attribute (vec2).
      * @param {!number} [aColor=-1] - The attribute index of the color attribute (float).
      * @param {!number} [aNormals=-1] - The attribute index of the normals attribute (vec3).
      */
-    bind(aVertexPosition, aTextureCoord = -1, aColor = -1, aNormals = -1)
+    bind(aVertexPosition, aTextureCoord, aColor = -1, aNormals = -1)
     {
-        DEBUG.ASSERT(this.hasTexCoords && aTextureCoord !== -1);
+        // @ifdef DEBUG
+        DEBUG.ASSERT(this.hasTexCoords && typeof aTextureCoord === 'number' && aTextureCoord >= 0, 'Texture coord attribute invalid'); // eslint-disable-line max-len
+        // @endif
 
-        let gl = this.gl;
-        let stride = this.vertexByteSize;
+        const gl = this.gl;
+        const stride = this.vertexByteSize;
         let offset = 0;
 
         // bind the buffers

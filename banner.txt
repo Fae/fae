@@ -5,6 +5,6 @@
  *
  * {{homepage}}
  *
- * Released under the MIT License.
+ * Released under the {{license}} License.
  *
  */

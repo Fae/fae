@@ -2,27 +2,19 @@
     <head>
         <script src="../../node_modules/gl-matrix/dist/gl-matrix-min.js"></script>
 
-        <script src="../../src/core/Consts.js"></script>
-        <script src="../../src/core/VertexView.js"></script>
-        <script src="../../src/core/VertexArray.js"></script>
-        <script src="../../src/core/RenderStates.js"></script>
-        <script src="../../src/core/RenderTarget.js"></script>
-        <script src="../../src/core/Renderer.js"></script>
-
-        <script src="../../src/common/Color.js"></script>
-        <script src="../../src/common/Sprite.js"></script>
+        <script src="../../dist/fay.js"></script>
     </head>
     <body>
         <canvas id="view" width="1024" height="1024" />
 
         <script>
-            let renderer = new Renderer(document.getElementById('view'));
+            let renderer = new Fay.Renderer(document.getElementById('view'));
             let image = new Image();
 
             img.src = 'bunny.png';
             img.addEventListener('load', function ()
             {
-                let sprite = new Sprite(renderer.createTexture(img));
+                let sprite = new Fay.Sprite(renderer.createTexture(img));
 
                 renderer.draw(sprite);
             });

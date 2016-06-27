@@ -1,5 +1,9 @@
+import { vec2, mat4 } from 'gl-matrix';
 import Consts from './Consts.js';
 
+/**
+ * @class
+ */
 export default class RenderTarget
 {
     /**
@@ -26,7 +30,7 @@ export default class RenderTarget
             this.framebuffer = gl.createFramebuffer();
             this.texture = gl.createTexture();
 
-            gl.bindTexture(gl.TEXTURE_2D,  this.texture);
+            gl.bindTexture(gl.TEXTURE_2D, this.texture);
 
             // set the scale properties of the texture..
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
@@ -80,13 +84,12 @@ export default class RenderTarget
      */
     draw(vertices, indices, type, state)
     {
-        if (!vertices || !vertices.length)
-            return;
+        if (!vertices || !vertices.length) return;
 
         // activate framebuffer and set viewport
         this.activate();
 
-        let gl = this.gl;
+        const gl = this.gl;
 
         // upload the index data
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
@@ -99,9 +102,12 @@ export default class RenderTarget
         gl.bindTexture(gl.TEXDTURE_2D, state.texture);
     }
 
+    /**
+     *
+     */
     activate()
     {
-        let gl = this.gl;
+        const gl = this.gl;
 
         gl.bindFramebuffer(gl.FRAMEBUFFER, this.framebuffer);
 
@@ -110,6 +116,10 @@ export default class RenderTarget
         gl.viewport(0, 0, this.size[0], this.size[1]);
     }
 
+    /**
+     * @param {number} width - The width to resize to.
+     * @param {number} height - The height to resize to.
+     */
     resize(width, height)
     {
         this.size[0] = width;
@@ -119,13 +129,16 @@ export default class RenderTarget
 
         if (!this.root)
         {
-            let gl = this.gl;
+            const gl = this.gl;
 
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
         }
     }
 
+    /**
+     *
+     */
     destroy()
     {
         // this.gl.deleteRenderbuffer(this.stencilBuffer);
@@ -136,10 +149,13 @@ export default class RenderTarget
         this.texture = null;
     }
 
+    /**
+     *
+     */
     _updateProjection()
     {
-        let pm = this.projectionMatrix;
-        let size = this.size;
+        const pm = this.projectionMatrix;
+        const size = this.size;
 
         mat4.identity(pm);
 
@@ -161,11 +177,14 @@ export default class RenderTarget
         }
     }
 
+    /**
+     * @param {RenderState} state - The render state to apply to.
+     */
     _applyTexture(state)
     {
-        let gl = this.gl;
+        const gl = this.gl;
 
-        gl.bindTexture(gl.TEXTURE_2D,  state.texture);
+        gl.bindTexture(gl.TEXTURE_2D, state.texture);
 
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);

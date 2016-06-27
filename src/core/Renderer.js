@@ -1,6 +1,9 @@
 import RenderTarget from './RenderTarget.js';
 import RenderState from './RenderState.js';
 
+/**
+ * @class
+ */
 export default class Renderer
 {
     /**
@@ -11,7 +14,7 @@ export default class Renderer
      */
     constructor(context)
     {
-        let gl = this.gl = (context.nodeName ? context.getContext('webgl') : context);
+        const gl = this.gl = (context.nodeName ? context.getContext('webgl') : context);
 
         gl.disable(gl.DEPTH_TEST);
         gl.disable(gl.CULL_FACE);
@@ -41,8 +44,8 @@ export default class Renderer
      */
     createTexture(source)
     {
-        let gl = this.gl;
-        let tx = gl.createTexture();
+        const gl = this.gl;
+        const tx = gl.createTexture();
 
         gl.bindTexture(gl.TEXTURE_2D, tx);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);

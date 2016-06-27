@@ -17,10 +17,15 @@
     "lib": "./src",
     "example": "./examples"
   },
+  "files": [
+    "src/",
+    "dist/"
+  ],
   "scripts": {
     "clean": "rm -rf dist/",
-    "build": "npm run clean && webpack --progress",
-    "dev": "npm run clean && webpack --progress --colors --watch",
+    "hash": "git rev-parse HEAD > .commit",
+    "build": "npm run hash && webpack -p --progress --output-filename fay.min.js",
+    "dev": "npm run hash && webpack -d --progress --colors --watch --output-filename fay.js",
     "start": "npm run build",
     "lint": "eslint ."
   },

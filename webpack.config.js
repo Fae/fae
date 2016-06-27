@@ -5,13 +5,14 @@ const path      = require('path');
 const fs        = require('fs');
 const webpack   = require('webpack');
 const NoErrorsPlugin = require('webpack/lib/NoErrorsPlugin');
+const pkg       = require('./package.json');
 
 const config = {};
+
 if (process.env.NODE_ENV === 'production') config.DEBUG = true;
 
 module.exports = {
-    devtool: 'source-map',
-    entry: './index.js',
+    entry: './src/index.js',
     output: {
         path: path.join(__dirname, 'dist'),
         library: 'Fay',
@@ -23,7 +24,7 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /(node_modules|vendor)/,
-                loader: [
+                loaders: [
                     'babel?cacheDirectory=true&presets[]=es2015',
                     `preprocess?${JSON.stringify(config)}`,
                 ],
@@ -35,6 +36,19 @@ module.exports = {
         new NoErrorsPlugin(),
 
         // Add a banner to output chunks
-        new webpack.BannerPlugin(fs.readFileSync('./banner.txt', 'utf8'), { raw: true, entry: true }),
+        new webpack.BannerPlugin(loadBannerText(), { raw: true, entry: true }),
     ],
 };
+
+function loadBannerText()
+{
+    let str = fs.readFileSync('./banner.txt', 'utf8');
+
+    str = str.replace('{{version}}', pkg.version);
+    str = str.replace('{{compileDate}}', (new Date()).toISOString());
+    str = str.replace('{{commitHash}}', fs.readFileSync('./.commit', 'utf8').trim());
+    str = str.replace('{{homepage}}', pkg.homepage);
+    str = str.replace('{{license}}', pkg.license);
+
+    return str;
+}
