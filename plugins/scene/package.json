@@ -1,0 +1,29 @@
+{
+  "name": "@fay/scene",
+  "version": "1.0.0",
+  "description": "Adds support for scene tree objects.",
+  "author": "Chad Engler <chad@pantherdev.com>",
+  "license": "MIT",
+  "main": "./index.js",
+  "homepage": "https://github.com/englercj/fay#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/englercj/fay.git"
+  },
+  "bugs": {
+    "url": "https://github.com/englercj/fay/issues"
+  },
+  "files": [
+    "Container.js",
+    "SceneObject.js"
+  ],
+  "dependencies": {
+    "mini-signals": "^1.1.1"
+  },
+  "peerDependencies": {
+    "@fay/core": "^1.0.0"
+  },
+  "fay": {
+    "namespace": "scene"
+  }
+}

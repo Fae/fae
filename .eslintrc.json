@@ -1,15 +1,16 @@
 {
     "extends": "./node_modules/@englercj/code-style/.eslintrc.json",
     "env": {
-        "node": false,
+        "commonjs": true,
         "browser": true
+    },
+    "globals": {
     },
     "parserOptions": {
         "sourceType": "module"
     },
     "rules": {
         "brace-style": [2, "allman"],
-        "no-magic-numbers": 0,
-        "spaced-comment": [2, "always", { "exceptions": ["?"] }]
+        "no-magic-numbers": 0
     }
 }

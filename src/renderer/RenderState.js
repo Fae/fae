@@ -1,5 +1,3 @@
-import { mat4 } from 'gl-matrix';
-
 /**
  * @class
  */
@@ -12,7 +10,6 @@ export default class RenderState
     {
         this.blendMode = null;
         this.texture = null;
-        this.transform = mat4.create();
     }
 
     /**
@@ -22,7 +19,6 @@ export default class RenderState
     {
         this.texture = null;
         this.blendMode = null;
-        mat4.identity(this.transform);
     }
 }
 

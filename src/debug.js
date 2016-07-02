@@ -1,8 +1,6 @@
 // @ifdef DEBUG
-export default {
-    ASSERT(bool, message)
-    {
-        if (!bool) throw new Error(message);
-    },
+export function ASSERT(bool, message)
+{
+    if (!bool) throw new Error(`[Fay ASSERT]: ${message}`);
 };
 // @endif

@@ -25,5 +25,6 @@ npm-debug.log
 *.sqlite
 .snyk
 .commit
+entry-*.js
 node_modules/
 dist/

@@ -1,5 +1,5 @@
 {
-  "name": "fay",
+  "name": "@fay/core",
   "version": "1.0.0",
   "description": "The next generation of pixi.js",
   "author": "Chad Engler <chad@pantherdev.com>",
@@ -24,21 +24,22 @@
   "scripts": {
     "clean": "rm -rf dist/",
     "hash": "git rev-parse HEAD > .commit",
-    "build": "npm run hash && webpack -p --progress --output-filename fay.min.js",
-    "dev": "npm run hash && webpack -d --progress --colors --watch --output-filename fay.js",
+    "build": "npm run hash && webpack -p --config ./build/webpack.config.js --output-filename fay.min.js --progress ",
+    "dev": "npm run hash && webpack -d --config ./build/webpack.config.js --output-filename fay.js --progress --colors",
     "start": "npm run build",
     "lint": "eslint ."
   },
   "dependencies": {
-    "gl-matrix": "^2.3.2"
+    "mini-signals": "^1.1.1"
   },
   "devDependencies": {
-    "@englercj/code-style": "^1.0.1",
+    "@englercj/code-style": "^1.0.4",
+    "async": "^2.0.0-rc.6",
     "babel-core": "^6.10.4",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.9.0",
-    "babel-preset-react": "^6.5.0",
-    "eslint": "^2.13.1",
+    "enhanced-resolve": "^2.2.2",
+    "eslint": "^3.0.0",
     "preprocess-loader": "^0.2.0",
     "webpack": "^1.13.1"
   }

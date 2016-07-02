@@ -1,0 +1,27 @@
+{
+  "name": "@fay/sprite",
+  "version": "1.0.0",
+  "description": "Adds support for sprites.",
+  "author": "Chad Engler <chad@pantherdev.com>",
+  "license": "MIT",
+  "main": "./index.js",
+  "homepage": "https://github.com/englercj/fay#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/englercj/fay.git"
+  },
+  "bugs": {
+    "url": "https://github.com/englercj/fay/issues"
+  },
+  "files": [
+    "Sprite.js"
+  ],
+  "dependencies": {
+  },
+  "peerDependencies": {
+    "@fay/core": "^1.0.0"
+  },
+  "fay": {
+    "namespace": "sprite"
+  }
+}

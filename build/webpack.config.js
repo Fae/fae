@@ -1,20 +1,23 @@
-/* eslint-env node */
 'use strict';
 
 const path      = require('path');
 const fs        = require('fs');
 const webpack   = require('webpack');
-const NoErrorsPlugin = require('webpack/lib/NoErrorsPlugin');
-const pkg       = require('./package.json');
+const pkg       = require('../package.json');
 
-const config = {};
+const EntryGeneratorPlugin = require('./EntryGeneratorPlugin');
+
+const srcBase = path.join(__dirname, '..', 'src');
+const pluginbase = path.join(__dirname, '..', 'plugins');
+
+const config = { pkg };
 
 if (process.env.NODE_ENV === 'production') config.DEBUG = true;
 
 module.exports = {
-    entry: './src/index.js',
+    // entry: path.join(__dirname, '..', 'src', 'index.js'),
     output: {
-        path: path.join(__dirname, 'dist'),
+        path: path.join(__dirname, '..', 'dist'),
         library: 'Fay',
         libraryTarget: 'umd',
         umdNamedDefine: true,
@@ -31,9 +34,19 @@ module.exports = {
             },
         ],
     },
+    resolve: {
+        alias: {
+            '@fay/core': srcBase,
+            '@fay/scene': path.join(pluginbase, 'scene'),
+            '@fay/sprite': path.join(pluginbase, 'sprite'),
+        },
+    },
     plugins: [
+        // generate entry file
+        new EntryGeneratorPlugin(),
+
         // don't emit output when there are errors
-        new NoErrorsPlugin(),
+        new webpack.NoErrorsPlugin(),
 
         // Add a banner to output chunks
         new webpack.BannerPlugin(loadBannerText(), { raw: true, entry: true }),
@@ -42,7 +55,7 @@ module.exports = {
 
 function loadBannerText()
 {
-    let str = fs.readFileSync('./banner.txt', 'utf8');
+    let str = fs.readFileSync(path.join(__dirname, 'banner.txt'), 'utf8');
 
     str = str.replace('{{version}}', pkg.version);
     str = str.replace('{{compileDate}}', (new Date()).toISOString());

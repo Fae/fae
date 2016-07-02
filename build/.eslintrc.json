@@ -1,0 +1,12 @@
+{
+    "extends": "../.eslintrc.json",
+    "env": {
+        "node": true,
+        "browser": false
+    },
+    "globals": {
+    },
+    "parserOptions": {
+        "sourceType": "script"
+    }
+}
