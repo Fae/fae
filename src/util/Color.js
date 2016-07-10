@@ -318,7 +318,23 @@ export default class Color
      */
     clone()
     {
-        return new Color(this.red, this.green, this.blue);
+        return new Color(this.red, this.green, this.blue, this.normalized);
+    }
+
+    /**
+     * Copies another color's values into this one.
+     *
+     * @param {Color} color - The color to copy.
+     * @return {Color} returns itself.
+     */
+    copy(color)
+    {
+        this.red = color.red;
+        this.green = color.green;
+        this.blue = color.blue;
+        this.normalized = color.normalized;
+
+        return this;
     }
 
     /**
@@ -330,6 +346,21 @@ export default class Color
      */
     equals(color)
     {
+        if (this.normalized !== color.normalized)
+        {
+            Color._tempColor.copy(color);
+            color = Color._tempColor;
+
+            if (this.normalized)
+            {
+                color.normalize();
+            }
+            else
+            {
+                color.denormalize();
+            }
+        }
+
         return !!color
             && this.red === color.red
             && this.green === color.green
@@ -344,3 +375,4 @@ Color.RED = new Color(255, 0, 0);
 Color.GREEN = new Color(0, 255, 0);
 Color.BLUE = new Color(0, 0, 255);
 
+Color._tempColor = new Color();
