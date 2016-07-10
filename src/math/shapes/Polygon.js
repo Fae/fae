@@ -1,5 +1,4 @@
 import Vector2d from '../Vector2d';
-import { TYPE } from '../../config';
 
 /**
  * A simple class representing a polygon.
@@ -34,14 +33,6 @@ export default class Polygon
 
             points = p;
         }
-
-        /**
-         * The type of the object, mainly used to avoid `instanceof` checks
-         *
-         * @member {number}
-         * @readOnly
-         */
-        this.type = TYPE.SHAPE_POLYGON;
 
         /**
          * Whether or not this polygon is a "closed" polygon.

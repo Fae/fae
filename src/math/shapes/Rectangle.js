@@ -1,5 +1,3 @@
-import { TYPE } from '../../config';
-
 /**
  * A simple class representing a rectangle. A Rectangle is defined by its position,
  * as indicated by its top-left corner point (x, y) and by its width and its height.
@@ -17,14 +15,6 @@ export default class Rectangle
      */
     constructor(x = 0, y = 0, width = 1, height = 1)
     {
-        /**
-         * The type of the object, mainly used to avoid `instanceof` checks
-         *
-         * @member {number}
-         * @readOnly
-         */
-        this.type = TYPE.SHAPE_RECTANGLE;
-
         /**
          * The X position of the top-left of the rectangle.
          *

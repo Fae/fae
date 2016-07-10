@@ -1,7 +1,7 @@
 import GLFramebuffer from '../gl/GLFramebuffer';
 import math from '../math';
 import Color from '../util/Color';
-import { SCALE_MODES } from '../config';
+import { SCALE_MODE } from '../config';
 
 /**
  * @class
@@ -17,7 +17,7 @@ export default class RenderTarget
      * @param {number} scaleMode - The mode to scale by.
      * @param {boolean} root - Whether this is the root render target or not.
      */
-    constructor(gl, width, height, scaleMode = SCALE_MODES.LINEAR, root = false)
+    constructor(gl, width, height, scaleMode = SCALE_MODE.LINEAR, root = false)
     {
         this.gl = gl;
         this.root = root;
@@ -43,7 +43,7 @@ export default class RenderTarget
         {
             this.framebuffer = GLFramebuffer.createRGBA(gl, 100, 100);
 
-            if (this.scaleMode === SCALE_MODES.NEAREST)
+            if (this.scaleMode === SCALE_MODE.NEAREST)
             {
                 this.frameBuffer.texture.enableNearestScaling();
             }

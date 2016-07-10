@@ -1,7 +1,5 @@
 /* eslint max-params: [2, { max: 7 }] */
 
-import { BLEND_MODES } from '../config';
-
 /**
  * @class
  */
@@ -13,10 +11,8 @@ export default class BlendMode
      * @param {number} equation - The Alpha blend function to use (for glBlendEquation).
      * @param {number} id - The preset blend mode this object represents.
      */
-    constructor(sfactor, dfactor, equation, id = BLEND_MODES.CUSTOM)
+    constructor(sfactor, dfactor, equation)
     {
-        this.id = id;
-
         this.sfactor = sfactor;
         this.dfactor = dfactor;
         this.equation = equation;
@@ -46,24 +42,13 @@ export default class BlendMode
     }
 }
 
-// pixi:
-// color(RGBA) = (sourceColor * sfactor) + (destinationColor * dfactor)
-
-// separate:
-// color(RGB) = (sourceColor * srcRGB) + (destinationColor * dstRGB)
-// color(A) = (sourceAlpha * srcAlpha) + (destinationAlpha * dstAlpha)
-
-// short names, I'm lazy.
+// short name, I'm lazy.
 const c = WebGLRenderingContext;
-const B = BLEND_MODES;
-const BM = BlendMode;
 
-BM.MODES = [];
-
-/* eslint-disable no-multi-spaces, max-len */
-BM.NORMAL       = BM.MODES[B.NORMAL]    = new BM(c.ONE, c.ONE_MINUS_SRC_ALPHA, c.FUNC_ADD, B.NORMAL);
-BM.ADD          = BM.MODES[B.ADD]       = new BM(c.ONE, c.DST_ALPHA, c.FUNC_ADD, B.ADD);
-BM.SUBTRACT     = BM.MODES[B.SUBTRACT]  = new BM(c.ONE, c.DST_ALPHA, c.FUNC_SUBTRACT, B.SUBTRACT);
-BM.MULTIPLY     = BM.MODES[B.MULTIPLY]  = new BM(c.DST_COLOR, c.ONE_MINUS_SRC_ALPHA, c.FUNC_SUBTRACT, B.SUBTRACT);
-BM.EXCLUSION    = BM.MODES[B.EXCLUSION] = new BM(c.ONE_MINUS_DST_COLOR, c.ONE_MINUS_SRC_COLOR, c.FUNC_SUBTRACT, B.EXCLUSION);
-/* eslint-enable no-multi-spaces, max-len */
+/* eslint-disable no-multi-spaces */
+BlendMode.NORMAL       = new BlendMode(c.ONE, c.ONE_MINUS_SRC_ALPHA, c.FUNC_ADD);
+BlendMode.ADD          = new BlendMode(c.ONE, c.DST_ALPHA, c.FUNC_ADD);
+BlendMode.SUBTRACT     = new BlendMode(c.ONE, c.DST_ALPHA, c.FUNC_SUBTRACT);
+BlendMode.MULTIPLY     = new BlendMode(c.DST_COLOR, c.ONE_MINUS_SRC_ALPHA, c.FUNC_SUBTRACT);
+BlendMode.EXCLUSION    = new BlendMode(c.ONE_MINUS_DST_COLOR, c.ONE_MINUS_SRC_COLOR, c.FUNC_SUBTRACT);
+/* eslint-enable no-multi-spaces */
