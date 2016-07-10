@@ -90,7 +90,7 @@ export default class GLBuffer
     /**
      * Uploads the buffer to the GPU
      *
-     * @param {ArrayBuffer| SharedArrayBuffer|ArrayBufferView} data - an array of data to upload
+     * @param {Buffer|ArrayBuffer|SharedArrayBuffer|ArrayBufferView} data - an array of data to upload
      * @param {number} offset - if only a subset of the data should be uploaded, this is the amount of data to subtract
      * @param {boolean} dontBind - whether to bind the buffer before uploading it
      */

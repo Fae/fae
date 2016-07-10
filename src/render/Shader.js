@@ -29,9 +29,40 @@ export default class Shader extends GLShader
  */
 function checkPrecision(source)
 {
-    if (source.substring(0, 9) !== 'precision')
+    const lines = source.split('\n');
+
+    let commentOpen = false;
+
+    for (let i = 0; i < lines.length; ++i)
     {
-        return `precision ${PRECISION.DEFAULT} float;\n\n${source}`;
+        const line = lines[i].trim();
+        const firstChars = line.substring(0, 2);
+
+        // line comment, ignore
+        if (firstChars === '//') continue;
+
+        // start of block comment, set flag
+        if (firstChars === '/*')
+        {
+            commentOpen = true;
+        }
+
+        // if comment open, check if this line ends it. If not continue
+        if (commentOpen)
+        {
+            if (line.indexOf('*/') !== -1)
+            {
+                commentOpen = false;
+            }
+
+            continue;
+        }
+
+        // not in a comment, check if precision is set
+        if (line.substring(0, 9) !== 'precision')
+        {
+            return `precision ${PRECISION.DEFAULT} float;\n\n${source}`;
+        }
     }
 
     return source;

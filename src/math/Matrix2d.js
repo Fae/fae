@@ -1,3 +1,4 @@
+/* eslint max-params: [1, { "max": 6 }] */
 /**
  * This is a modified version of Brandon Jones's mat2d utility.
  *
@@ -73,7 +74,7 @@ export default class Matrix2d extends Float32Array
     /**
      * The `a` (index 0) component of the Matrix2d.
      *
-     * @type {number}
+     * @member {number}
      */
     get a()
     {
@@ -93,7 +94,7 @@ export default class Matrix2d extends Float32Array
     /**
      * The `b` (index 1) component of the Matrix2d.
      *
-     * @type {number}
+     * @member {number}
      */
     get b()
     {
@@ -113,7 +114,7 @@ export default class Matrix2d extends Float32Array
     /**
      * The `c` (index 2) component of the Matrix2d.
      *
-     * @type {number}
+     * @member {number}
      */
     get c()
     {
@@ -133,7 +134,7 @@ export default class Matrix2d extends Float32Array
     /**
      * The `d` (index 3) component of the Matrix2d.
      *
-     * @type {number}
+     * @member {number}
      */
     get d()
     {
@@ -153,7 +154,7 @@ export default class Matrix2d extends Float32Array
     /**
      * The `tx` (index 4) component of the Matrix2d.
      *
-     * @type {number}
+     * @member {number}
      */
     get tx()
     {
@@ -173,7 +174,7 @@ export default class Matrix2d extends Float32Array
     /**
      * The `ty` (index 5) component of the Matrix2d.
      *
-     * @type {number}
+     * @member {number}
      */
     get ty()
     {

@@ -26,10 +26,13 @@
     "hash": "git rev-parse HEAD > .commit",
     "build": "npm run hash && webpack -p --config ./build/webpack.config.js --output-filename fay.min.js --progress ",
     "dev": "npm run hash && webpack -d --config ./build/webpack.config.js --output-filename fay.js --progress --colors",
+    "lint": "eslint src/ && eslint plugins/",
     "start": "npm run build",
     "lint": "eslint ."
   },
   "dependencies": {
+    "bit-twiddle": "^1.0.2",
+    "ismobilejs": "^0.4.0",
     "mini-signals": "^1.1.1"
   },
   "devDependencies": {
@@ -41,6 +44,7 @@
     "enhanced-resolve": "^2.2.2",
     "eslint": "^3.0.0",
     "preprocess-loader": "^0.2.0",
-    "webpack": "^1.13.1"
+    "webpack": "^1.13.1",
+    "webpack-glsl-loader": "^1.0.1"
   }
 }

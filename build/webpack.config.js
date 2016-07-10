@@ -32,6 +32,11 @@ module.exports = {
                     `preprocess?${JSON.stringify(config)}`,
                 ],
             },
+            {
+                test: /\.(glsl|frag|vert)$/,
+                exclude: /(node_modules|vendor)/,
+                loader: 'webpack-glsl',
+            },
         ],
     },
     resolve: {

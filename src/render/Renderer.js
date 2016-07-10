@@ -1,3 +1,4 @@
+import Signal from 'mini-signals';
 import RenderTarget from './RenderTarget.js';
 import RenderState from './RenderState.js';
 
@@ -22,6 +23,13 @@ export default class Renderer
 
         this.screen = new RenderTarget(gl, this.gl.canvas.width, this.gl.canvas.height, true);
         this.state = new RenderState();
+
+        this.onContextLost = new Signal();
+        this.onContextRestored = new Signal();
+        this.onContextChange = new Signal();
+
+        this.onBeforeRender = new Signal();
+        this.onAfterRender = new Signal();
     }
 
     /**

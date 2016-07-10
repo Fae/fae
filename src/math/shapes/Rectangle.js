@@ -67,6 +67,7 @@ export default class Rectangle
     /**
      * Copies the passed rectangle into this one.
      *
+     * @param {Rectangle} rectangle - The rectangle to copy from.
      * @return {Rectangle} returns itself.
      */
     copy(rectangle)

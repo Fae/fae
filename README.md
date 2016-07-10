@@ -1,25 +1,24 @@
 # Fay
 
-## A JavaScript multi-threaded renderer
+## A 2D JavaScript
 
 ## Cool features
 
-- Stores transform data in a large data array easily shared between WebWorkers
-- Uses [mini-signals][[mini-signals] for extremely fast events*.
+- Uses [mini-signals][mini-signals] for extremely fast events.
 - Debug builds have lots of checks, all of them are stripped out in prod builds for max perf.
+- Highly plugable. The core is generic and easily extensible.
 
 ## Todo:
 
+- Texture, BaseTexture
+- Tinting
 - Bounds
 - Masks
 - Filters
-- Batching / Automatic Batching / Automatic spritesheeting
 - Blend mode
 - Custom shaders
 - DevicePixelRatio
-
-\* [mini-signals][[mini-signals] is even faster than [EventEmitter3][ee3] ([tests][event-tests]).
-
+- Interactions (https://github.com/pixijs/pixi.js/issues/241)
 
 [mini-signals]: https://github.com/Hypercubed/mini-signals
 [ee3]: https://github.com/primus/eventemitter3

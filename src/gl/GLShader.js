@@ -274,7 +274,7 @@ function attributeSetupFunction(gl, attrib)
     return gl.vertexAttribPointer(
         this.location,
         this.size,
-        this.type || gl.FLOAT,
+        this.type,
         attrib.normalized || false,
         attrib.stride || 0,
         attrib.start || 0

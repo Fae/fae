@@ -49,7 +49,7 @@ export default class Transform
          * Raw data buffer that contains the data of this transform.
          *
          * @private
-         * @type {ArrayBuffer|SharedArrayBuffer}
+         * @member {ArrayBuffer|SharedArrayBuffer}
          */
         this._buffer = new ArrayBuffer(DATA_BYTE_SIZE);
         this._data = new Float32Array(this._buffer);
@@ -84,7 +84,7 @@ export default class Transform
     /**
      * The local transformation matrix.
      *
-     * @type {Matrix2d}
+     * @member {Matrix2d}
      */
     get localTransform()
     {
@@ -94,7 +94,7 @@ export default class Transform
     /**
      * The world transformation matrix.
      *
-     * @type {Matrix2d}
+     * @member {Matrix2d}
      */
     get worldTransform()
     {
@@ -104,7 +104,7 @@ export default class Transform
     /**
      * The X position.
      *
-     * @type {number}
+     * @member {number}
      */
     get x()
     {
@@ -114,7 +114,7 @@ export default class Transform
     /**
      * The Y position.
      *
-     * @type {number}
+     * @member {number}
      */
     get y()
     {
@@ -124,7 +124,7 @@ export default class Transform
     /**
      * The X scale.
      *
-     * @type {number}
+     * @member {number}
      */
     get scaleX()
     {
@@ -134,7 +134,7 @@ export default class Transform
     /**
      * The Y scale.
      *
-     * @type {number}
+     * @member {number}
      */
     get scaleY()
     {
@@ -144,7 +144,7 @@ export default class Transform
     /**
      * The X skew.
      *
-     * @type {number}
+     * @member {number}
      */
     get skewX()
     {
@@ -154,7 +154,7 @@ export default class Transform
     /**
      * The Y skew.
      *
-     * @type {number}
+     * @member {number}
      */
     get skewY()
     {
@@ -164,7 +164,7 @@ export default class Transform
     /**
      * The X pivot.
      *
-     * @type {number}
+     * @member {number}
      */
     get pivotX()
     {
@@ -174,7 +174,7 @@ export default class Transform
     /**
      * The Y pivot.
      *
-     * @type {number}
+     * @member {number}
      */
     get pivotY()
     {
@@ -184,7 +184,7 @@ export default class Transform
     /**
      * The rotation.
      *
-     * @type {number}
+     * @member {number}
      */
     get rotation()
     {

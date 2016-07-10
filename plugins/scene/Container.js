@@ -35,12 +35,20 @@ export default class Container extends SceneObject
     /**
      * Called for this object to render itself.
      *
-     * @param {!RenderTarget} target - The target to draw to.
-     * @param {!RenderState} state - The state object to setup for this draw.
+     * @param {!Renderer} renderer - The renderer to render with.
      */
-    render(target, state)
+    render(renderer)
     {
-        /* Stuff */
+        // if the object is not visible or the alpha is 0 then no need to render this element
+        if (!this.visible || this.worldAlpha <= 0 || !this.renderable)
+        {
+            return;
+        }
+
+        for (let i = 0; i < this.children.length; ++i)
+        {
+            this.children[i].renderL(renderer);
+        }
     }
 
     /**

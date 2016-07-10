@@ -101,10 +101,9 @@ export default class SceneObject
     /**
      * Called for this object to render itself.
      *
-     * @param {!RenderTarget} target - The target to draw to.
-     * @param {!RenderState} state - The state object to setup for this draw.
+     * @param {!Renderer} renderer - The renderer to render with.
      */
-    render(target, state)
+    render(/* renderer */)
     {
         /* Abstract */
     }

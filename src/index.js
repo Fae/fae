@@ -1,12 +1,13 @@
 // export some core modules
+import * as glut from './gl';
 import * as math from './math';
+import * as render from './render';
+import * as shaders from './shaders';
 import * as util from './util';
+
 import * as config from './config';
 
-export { math, util, config };
-
-// export the renderer module inline
-export * from './renderer';
+export { glut, math, render, shaders, util, config };
 
 // @ifdef DEBUG
 import * as debug from './debug';

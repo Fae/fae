@@ -56,7 +56,7 @@ export default class Vector2d extends Float32Array
     /**
      * The `x` (index 0) component of the Vector2d.
      *
-     * @type {number}
+     * @member {number}
      */
     get x()
     {
@@ -76,7 +76,7 @@ export default class Vector2d extends Float32Array
     /**
      * The `y` (index 1) component of the Vector2d.
      *
-     * @type {number}
+     * @member {number}
      */
     get y()
     {

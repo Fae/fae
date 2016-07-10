@@ -1,5 +1,5 @@
 import { Container } from '@fay/scene';
-import { math } from '@fay/core';
+import { math, util } from '@fay/core';
 
 /**
  * @class
@@ -17,6 +17,7 @@ export default class Sprite extends Container
     {
         super();
 
+        this.tint = util.Color.WHITE.clone();
         this.texture = texture;
         this.vertexData = new Float32Array(16);
         this.anchor = new math.Vectord2d();
@@ -25,10 +26,9 @@ export default class Sprite extends Container
     /**
      * Called for this object to render itself.
      *
-     * @param {!RenderTarget} target - The target to draw to.
-     * @param {!RenderState} state - The state object to setup for this draw.
+     * @param {!Renderer} renderer - The renderer to render with.
      */
-    render(target, state)
+    render(renderer)
     {
         this.calculateVertices();
 
