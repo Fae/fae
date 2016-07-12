@@ -1,7 +1,7 @@
 import GLContext from '../gl/GLContext';
 
 // @ifdef DEBUG
-import { ASSERT } from './debug';
+import { ASSERT } from '../debug';
 // @endif
 
 let nextUid = 0;

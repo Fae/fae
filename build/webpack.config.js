@@ -12,7 +12,10 @@ const pluginbase = path.join(__dirname, '..', 'plugins');
 
 const config = { pkg };
 
-if (process.env.NODE_ENV === 'production') config.DEBUG = true;
+if (process.env.NODE_ENV !== 'production')
+{
+    config.DEBUG = true;
+}
 
 module.exports = {
     // entry: path.join(__dirname, '..', 'src', 'index.js'),
