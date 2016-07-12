@@ -44,6 +44,7 @@ module.exports = {
             '@fay/core': srcBase,
             '@fay/scene': path.join(pluginbase, 'scene'),
             '@fay/sprite': path.join(pluginbase, 'sprite'),
+            '@fay/textures': path.join(pluginbase, 'textures'),
         },
     },
     plugins: [

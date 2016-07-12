@@ -1,16 +1,18 @@
 # Fay
 
-## A 2D JavaScript
+## A 2D JavaScript Renderer
+
+Based on [pixi.js](https://github.com/pixijs/pixi.js) but with a heavier focus on WebGL
+and a few core design differences that result in a familiar but slightly different API.
 
 ## Cool features
 
+- Very generic and highly extensible core.
 - Uses [mini-signals][mini-signals] for extremely fast events.
-- Debug builds have lots of checks, all of them are stripped out in prod builds for max perf.
-- Highly plugable. The core is generic and easily extensible.
+- Extra asserts and checks in debug builds, all of which are stripped out in prod builds.
 
 ## Todo:
 
-- Texture, BaseTexture
 - Tinting
 - Bounds
 - Masks
@@ -19,6 +21,7 @@
 - Custom shaders
 - DevicePixelRatio
 - Interactions (https://github.com/pixijs/pixi.js/issues/241)
+- Texture rotation
 
 [mini-signals]: https://github.com/Hypercubed/mini-signals
 [ee3]: https://github.com/primus/eventemitter3

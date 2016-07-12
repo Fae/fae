@@ -49,6 +49,6 @@ const c = WebGLRenderingContext;
 BlendMode.NORMAL       = new BlendMode(c.ONE, c.ONE_MINUS_SRC_ALPHA, c.FUNC_ADD);
 BlendMode.ADD          = new BlendMode(c.ONE, c.DST_ALPHA, c.FUNC_ADD);
 BlendMode.SUBTRACT     = new BlendMode(c.ONE, c.DST_ALPHA, c.FUNC_SUBTRACT);
-BlendMode.MULTIPLY     = new BlendMode(c.DST_COLOR, c.ONE_MINUS_SRC_ALPHA, c.FUNC_SUBTRACT);
-BlendMode.EXCLUSION    = new BlendMode(c.ONE_MINUS_DST_COLOR, c.ONE_MINUS_SRC_COLOR, c.FUNC_SUBTRACT);
+BlendMode.MULTIPLY     = new BlendMode(c.DST_COLOR, c.ONE_MINUS_SRC_ALPHA, c.FUNC_ADD);
+BlendMode.EXCLUSION    = new BlendMode(c.ONE_MINUS_DST_COLOR, c.ONE_MINUS_SRC_COLOR, c.FUNC_ADD);
 /* eslint-enable no-multi-spaces */

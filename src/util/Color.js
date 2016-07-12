@@ -60,7 +60,7 @@ export default class Color
      */
     static fromArray(components, normalized = false)
     {
-        // @ifdef
+        // @ifdef DEBUG
         ASSERT(components.length > 2, 'Component array passed to Color.fromArray() is too short.');
         // @endif
         const out = new Color(0, 0, 0, normalized);
@@ -169,7 +169,6 @@ export default class Color
         // @ifdef DEBUG
         ASSERT(v >= 0 && v <= 0xffffff, `Value out of range for color: 0x${v.toString(16)} (min: 0, max: 0xffffff).`);
         // @endif
-
         this._value[0] = v;
     }
 

@@ -27,8 +27,7 @@
     "build": "npm run hash && webpack -p --config ./build/webpack.config.js --output-filename fay.min.js --progress ",
     "dev": "npm run hash && webpack -d --config ./build/webpack.config.js --output-filename fay.js --progress --colors",
     "lint": "eslint src/ && eslint plugins/",
-    "start": "npm run build",
-    "lint": "eslint ."
+    "start": "npm run build"
   },
   "dependencies": {
     "bit-twiddle": "^1.0.2",

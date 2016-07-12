@@ -33,9 +33,9 @@ export default class Manager
      */
     destroy()
     {
-        this.renderer.onContextChange.detach(this._onContextChangeBinding);
-
         this.renderer = null;
+
+        this._onContextChangeBinding.detach();
         this._onContextChangeBinding = null;
     }
 }

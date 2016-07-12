@@ -1,5 +1,4 @@
 import GLShader from '../gl/GLShader';
-import { PRECISION } from '../config';
 
 /**
  * Shader wrapper.
@@ -61,9 +60,28 @@ function checkPrecision(source)
         // not in a comment, check if precision is set
         if (line.substring(0, 9) !== 'precision')
         {
-            return `precision ${PRECISION.DEFAULT} float;\n\n${source}`;
+            return `precision ${Shader.PRECISION.DEFAULT} float;\n\n${source}`;
         }
     }
 
     return source;
 }
+
+/**
+ * Value that specifies float precision in shaders.
+ *
+ * @static
+ * @constant
+ * @memberof Shader
+ * @type {object}
+ * @property {string} DEFAULT=MEDIUM - The default precision to use.
+ * @property {string} LOW - The low precision header.
+ * @property {string} MEDIUM - The medium precision header.
+ * @property {string} HIGH - The high precision header.
+ */
+Shader.PRECISION = {
+    DEFAULT:    'mediump',
+    LOW:        'lowp',
+    MEDIUM:     'mediump',
+    HIGH:       'highp',
+};

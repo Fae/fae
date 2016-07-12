@@ -3,8 +3,10 @@ import SceneObject from './SceneObject';
 import { util/* @ifdef DEBUG */, debug/* @endif */ } from '@fay/core';
 
 /**
- * Base class for an object that has a transform in the scene.
- * This object's render methods are abstract.
+ * A Container is a SceneObject that has children. It overrides
+ * the necessary methods to ensure that actions (like update, render, etc)
+ * call the children. This is the main class that makes it possible to have
+ * a tree of SceneObjects.
  *
  * @class
  */
@@ -33,6 +35,32 @@ export default class Container extends SceneObject
     }
 
     /**
+     * Updates the object properties to prepare it for rendering.
+     *
+     * - Multiply transform matrix by the parent matrix,
+     * - Multiply local alpha by the parent world alpha,
+     * - Update the boundingBox
+     *
+     * @return {boolean} True if the object was updated, false otherwise.
+     */
+    update()
+    {
+        if (!super.update()) return false;
+
+        for (let i = 0; i < this.children.length; ++i)
+        {
+            const child = this.children[i];
+
+            if (child.updateTransform())
+            {
+                this.boundingBox.union(child.boundingBox);
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Called for this object to render itself.
      *
      * @param {!Renderer} renderer - The renderer to render with.
@@ -40,15 +68,40 @@ export default class Container extends SceneObject
     render(renderer)
     {
         // if the object is not visible or the alpha is 0 then no need to render this element
-        if (!this.visible || this.worldAlpha <= 0 || !this.renderable)
+        if (!this.visible || this.worldAlpha <= 0)
         {
             return;
         }
 
+        this._render(renderer);
+
         for (let i = 0; i < this.children.length; ++i)
         {
-            this.children[i].renderL(renderer);
+            this.children[i].render(renderer);
         }
+    }
+
+    /**
+     * Called to test if this object contains the passed in point.
+     *
+     * @param {number} x - The x coord to check.
+     * @param {number} y - The y coord to check.
+     * @return {SceneObject} The SceneObject that was hit, or null if nothing was.
+     */
+    hitTest(x, y)
+    {
+        for (let i = 0; i < this.children.length; ++i)
+        {
+            const child = this.children[i];
+            const hit = child.hitTest(x, y);
+
+            if (hit)
+            {
+                return hit;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -140,5 +193,17 @@ export default class Container extends SceneObject
 
         this.onChildrenChange.detachAll();
         this.onChildrenChange = null;
+    }
+
+    /**
+     * Called internally for this object to render itself. This is only called
+     * if the container is visible has a worldAlpha > 0.
+     *
+     * @private
+     * @param {!Renderer} renderer - The renderer to render with.
+     */
+    _render(/* renderer */)
+    {
+        /* Abstract */
     }
 }

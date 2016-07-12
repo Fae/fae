@@ -20,8 +20,5 @@
   "dependencies": {
     "@fay/core": "^1.0.0",
     "mini-signals": "^1.1.1"
-  },
-  "fay": {
-    "namespace": "scene"
   }
 }

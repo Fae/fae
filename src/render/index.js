@@ -4,6 +4,4 @@ export { default as RenderTarget } from './RenderTarget';
 export { default as Shader } from './Shader';
 
 export { default as Manager } from './managers/Manager';
-export { default as BlendModeManager } from './managers/BlendModeManager';
-
-export { default as ObjectRenderer } from './ObjectRenderer';
+export { default as ObjectRenderer } from './managers/ObjectRenderer';

@@ -17,14 +17,14 @@ export default class SceneObject
         /**
          * The transformation of the display object.
          *
-         * @type {Transform}
+         * @member {Transform}
          */
         this.transform = new math.Transform();
 
         /**
          * Is this object visible? When set to false, the object is not rendered.
          *
-         * @type {boolean}
+         * @member {boolean}
          * @default true
          */
         this.visible = true;
@@ -33,7 +33,7 @@ export default class SceneObject
          * The alpha of the object when rendered.
          * 0 = transparent, 1 = opaque.
          *
-         * @type {number}
+         * @member {number}
          * @default 1
          */
         this.alpha = 1;
@@ -42,7 +42,7 @@ export default class SceneObject
          * The world alpha of the object (local alpha * parent alpha).
          * 0 = transparent, 1 = opaque.
          *
-         * @type {number}
+         * @member {number}
          * @default 1
          */
         this.worldAlpha = 1;
@@ -50,28 +50,35 @@ export default class SceneObject
         /**
          * The parent scene object this belongs to.
          *
-         * @type {Container}
+         * @member {Container}
          */
         this.parent = null;
 
         /**
+         * The bounding box of this scene object.
+         *
+         * @member {Rectangle}
+         */
+        this.boundingBox = new math.Rectangle();
+
+        /**
          * Dispatched in the update loop, each frame.
          *
-         * @type {Signal}
+         * @member {Signal}
          */
         this.onUpdate = new Signal();
 
         /**
          * Dispatched before the object is rendered.
          *
-         * @type {Signal}
+         * @member {Signal}
          */
         this.onPreRender = new Signal();
 
         /**
          * Dispatched after the object is rendered.
          *
-         * @type {Signal}
+         * @member {Signal}
          */
         this.onPostRender = new Signal();
 
@@ -82,7 +89,7 @@ export default class SceneObject
          *
          * 1. {DisplayObject} parent - The parent it was added to.
          *
-         * @type {Signal}
+         * @member {Signal}
          */
         this.onAddedToParent = new Signal();
 
@@ -93,9 +100,32 @@ export default class SceneObject
          *
          * 1. {DisplayObject} parent - The parent it was removed from.
          *
-         * @type {Signal}
+         * @member {Signal}
          */
         this.onRemovedFromParent = new Signal();
+    }
+
+    /**
+     * Updates the object properties to prepare it for rendering.
+     *
+     * - Multiply transform matrix by the parent matrix,
+     * - Multiply local alpha by the parent world alpha,
+     * - Update the boundingBox
+     *
+     * @return {boolean} True if the object was updated, false otherwise.
+     */
+    update()
+    {
+        if (!this.visible || !this.parent) return false;
+
+        this.transform.update(this.parent.transform);
+
+        this.worldAlpha = this.alpha * this.parent.worldAlpha;
+
+        this.boundingBox.x = this.transform.x;
+        this.boundingBox.y = this.transform.y;
+
+        return true;
     }
 
     /**
@@ -106,6 +136,19 @@ export default class SceneObject
     render(/* renderer */)
     {
         /* Abstract */
+    }
+
+    /**
+     * Called to test if this object contains the passed in point.
+     *
+     * @param {number} x - The x coord to check.
+     * @param {number} y - The y coord to check.
+     * @return {SceneObject} The SceneObject that was hit, or null if nothing was.
+     */
+    hitTest(/* x, y */)
+    {
+        /* Abstract */
+        return null;
     }
 
     /**

@@ -13,7 +13,7 @@ export default class Rectangle
      * @param {number} width - The overall width of this rectangle
      * @param {number} height - The overall height of this rectangle
      */
-    constructor(x = 0, y = 0, width = 1, height = 1)
+    constructor(x = 0, y = 0, width = 0, height = 0)
     {
         /**
          * The X position of the top-left of the rectangle.
@@ -42,6 +42,46 @@ export default class Rectangle
          * @member {number}
          */
         this.height = height;
+    }
+
+    /**
+     * The left-most X coord of this rectangle.
+     *
+     * @member {number}
+     */
+    get left()
+    {
+        return this.x;
+    }
+
+    /**
+     * The right-most X coord of this rectangle.
+     *
+     * @member {number}
+     */
+    get right()
+    {
+        return this.x + this.width;
+    }
+
+    /**
+     * The top-most Y coord of this rectangle.
+     *
+     * @member {number}
+     */
+    get top()
+    {
+        return this.y;
+    }
+
+    /**
+     * The bottom-most Y coord of this rectangle.
+     *
+     * @member {number}
+     */
+    get bottom()
+    {
+        return this.y + this.height;
     }
 
     /**
@@ -96,7 +136,92 @@ export default class Rectangle
     }
 
     /**
-     * Grows the rectangle on all sides.
+     * Grows the rectangle to contain the passed rectangle. Expanding size
+     * and reducing position as necessary.
+     *
+     * For example, given these rectangles:
+     *
+     * ```
+     * -----------------
+     * | 1 ----------  |
+     * |   | 2      |  |
+     * ----|--------|--
+     *     ----------
+     * ```
+     *
+     * If we call `rect1.union(rect2)` we get this rectangle:
+     *
+     * ```
+     * -----------------
+     * | 1             |
+     * |               |
+     * |               |
+     * ----------------
+     * ```
+     *
+     * This happens even if they do not intersect.
+     *
+     * @param {Rectangle} rect -The rectangle to union with.
+     * @return {Rectangle} Returns itself.
+     */
+    union(rect)
+    {
+        const x = this.x;
+        const y = this.y;
+
+        this.x = Math.min(rect.x, this.x);
+        this.y = Math.min(rect.y, this.y);
+
+        this.width = Math.max(rect.x + rect.width, x + this.width) - this.x;
+        this.height = Math.max(rect.y + rect.height, y + this.height) - this.y;
+
+        return this;
+    }
+
+    /**
+     * Sets this rectangle to the intersection of this rectangle and the passed one.
+     *
+     * For example, given these rectangles:
+     *
+     * ```
+     * -----------------
+     * | 1 ----------  |
+     * |   | 2      |  |
+     * ----|--------|--
+     *     ----------
+     * ```
+     *
+     * If we call `rect1.intersection(rect2)` we get this rectangle:
+     *
+     * ```
+     *
+     *     ----------
+     *     | 1      |
+     *     ---------
+     *
+     * ```
+     *
+     * This happens even if they do not intersect.
+     *
+     * @param {Rectangle} rect -The rectangle to union with.
+     * @return {Rectangle} Returns itself.
+     */
+    intersection(rect)
+    {
+        const x = this.x;
+        const y = this.y;
+
+        this.x = Math.max(rect.x, this.x);
+        this.y = Math.max(rect.y, this.y);
+
+        this.width = Math.min(rect.x + rect.width, x + this.widthR) - this.x;
+        this.height = Math.min(rect.y + rect.height, y + this.height) - this.y;
+
+        return this;
+    }
+
+    /**
+     * Grows the rectangle on all sides. The center stays constant.
      *
      * For example, this rectangle:
      *
@@ -120,20 +245,16 @@ export default class Rectangle
      * Notice that the position (top-left) doesn't stay in the same
      * place, it moved back slightly.
      *
-     * @param {number} paddingX - The amount to "grow" in the X direction.
-     * @param {number} paddingY - The amount to "grow" in the Y direction.
+     * @param {number} dx - The amount to "grow" in the X direction.
+     * @param {number} dy - The amount to "grow" in the Y direction.
      * @return {Rectangle} returns itself.
      */
-    pad(paddingX, paddingY)
+    inflate(dx = 0, dy = 0)
     {
-        paddingX = paddingX || 0;
-        paddingY = paddingY || ((paddingY !== 0) ? paddingX : 0);
-
-        this.x -= paddingX;
-        this.y -= paddingY;
-
-        this.width += paddingX * 2;
-        this.height += paddingY * 2;
+        this.x -= dx;
+        this.y -= dy;
+        this.width += dx * 2;
+        this.height += dy * 2;
 
         return this;
     }
@@ -205,4 +326,4 @@ export default class Rectangle
  * @static
  * @constant
  */
-Rectangle.EMPTY = new Rectangle(0, 0, 0, 0);
+Rectangle.EMPTY = new Rectangle();

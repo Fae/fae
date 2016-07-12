@@ -1,43 +1,242 @@
 import { Container } from '@fay/scene';
-import { math, util } from '@fay/core';
+import { Texture } from '@fay/textures';
+import { util } from '@fay/core';
+import SpriteRenderer from './SpriteRenderer';
 
 /**
+ * A Sprite is a textured SceneObject. It is implemented as a quad
+ * with a texture drawn on it. You can modify properties to make it
+ * render differently, including assinging custom shaders.
+ *
  * @class
  */
 export default class Sprite extends Container
 {
     /**
-     * Creates a new sprite.
-     *
-     * @param {!WebGLTexture} texture - The texture to use.
-     * @param {VertexArray} [batchArray] - The vertex array object for this sprite to insert itself into
-     * @param {number} [batchIndex] - The index at which this sprite should manipulate the vertex array
+     * @param {Texture} texture - The texture to use.
      */
-    constructor(texture)
+    constructor(texture = Texture.EMPTY)
     {
         super();
 
+        /**
+         * The tint to apply to the sprite. A value of white will render without
+         * any tinting. This works because this color value is multiplied against
+         * the actual color value in the texture (per pixel).
+         *
+         * @member {Color}
+         */
         this.tint = util.Color.WHITE.clone();
-        this.texture = texture;
+
+        /**
+         * The blend mode to be applied to the sprite.
+         *
+         * @member {BlendMode}
+         * @default BlendMode.NORMAL
+         */
+        this.blendMode = util.BlendMode.NORMAL;
+
+        /**
+         * A custom shader that will be used to render the sprite. Set to
+         * `null` to use the default shader.
+         *
+         * @member {Shader}
+         */
+        this.shader = null;
+
+        /**
+         * The vertex data used to draw the sprite.
+         *
+         * @readonly
+         * @member {Float32Array}
+         */
         this.vertexData = new Float32Array(16);
-        this.anchor = new math.Vectord2d();
+
+        /**
+         * The X coord of the attachment point of the texture.
+         *
+         * @private
+         * @member {number}
+         */
+        this._anchorX = 0;
+
+        /**
+         * The Y coord of the attachment point of the texture.
+         *
+         * @private
+         * @member {number}
+         */
+        this._anchorY = 0;
+
+        /**
+         * Tracker for if the vertices are dirty.
+         *
+         * @private
+         * @member {number}
+         */
+        this._vertsDirty = true;
+
+        /**
+         * The texture object to use.
+         *
+         * @private
+         * @member {Texture}
+         */
+        this._texture = null;
+        this._onTextureUpdateBinding = null;
+
+        // run texture setter
+        this.texture = texture;
     }
 
     /**
-     * Called for this object to render itself.
+     * The X coord of the attachment point of the texture.
      *
+     * @member {number}
+     */
+    get anchorX()
+    {
+        return this._anchorX;
+    }
+
+    /**
+     * @param {number} v - The new anchor.
+     */
+    set anchorX(v)
+    {
+        if (this.anchorX === v) return;
+
+        this._anchorX = v;
+        this._vertsDirty = true;
+    }
+
+    /**
+     * The Y coord of the attachment point of the texture.
+     *
+     * @member {number}
+     */
+    get anchorY()
+    {
+        return this._anchorY;
+    }
+
+    /**
+     * @param {number} v - The new anchor.
+     */
+    set anchorY(v)
+    {
+        if (this.anchorY === v) return;
+
+        this._anchorY = v;
+        this._vertsDirty = true;
+    }
+
+    /**
+     * The texture to use.
+     *
+     * @member {Texture}
+     */
+    get texture()
+    {
+        return this._texture;
+    }
+
+    /**
+     * @param {Texture} v - The new texture.
+     */
+    set texture(v)
+    {
+        if (this._texture === v) return;
+
+        if (this._onTextureUpdateBinding)
+        {
+            this._onTextureUpdateBinding.detach();
+            this._onTextureUpdateBinding = null;
+        }
+
+        this._texture = v;
+        this._vertsDirty = true;
+
+        if (v)
+        {
+            this._onTextureUpdateBinding = v.onUpdate.add(this._onTextureUpdate, this);
+
+            if (v.ready)
+            {
+                this._onTextureUpdate();
+            }
+        }
+    }
+
+    /**
+     * Updates the object properties to prepare it for rendering.
+     *
+     * - Multiply transform matrix by the parent matrix,
+     * - Multiply local alpha by the parent world alpha,
+     * - Update the boundingBox
+     *
+     * @return {boolean} True if the object was updated, false otherwise.
+     */
+    update()
+    {
+        if (!super.update()) return false;
+
+        if (this._vertsDirty)
+        {
+            this.calculateVertices();
+        }
+
+        // TODO: Bounds need to take into account transform,
+        // base them on verts instead.
+
+        if (this._texture)
+        {
+            this.boundingBox.width = this._texture.orig.width;
+            this.boundingBox.height = this._texture.orig.height;
+        }
+
+        return true;
+    }
+
+    /**
+     * Called to test if this object contains the passed in point.
+     *
+     * @param {number} x - The x coord to check.
+     * @param {number} y - The y coord to check.
+     * @return {SceneObject} The SceneObject that was hit, or null if nothing was.
+     */
+    hitTest(x, y)
+    {
+        const hit = super.hitTest(x, y);
+
+        if (hit)
+        {
+            return hit;
+        }
+
+        if (this.boundingBox.contains(x, y))
+        {
+            return this;
+        }
+
+        return null;
+    }
+
+    /**
+     * Called internally for this object to render itself.
+     *
+     * @private
      * @param {!Renderer} renderer - The renderer to render with.
      */
-    render(renderer)
+    _render(renderer)
     {
-        this.calculateVertices();
-
-        renderer.setObjectRenderer(renderer.plugins.sprite);
-        renderer.plugins.sprite.render(this);
+        renderer.setObjectRenderer(SpriteRenderer);
+        renderer.currentObjectRenderer.render(this);
     }
 
     /**
      * Calculates the vertices used to draw the sprite.
+     *
      */
     calculateVertices()
     {
@@ -60,8 +259,8 @@ export default class Sprite extends Container
 
         if (trim)
         {
-            // if the sprite is trimmed and is not a tilingsprite then we
-            // need to add the extra space before transforming the sprite coords..
+            // if the sprite is trimmed then we need to add the extra space
+            // before transforming the sprite coords.
             w1 = trim.x - (this.anchor.x * orig.width);
             w0 = w1 + trim.width;
 
@@ -105,17 +304,35 @@ export default class Sprite extends Container
      */
     destroy(options)
     {
+        super.destroy(options);
+
         const destroyTexture = typeof options === 'boolean' ? options : options && options.texture;
 
         if (destroyTexture)
         {
-            const destroyBaseTexture = typeof options === 'boolean' ? options : options && options.baseTexture;
-
-            this.texture.destroy(destroyBaseTexture);
+            this.texture.destroy(options);
         }
 
-        this.texture = null;
+        this.tint = null;
+        this.blendMode = null;
+        this.shader = null;
         this.vertexData = null;
-        this.anchor = null;
+
+        this._texture = null;
+
+        if (this._onTextureUpdateBinding)
+        {
+            this._onTextureUpdateBinding.detach();
+            this._onTextureUpdateBinding = null;
+        }
+    }
+
+    /**
+     * Called when the underlying texture updates.
+     *
+     */
+    _onTextureUpdate()
+    {
+        this._vertsDirty = true;
     }
 }

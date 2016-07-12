@@ -1,6 +1,6 @@
-import { ObjectRenderer, Shader, glut, util/* @ifdef DEBUG */, debug/* @endif */ } from '@fay/core';
+import Device from 'ismobilejs';
 import bitTwiddle from 'bit-twiddle';
-import { DEFAULT_SPRITE_BATCH_SIZE, MAX_TEXTURE_COUNT } from './config';
+import { Renderer, ObjectRenderer, Shader, glutil, util/* @ifdef DEBUG */, debug/* @endif */ } from '@fay/core';
 
 const vertSource = require('./shader/multi-texture.vert');
 const fragTemplate = require('./shader/multi-texture.frag');
@@ -37,7 +37,7 @@ export default class SpriteRenderer extends ObjectRenderer
          *
          * @member {number}
          */
-        this.size = bitTwiddle.nextPow2(DEFAULT_SPRITE_BATCH_SIZE);
+        this.size = bitTwiddle.nextPow2(SpriteRenderer.DEFAULT_SPRITE_BATCH_SIZE);
 
         /**
          * Buffer views used to upload smaller portions of the data size when the
@@ -119,7 +119,7 @@ export default class SpriteRenderer extends ObjectRenderer
         const gl = this.renderer.gl;
 
         // step 1: first check max textures the GPU can handle.
-        this._maxTextures = Math.min(gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS), MAX_TEXTURE_COUNT);
+        this._maxTextures = Math.min(gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS), SpriteRenderer.MAX_TEXTURE_COUNT);
 
         // step 2: check the maximum number of if statements the shader can have too..
         this._maxTextures = util.getMaxIfStatmentsInShader(gl, this._maxTextures);
@@ -129,7 +129,7 @@ export default class SpriteRenderer extends ObjectRenderer
         this.shaders[1] = generateMultiTextureShader(gl, 2);
 
         // create a couple of buffers
-        this.indexBuffer = glut.GLBuffer.createIndexBuffer(gl, this.indices, gl.STATIC_DRAW);
+        this.indexBuffer = glutil.GLBuffer.createIndexBuffer(gl, this.indices, gl.STATIC_DRAW);
 
         // we use the second shader as the first one depending on your browser may omit aTextureId
         // as it is not used by the shader so is optimized out.
@@ -193,7 +193,7 @@ export default class SpriteRenderer extends ObjectRenderer
         let groupCount = 1;
         let textureCount = 0;
         let currentGroup = this.groups[0];
-        let blendMode = this.sprites[0].blendMode;
+        let blendMode = this.sprites[0].blendMode || util.BlendMode.NORMAL;
 
         currentGroup.textures.length = 0;
         currentGroup.start = 0;
@@ -207,9 +207,9 @@ export default class SpriteRenderer extends ObjectRenderer
             // they have all ready been calculated so we just need to push them into the buffer.
             const sprite = this.sprites[i];
 
-            nextTexture = sprite._texture.baseTexture;
+            nextTexture = sprite._texture.source;
 
-            if (blendMode !== sprite.blendMode)
+            if (!blendMode.equals(sprite.blendMode))
             {
                 blendMode = sprite.blendMode;
 
@@ -242,7 +242,7 @@ export default class SpriteRenderer extends ObjectRenderer
                     nextTexture._enabled = this.tick;
                     nextTexture._id = textureCount;
 
-                    currentGroup.textures.push(nextTexture);
+                    currentGroup.textures.push(nextTexture.getGlTexture(this.renderer));
                     textureCount++;
                 }
             }
@@ -311,11 +311,11 @@ export default class SpriteRenderer extends ObjectRenderer
                 shader = this.shaders[groupTextureCount - 1] = generateMultiTextureShader(gl, groupTextureCount);
             }
 
-            this.renderer.bindShader(shader);
+            this.renderer.state.setShader(shader);
 
             for (let j = 0; j < groupTextureCount; ++j)
             {
-                this.renderer.bindTexture(group.textures[j], j);
+                group.textures[j].bind(j);
             }
 
             // set the blend mode..
@@ -357,7 +357,8 @@ export default class SpriteRenderer extends ObjectRenderer
     destroy()
     {
         // detach event
-        this.renderer.onBeforeRender.detach(this._onBeforeRenderBinding);
+        this._onBeforeRenderBinding.detach();
+        this._onBeforeRenderBinding = null;
 
         // destroy vertex buffers
         for (let i = 0; i < this.vertexCount; ++i)
@@ -411,7 +412,7 @@ export default class SpriteRenderer extends ObjectRenderer
      */
     _createVao(gl, attribs)
     {
-        const vbuffer = glut.GLBuffer.createVertexBuffer(gl, null, gl.STREAM_DRAW);
+        const vbuffer = glutil.GLBuffer.createVertexBuffer(gl, null, gl.STREAM_DRAW);
 
         this.vertexBuffers.push(vbuffer);
 
@@ -469,3 +470,25 @@ function generateSampleSrc(maxTextures)
 
     return src;
 }
+
+/**
+ * Default batch size for the sprite renderer.
+ *
+ * @static
+ * @constant
+ * @memberof SpriteRenderer
+ * @type {number}
+ */
+SpriteRenderer.DEFAULT_SPRITE_BATCH_SIZE = 4096;
+
+/**
+ * Default batch size for the sprite renderer.
+ *
+ * @static
+ * @constant
+ * @memberof SpriteRenderer
+ * @type {number}
+ */
+SpriteRenderer.MAX_TEXTURE_COUNT = Device.tablet || Device.phone ? 2 : 32;
+
+Renderer.registerObjectRenderer(SpriteRenderer);

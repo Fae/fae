@@ -177,15 +177,11 @@ export default class GLTexture
      *
      * @param {number} location - The texture slot to fill.
      */
-    bind(location = null)
+    bind(location = 0)
     {
         const gl = this.gl;
 
-        if (location !== null)
-        {
-            gl.activeTexture(gl.TEXTURE0 + location);
-        }
-
+        gl.activeTexture(gl.TEXTURE0 + location);
         gl.bindTexture(gl.TEXTURE_2D, this.texture);
     }
 

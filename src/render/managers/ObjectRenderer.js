@@ -1,4 +1,4 @@
-import Manager from './managers/Manager';
+import Manager from './Manager';
 
 /**
  * @class
@@ -42,3 +42,5 @@ export default class ObjectRenderer extends Manager
         // no base implementation
     }
 }
+
+ObjectRenderer._rendererUid = -1;

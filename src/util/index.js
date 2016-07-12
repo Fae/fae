@@ -10,6 +10,7 @@ let nextUid = 0;
 export { default as Color } from './Color';
 export { default as Buffer } from './Buffer';
 export { default as BlendMode } from './BlendMode';
+export { default as Flags } from './Flags';
 
 /**
  * Logs an error to the console.

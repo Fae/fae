@@ -4,12 +4,8 @@ const path      = require('path');
 const fs        = require('fs');
 const async     = require('async');
 const buildName = require('./build-name');
-const pkg       = require('../package.json');
 
 const SingleEntryDependency = require('webpack/lib/dependencies/SingleEntryDependency');
-const AliasPlugin = require('enhanced-resolve/lib/AliasPlugin');
-
-const PLUGIN_NAME = 'entry-generator-plugin';
 
 /**
  * @class
@@ -101,27 +97,26 @@ class EntryGeneratorWebpackPlugin
                 for (let i = 0; i < pluginData.length; ++i)
                 {
                     const data = pluginData[i];
-                    const namespace = data.pkg.fay && data.pkg.fay.namespace ? data.pkg.fay.namespace : name;
+                    const pkg = data.pkg;
+                    const namespace = pkg.fay && pkg.fay.namespace ? pkg.fay.namespace : pkg.name.replace('@fay/', '');
 
                     str += `import * as ${namespace} from '${data.pkg.name}';\n`;
                     str += `export { ${namespace} };\n\n`;
                 }
 
                 // write exports and update entry
-                fs.writeFile(this.outputFile, str, (err) =>
-                {
-                    if (err) return done(err);
+                fs.writeFile(this.outputFile, str, done);
 
-                    done();
-                });
+                return null;
             });
+
+            return null;
         });
     }
 
     /**
      * Loads the package data about plugins.
      *
-     * @param {object} basePath - The base path to look for the plugins folder.
      * @param {function} cb - Callback to call when complete.
      */
     loadPluginData(cb)

@@ -68,6 +68,8 @@ export default class Matrix2d extends Float32Array
     {
         super(buffer, byteOffset, Matrix2d.ELEMENT_LENGTH);
 
+        this._mat3 = null;
+
         this.identity();
     }
 
@@ -189,6 +191,50 @@ export default class Matrix2d extends Float32Array
     set ty(v)
     {
         this[5] = v;
+    }
+
+    /**
+     * Converts to the full 3x3 matrix form, optionally transposing.
+     *
+     * @param {boolean} transpose - Should we transpose the matrix?
+     * @param {Float32Array} [out] - An optional array to assign values to.
+     * @return {Float32Array} A 9-element array representing the 3x3 Matrix.
+     */
+    toMat3(transpose = true, out)
+    {
+        if (!out && !this._mat3)
+        {
+            this._mat3 = new Float32Array(9);
+        }
+
+        out = out || this._mat3;
+
+        if (transpose)
+        {
+            out[0] = this.a;
+            out[1] = this.b;
+            out[2] = 0;
+            out[3] = this.c;
+            out[4] = this.d;
+            out[5] = 0;
+            out[6] = this.tx;
+            out[7] = this.ty;
+            out[8] = 1;
+        }
+        else
+        {
+            out[0] = this.a;
+            out[1] = this.c;
+            out[2] = this.tx;
+            out[3] = this.b;
+            out[4] = this.d;
+            out[5] = this.ty;
+            out[6] = 0;
+            out[7] = 0;
+            out[8] = 1;
+        }
+
+        return out;
     }
 
     /**

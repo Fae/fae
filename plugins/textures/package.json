@@ -19,8 +19,5 @@
   ],
   "dependencies": {
     "@fay/core": "^1.0.0"
-  },
-  "fay": {
-    "namespace": "sprite"
   }
 }

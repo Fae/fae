@@ -1,7 +1,6 @@
 import GLFramebuffer from '../gl/GLFramebuffer';
 import math from '../math';
 import Color from '../util/Color';
-import { SCALE_MODE } from '../config';
 
 /**
  * @class
@@ -17,13 +16,12 @@ export default class RenderTarget
      * @param {number} scaleMode - The mode to scale by.
      * @param {boolean} root - Whether this is the root render target or not.
      */
-    constructor(gl, width, height, scaleMode = SCALE_MODE.LINEAR, root = false)
+    constructor(gl, width, height, scaleMode = WebGLRenderingContext.LINEAR, root = false)
     {
         this.gl = gl;
         this.root = root;
 
         this.framebuffer = null;
-        this.texture = null;
 
         this.clearColor = Color.BLACK.clone();
 
@@ -43,7 +41,7 @@ export default class RenderTarget
         {
             this.framebuffer = GLFramebuffer.createRGBA(gl, 100, 100);
 
-            if (this.scaleMode === SCALE_MODE.NEAREST)
+            if (this.scaleMode === WebGLRenderingContext.NEAREST)
             {
                 this.frameBuffer.texture.enableNearestScaling();
             }
@@ -51,9 +49,6 @@ export default class RenderTarget
             {
                 this.frameBuffer.texture.enableLinearScaling();
             }
-
-            // this is used by the base texture
-            this.texture = this.frameBuffer.texture;
         }
         else
         {
@@ -90,6 +85,7 @@ export default class RenderTarget
 
     /**
      * Binds the buffers and initialises the viewport.
+     *
      */
     activate()
     {
@@ -199,7 +195,6 @@ export default class RenderTarget
 
         this.gl = null;
         this.frameBuffer = null;
-        this.texture = null;
         this.clearColor = null;
         this.size = null;
         this.projectionMatrix = null;
