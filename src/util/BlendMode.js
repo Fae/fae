@@ -23,7 +23,7 @@ export default class BlendMode
      */
     enable(gl)
     {
-        gl.blendFunc(this.srcRgb, this.dstRgb, this.srcAlpha, this.dstAlpha);
+        gl.blendFunc(this.sfactor, this.dfactor);
         gl.blendEquation(this.equation);
     }
 
@@ -38,7 +38,7 @@ export default class BlendMode
         return !!mode
             && this.sfactor === mode.sfactor
             && this.dfactor === mode.dfactor
-            && this.mode === mode.equation;
+            && this.equation === mode.equation;
     }
 }
 

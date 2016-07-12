@@ -88,7 +88,7 @@ export default class RenderState
 
         if (!force && equal) return false;
 
-        this.currentMode = mode;
+        this.blendMode = mode;
 
         if (mode)
         {
@@ -116,9 +116,9 @@ export default class RenderState
             shader.bind();
 
             // automatically set the projection matrix
-            if (this.target && shader.uniforms.projectionMatrix)
+            if (this.target && shader.uniforms.uProjectionMatrix)
             {
-                shader.uniforms.projectionMatrix = this.target.projectionMatrix.toMat3Array();
+                shader.uniforms.uProjectionMatrix = this.target.projectionMatrix.toMat3Array();
             }
         }
         else
@@ -146,9 +146,9 @@ export default class RenderState
         {
             target.activate();
 
-            if (this.shader && this.shader.uniforms.projectionMatrix)
+            if (this.shader && this.shader.uniforms.uProjectionMatrix)
             {
-                this.shader.uniforms.projectionMatrix = target.projectionMatrix.toMat3Array();
+                this.shader.uniforms.uProjectionMatrix = target.projectionMatrix.toMat3Array();
             }
         }
 
@@ -285,7 +285,7 @@ export default class RenderState
             this.enable(RenderState.FLAG[k], RenderState.defaultStateFlags.isSet(RenderState.FLAG[k]), true);
         });
 
-        this.setBlendMode(BlendMode.NORMAL, true);
+        // this.setBlendMode(BlendMode.NORMAL, true);
         this.setShader(null, true);
         this.setRenderTarget(null, true);
     }

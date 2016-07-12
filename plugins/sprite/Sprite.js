@@ -104,7 +104,7 @@ export default class Sprite extends Container
      */
     set anchorX(v)
     {
-        if (this.anchorX === v) return;
+        if (this._anchorX === v) return;
 
         this._anchorX = v;
         this._vertsDirty = true;
@@ -125,7 +125,7 @@ export default class Sprite extends Container
      */
     set anchorY(v)
     {
-        if (this.anchorY === v) return;
+        if (this._anchorY === v) return;
 
         this._anchorY = v;
         this._vertsDirty = true;
@@ -231,7 +231,7 @@ export default class Sprite extends Container
     _render(renderer)
     {
         renderer.setObjectRenderer(SpriteRenderer);
-        renderer.currentObjectRenderer.render(this);
+        renderer.currentRenderer.render(this);
     }
 
     /**
@@ -261,19 +261,19 @@ export default class Sprite extends Container
         {
             // if the sprite is trimmed then we need to add the extra space
             // before transforming the sprite coords.
-            w1 = trim.x - (this.anchor.x * orig.width);
+            w1 = trim.x - (this._anchorX * orig.width);
             w0 = w1 + trim.width;
 
-            h1 = trim.y - (this.anchor.y * orig.height);
+            h1 = trim.y - (this._anchorY * orig.height);
             h0 = h1 + trim.height;
         }
         else
         {
-            w0 = (orig.width) * (1 - this.anchor.x);
-            w1 = (orig.width) * -this.anchor.x;
+            w0 = (orig.width) * (1 - this._anchorX);
+            w1 = (orig.width) * -this._anchorX;
 
-            h0 = orig.height * (1 - this.anchor.y);
-            h1 = orig.height * -this.anchor.y;
+            h0 = orig.height * (1 - this._anchorY);
+            h1 = orig.height * -this._anchorY;
         }
 
         // xy

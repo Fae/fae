@@ -108,6 +108,8 @@ export default class SpriteRenderer extends render.ObjectRenderer
 
         this._maxTextures = 0;
         this._onBeforeRenderBinding = this.renderer.onBeforeRender.add(this.onBeforeRender, this);
+
+        this.onContextChange();
     }
 
     /**
@@ -282,7 +284,7 @@ export default class SpriteRenderer extends render.ObjectRenderer
             buffer.float32View[index++] = textureId;
         }
 
-        currentGroup.size = (this.currentIndex - 1) - currentGroup.start;
+        currentGroup.size = this.currentIndex - currentGroup.start;
 
         this.vertexCount++;
 
@@ -295,7 +297,7 @@ export default class SpriteRenderer extends render.ObjectRenderer
         debug.ASSERT(this.vertexBuffers.length > this.vertexCount, 'Number of Vertex Buffers is too small.');
         // @endif
 
-        this.vertexBuffers[this.vertexCount].upload(buffer.bytes, 0);
+        this.vertexBuffers[this.vertexCount].upload(buffer.buffer, 0);
         this.vao = this.vaos[this.vertexCount].bind();
 
         // render the groups..
@@ -419,11 +421,11 @@ export default class SpriteRenderer extends render.ObjectRenderer
         // build the vao object that will render..
         this.vaos.push(
             this.renderer.createVao()
-                .addIndex(this.indexBuffer)
-                .addAttribute(vbuffer, attribs.aVertexPosition, false, this.vertByteSize, 0)
-                .addAttribute(vbuffer, attribs.aTextureCoord, true, this.vertByteSize, 2 * 4)
-                .addAttribute(vbuffer, attribs.aColor, true, this.vertByteSize, 3 * 4)
-                .addAttribute(vbuffer, attribs.aTextureId, false, this.vertByteSize, 4 * 4)
+                .setIndexBuffer(this.indexBuffer)
+                .addAttribute(vbuffer, attribs.aVertexPosition, gl.FLOAT, false, this.vertByteSize, 0)
+                .addAttribute(vbuffer, attribs.aTextureCoord, gl.UNSIGNED_SHORT, true, this.vertByteSize, 2 * 4)
+                .addAttribute(vbuffer, attribs.aColor, gl.UNSIGNED_BYTE, true, this.vertByteSize, 3 * 4)
+                .addAttribute(vbuffer, attribs.aTextureId, gl.FLOAT, false, this.vertByteSize, 4 * 4)
         );
     }
 }

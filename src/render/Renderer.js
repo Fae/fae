@@ -164,7 +164,7 @@ export default class Renderer
         this.onBeforeRender.dispatch();
 
         // if no context, or context is lost, just bail.
-        if (!this.gl || !this.gl.isContextLost()) return;
+        if (!this.gl || this.gl.isContextLost()) return;
 
         // set the target
         target.transform = transform;
@@ -286,7 +286,7 @@ export default class Renderer
             this.screen.destroy();
         }
 
-        this.screen = new RenderTarget(gl, gl.canvas.width, gl.canvas.height, true);
+        this.screen = new RenderTarget(gl, gl.canvas.width, gl.canvas.height, RenderTarget.defaultScaleMode, true);
 
         this.state.setRenderTarget(this.screen);
 

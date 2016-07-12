@@ -141,7 +141,7 @@ export default class GLFramebuffer
      * @param {number} b - the blue value of the clearing colour
      * @param {number} a - the alpha value of the clearing colour
      */
-    clear(r, g, b, a)
+    clear(r = 0, g = 0, b = 0, a = 1)
     {
         this.bind();
 

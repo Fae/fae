@@ -26,6 +26,10 @@ export default class Buffer
         {
             _buffer = new ArrayBuffer(parentBufferOrSize);
         }
+        else if (parentBufferOrSize instanceof ArrayBuffer)
+        {
+            _buffer = parentBufferOrSize;
+        }
         else
         {
             // @ifdef DEBUG

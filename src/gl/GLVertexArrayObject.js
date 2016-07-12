@@ -138,16 +138,18 @@ export default class GLVertexArrayObject
      *
      * @param {WebGLBuffer} buffer - The buffer for the attribute.
      * @param {object} attribute - The attribute descriptor from the shader.
+     * @param {number} type - The GLEnum type of this attribute.
      * @param {boolean} normalized - Whether the value is normalized.
      * @param {number} stride - The size of a single element.
      * @param {number} start - The index in the buffer this attribute starts at.
      * @return {GLVertexArrayObject} Returns self.
      */
-    addAttribute(buffer, attribute, normalized = false, stride = 0, start = 0)
+    addAttribute(buffer, attribute, type, normalized = false, stride = 0, start = 0)
     {
         this.attributes.push({
             buffer,
             attribute,
+            type,
             normalized,
             stride,
             start,

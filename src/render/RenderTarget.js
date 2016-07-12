@@ -18,7 +18,7 @@ export default class RenderTarget
      * @param {number} scaleMode - The mode to scale by.
      * @param {boolean} root - Whether this is the root render target or not.
      */
-    constructor(gl, width, height, scaleMode = WebGLRenderingContext.LINEAR, root = false)
+    constructor(gl, width, height, scaleMode = RenderTarget.defaultScaleMode, root = false)
     {
         this.gl = gl;
         this.root = root;
@@ -206,3 +206,5 @@ export default class RenderTarget
         this.sourceFrame = null;
     }
 }
+
+RenderTarget.defaultScaleMode = WebGLRenderingContext.LINEAR;

@@ -116,11 +116,14 @@ export default class SceneObject
      */
     update()
     {
-        if (!this.visible || !this.parent) return false;
+        if (!this.visible) return false;
 
-        this.transform.update(this.parent.transform);
+        if (this.parent)
+        {
+            this.transform.update(this.parent.transform);
 
-        this.worldAlpha = this.alpha * this.parent.worldAlpha;
+            this.worldAlpha = this.alpha * this.parent.worldAlpha;
+        }
 
         this.boundingBox.x = this.transform.x;
         this.boundingBox.y = this.transform.y;

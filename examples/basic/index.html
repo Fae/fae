@@ -3,19 +3,29 @@
         <script src="../../dist/fay.js"></script>
     </head>
     <body>
-        <canvas id="view" width="1024" height="1024" />
+        <canvas id="view" width="512" height="512"></canvas>
 
         <script>
             let renderer = new Fay.render.Renderer(document.getElementById('view'));
             let img = new Image();
+            let sprite = null;
 
             img.src = 'bunny.png';
             img.addEventListener('load', function ()
             {
-                let sprite = new Fay.sprite.Sprite(new Fay.textures.Texture(img));
+                sprite = new Fay.sprite.Sprite(new Fay.textures.Texture(img));
+
+                render();
+            });
+
+            function render()
+            {
+                requestAnimationFrame(render);
+
+                sprite.update();
 
                 renderer.render(sprite);
-            });
+            }
         </script>
     </body>
 </html>

@@ -307,9 +307,9 @@ export default class TextureSource
             {
                 glTexture.enableLinearScaling();
             }
-        }
 
-        this._update(renderer.uid);
+            this._update(renderer.uid);
+        }
 
         return glTexture;
     }
