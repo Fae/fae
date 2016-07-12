@@ -71,7 +71,7 @@ export default class Matrix2d
          *
          * @member {number}
          */
-        this.a = 0;
+        this.a = 1;
 
         /**
          * The `b` component of the Matrix2d.
@@ -92,7 +92,7 @@ export default class Matrix2d
          *
          * @member {number}
          */
-        this.d = 0;
+        this.d = 1;
 
         /**
          * The `tx` component of the Matrix2d.
@@ -107,8 +107,6 @@ export default class Matrix2d
          * @member {number}
          */
         this.ty = 0;
-
-        this.identity();
     }
 
     /**
@@ -315,15 +313,10 @@ export default class Matrix2d
      **/
     scale(x, y)
     {
-        const a0 = this.a;
-        const a1 = this.b;
-        const a2 = this.c;
-        const a3 = this.d;
-
-        this.a = a0 * x;
-        this.b = a1 * x;
-        this.c = a2 * y;
-        this.d = a3 * y;
+        this.a *= x;
+        this.b *= x;
+        this.c *= y;
+        this.d *= y;
 
         return this;
     }
@@ -494,6 +487,21 @@ export default class Matrix2d
             && Math.abs(a3 - b3) <= EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3))
             && Math.abs(a4 - b4) <= EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4))
             && Math.abs(a5 - b5) <= EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5)));
+    }
+
+    /**
+     * Checks if the matrix has NaN or Infinity anywhere.
+     *
+     * @return {boolean} True if the matrix is valid, false otherwise.
+     */
+    valid()
+    {
+        return !isNaN(this.a) && this.a !== Infinity
+            && !isNaN(this.b) && this.b !== Infinity
+            && !isNaN(this.c) && this.c !== Infinity
+            && !isNaN(this.d) && this.d !== Infinity
+            && !isNaN(this.tx) && this.tx !== Infinity
+            && !isNaN(this.ty) && this.ty !== Infinity;
     }
 }
 

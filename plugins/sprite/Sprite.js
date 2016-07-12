@@ -181,7 +181,7 @@ export default class Sprite extends Container
     {
         if (!super.update()) return false;
 
-        if (this._vertsDirty)
+        if (this._texture.ready && (this._vertsDirty || this.transform.dirty))
         {
             this.calculateVertices();
         }
@@ -189,7 +189,7 @@ export default class Sprite extends Container
         // TODO: Bounds need to take into account transform,
         // base them on verts instead.
 
-        if (this._texture)
+        if (this._texture && this._texture.ready)
         {
             this.boundingBox.width = this._texture.orig.width;
             this.boundingBox.height = this._texture.orig.height;
@@ -291,6 +291,8 @@ export default class Sprite extends Container
         // xy
         vertexData[6] = (a * w1) + (c * h0) + tx;
         vertexData[7] = (d * h0) + (b * w1) + ty;
+
+        this._vertsDirty = false;
     }
 
     /**

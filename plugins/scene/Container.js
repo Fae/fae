@@ -51,7 +51,7 @@ export default class Container extends SceneObject
         {
             const child = this.children[i];
 
-            if (child.updateTransform())
+            if (child.update())
             {
                 this.boundingBox.union(child.boundingBox);
             }

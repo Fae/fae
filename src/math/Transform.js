@@ -1,5 +1,9 @@
-import Matrix2d from '../math/Matrix2d';
-import Vector2d from '../math/Vector2d';
+import Matrix2d from './Matrix2d';
+import Vector2d from './Vector2d';
+
+// @ifdef DEBUG
+import { ASSERT } from '../debug';
+// @endif
 
 // TODO: Pivot and skew
 
@@ -54,6 +58,7 @@ export default class Transform
          * @member {Vector2d}
          */
         this._scale = new Vector2d();
+        this._scale.x = this._scale.y = 1.0;
 
         /**
          * Skew component of transform.
@@ -82,6 +87,15 @@ export default class Transform
         // set scale to 1
         this.scaleX = 1.0;
         this.scaleY = 1.0;
+
+        /**
+         * Tracker for if the transform has changed. This Transform
+         * object will only set it to true. It is up to the owning object
+         * to decide it is "no longer dirty".
+         *
+         * @member {boolean}
+         */
+        this.dirty = true;
     }
 
     /**
@@ -221,7 +235,7 @@ export default class Transform
      */
     set scaleX(v)
     {
-        this.scale(v - this._scale.x, 0.0);
+        this.scale(v / this._scale.x, 1.0);
     }
 
     /**
@@ -231,7 +245,7 @@ export default class Transform
      */
     set scaleY(v)
     {
-        this.scale(0.0, v - this._scale.y);
+        this.scale(1.0, v / this._scale.y);
     }
 
     /**
@@ -293,8 +307,18 @@ export default class Transform
      */
     update(parent)
     {
+        this.dirty = true;
+
+        // @ifdef DEBUG
+        ASSERT(this._lt.valid(), 'Invalid local transform, property is set incorrectly somewhere...');
+        // @endif
+
         this._wt.copy(this._lt);
-        this._wt.multiply(parent);
+        this._wt.multiply(parent._wt);
+
+        // @ifdef DEBUG
+        ASSERT(this._wt.valid(), 'Invalid local transform, property is set incorrectly somewhere...');
+        // @endif
     }
 
     /**
@@ -306,6 +330,8 @@ export default class Transform
      */
     translate(x, y)
     {
+        this.dirty = true;
+
         this._lt.translate(x, y);
 
         this._position.x += x;
@@ -323,10 +349,12 @@ export default class Transform
      */
     scale(x, y)
     {
+        this.dirty = true;
+
         this._lt.scale(x, y);
 
-        this._scale.x += x;
-        this._scale.y += y;
+        this._scale.x *= x;
+        this._scale.y *= y;
 
         return this;
     }
@@ -340,6 +368,8 @@ export default class Transform
      */
     skew(x, y)
     {
+        this.dirty = true;
+
         this._skew.x = x;
         this._skew.y = y;
 
@@ -354,6 +384,8 @@ export default class Transform
      */
     rotate(rad)
     {
+        this.dirty = true;
+
         this._lt.rotate(rad);
 
         this._rotation += rad;

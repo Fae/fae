@@ -244,8 +244,13 @@ export default class SpriteRenderer extends render.ObjectRenderer
                     nextTexture._enabled = this.tick;
                     nextTexture._id = textureCount;
 
-                    currentGroup.textures.push(nextTexture.getGlTexture(this.renderer));
-                    textureCount++;
+                    const glTexture = nextTexture.getGlTexture(this.renderer);
+
+                    if (glTexture)
+                    {
+                        currentGroup.textures.push(glTexture);
+                        textureCount++;
+                    }
                 }
             }
 
@@ -290,14 +295,14 @@ export default class SpriteRenderer extends render.ObjectRenderer
 
         if (this.vertexBuffers.length <= this.vertexCount)
         {
-            this._createVao(this.shaders[1].attributes);
+            this._createVao(gl, this.shaders[1].attributes);
         }
 
         // @ifdef DEBUG
         debug.ASSERT(this.vertexBuffers.length > this.vertexCount, 'Number of Vertex Buffers is too small.');
         // @endif
 
-        this.vertexBuffers[this.vertexCount].upload(buffer.buffer, 0);
+        this.vertexBuffers[this.vertexCount].upload(buffer.bytes, 0);
         this.vao = this.vaos[this.vertexCount].bind();
 
         // render the groups..
@@ -305,6 +310,8 @@ export default class SpriteRenderer extends render.ObjectRenderer
         {
             const group = this.groups[i];
             const groupTextureCount = group.textures.length;
+
+            if (!groupTextureCount) continue;
 
             let shader = this.shaders[groupTextureCount - 1];
 

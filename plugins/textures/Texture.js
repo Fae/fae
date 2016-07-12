@@ -121,7 +121,7 @@ export default class Texture
      */
     get ready()
     {
-        return this.source ? this.source.ready : false;
+        return !!((this.source ? this.source.ready : false) && this.orig);
     }
 
     /**
