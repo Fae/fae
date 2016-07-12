@@ -56,141 +56,59 @@ const EPSILON = 0.000001;
  *
  * @class
  */
-export default class Matrix2d extends Float32Array
+export default class Matrix2d
 {
     /**
      * Creates a new identity Matrix2d
      *
-     * @param {ArrayBuffer|SharedArrayBufffer} buffer - The buffer to write to.
-     * @param {number} byteOffset - The byteOffset into the buffer to write to.
      */
-    constructor(buffer = new ArrayBuffer(24), byteOffset = 0)
+    constructor()
     {
-        super(buffer, byteOffset, Matrix2d.ELEMENT_LENGTH);
-
         this._mat3 = null;
 
+        /**
+         * The `a` component of the Matrix2d.
+         *
+         * @member {number}
+         */
+        this.a = 0;
+
+        /**
+         * The `b` component of the Matrix2d.
+         *
+         * @member {number}
+         */
+        this.b = 0;
+
+        /**
+         * The `c` component of the Matrix2d.
+         *
+         * @member {number}
+         */
+        this.c = 0;
+
+        /**
+         * The `d` component of the Matrix2d.
+         *
+         * @member {number}
+         */
+        this.d = 0;
+
+        /**
+         * The `tx` component of the Matrix2d.
+         *
+         * @member {number}
+         */
+        this.tx = 0;
+
+        /**
+         * The `ty` component of the Matrix2d.
+         *
+         * @member {number}
+         */
+        this.ty = 0;
+
         this.identity();
-    }
-
-    /**
-     * The `a` (index 0) component of the Matrix2d.
-     *
-     * @member {number}
-     */
-    get a()
-    {
-        return this[0];
-    }
-
-    /**
-     * Sets the `a` (index 0) component of the Matrix2d.
-     *
-     * @param {number} v - The value to set to.
-     */
-    set a(v)
-    {
-        this[0] = v;
-    }
-
-    /**
-     * The `b` (index 1) component of the Matrix2d.
-     *
-     * @member {number}
-     */
-    get b()
-    {
-        return this[1];
-    }
-
-    /**
-     * Sets the `b` (index 1) component of the Matrix2d.
-     *
-     * @param {number} v - The value to set to.
-     */
-    set b(v)
-    {
-        this[1] = v;
-    }
-
-    /**
-     * The `c` (index 2) component of the Matrix2d.
-     *
-     * @member {number}
-     */
-    get c()
-    {
-        return this[2];
-    }
-
-    /**
-     * Sets the `c` (index 2) component of the Matrix2d.
-     *
-     * @param {number} v - The value to set to.
-     */
-    set c(v)
-    {
-        this[2] = v;
-    }
-
-    /**
-     * The `d` (index 3) component of the Matrix2d.
-     *
-     * @member {number}
-     */
-    get d()
-    {
-        return this[3];
-    }
-
-    /**
-     * Sets the `d` (index 3) component of the Matrix2d.
-     *
-     * @param {number} v - The value to set to.
-     */
-    set d(v)
-    {
-        this[3] = v;
-    }
-
-    /**
-     * The `tx` (index 4) component of the Matrix2d.
-     *
-     * @member {number}
-     */
-    get tx()
-    {
-        return this[4];
-    }
-
-    /**
-     * Sets the `tx` (index 4) component of the Matrix2d.
-     *
-     * @param {number} v - The value to set to.
-     */
-    set tx(v)
-    {
-        this[4] = v;
-    }
-
-    /**
-     * The `ty` (index 5) component of the Matrix2d.
-     *
-     * @member {number}
-     */
-    get ty()
-    {
-        return this[5];
-    }
-
-    /**
-     * Sets the `ty` (index 5) component of the Matrix2d.
-     *
-     * @param {number} v - The value to set to.
-     */
-    set ty(v)
-    {
-        this[5] = v;
     }
 
     /**
@@ -200,7 +118,7 @@ export default class Matrix2d extends Float32Array
      * @param {Float32Array} [out] - An optional array to assign values to.
      * @return {Float32Array} A 9-element array representing the 3x3 Matrix.
      */
-    toMat3(transpose = true, out)
+    toMat3Array(transpose = true, out)
     {
         if (!out && !this._mat3)
         {
@@ -245,12 +163,12 @@ export default class Matrix2d extends Float32Array
      */
     copy(b)
     {
-        this[0] = b[0];
-        this[1] = b[1];
-        this[2] = b[2];
-        this[3] = b[3];
-        this[4] = b[4];
-        this[5] = b[5];
+        this.a = b.a;
+        this.b = b.b;
+        this.c = b.c;
+        this.d = b.d;
+        this.tx = b.tx;
+        this.ty = b.ty;
 
         return this;
     }
@@ -262,12 +180,12 @@ export default class Matrix2d extends Float32Array
      */
     identity()
     {
-        this[0] = 1;
-        this[1] = 0;
-        this[2] = 0;
-        this[3] = 1;
-        this[4] = 0;
-        this[5] = 0;
+        this.a = 1;
+        this.b = 0;
+        this.c = 0;
+        this.d = 1;
+        this.tx = 0;
+        this.ty = 0;
 
         return this;
     }
@@ -285,12 +203,12 @@ export default class Matrix2d extends Float32Array
      */
     set(a, b, c, d, tx, ty)
     {
-        this[0] = a;
-        this[1] = b;
-        this[2] = c;
-        this[3] = d;
-        this[4] = tx;
-        this[5] = ty;
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+        this.tx = tx;
+        this.ty = ty;
 
         return this;
     }
@@ -303,12 +221,12 @@ export default class Matrix2d extends Float32Array
      */
     invert()
     {
-        const aa = this[0];
-        const ab = this[1];
-        const ac = this[2];
-        const ad = this[3];
-        const atx = this[4];
-        const aty = this[5];
+        const aa = this.a;
+        const ab = this.b;
+        const ac = this.c;
+        const ad = this.d;
+        const atx = this.tx;
+        const aty = this.ty;
 
         let det = (aa * ad) - (ab * ac);
 
@@ -316,12 +234,12 @@ export default class Matrix2d extends Float32Array
 
         det = 1.0 / det;
 
-        this[0] = ad * det;
-        this[1] = -ab * det;
-        this[2] = -ac * det;
-        this[3] = aa * det;
-        this[4] = ((ac * aty) - (ad * atx)) * det;
-        this[5] = ((ab * atx) - (aa * aty)) * det;
+        this.a = ad * det;
+        this.b = -ab * det;
+        this.c = -ac * det;
+        this.d = aa * det;
+        this.tx = ((ac * aty) - (ad * atx)) * det;
+        this.ty = ((ab * atx) - (aa * aty)) * det;
 
         return this;
     }
@@ -333,7 +251,7 @@ export default class Matrix2d extends Float32Array
      */
     determinant()
     {
-        return (this[0] * this[3]) - (this[1] * this[2]);
+        return (this.a * this.d) - (this.b * this.c);
     }
 
     /**
@@ -344,23 +262,23 @@ export default class Matrix2d extends Float32Array
      */
     multiply(b)
     {
-        const a0 = this[0];
-        const a1 = this[1];
-        const a2 = this[2];
-        const a3 = this[3];
-        const b0 = b[0];
-        const b1 = b[1];
-        const b2 = b[2];
-        const b3 = b[3];
-        const b4 = b[4];
-        const b5 = b[5];
+        const a0 = this.a;
+        const a1 = this.b;
+        const a2 = this.c;
+        const a3 = this.d;
+        const b0 = b.a;
+        const b1 = b.b;
+        const b2 = b.c;
+        const b3 = b.d;
+        const b4 = b.tx;
+        const b5 = b.ty;
 
-        this[0] = (a0 * b0) + (a2 * b1);
-        this[1] = (a1 * b0) + (a3 * b1);
-        this[2] = (a0 * b2) + (a2 * b3);
-        this[3] = (a1 * b2) + (a3 * b3);
-        this[4] = (a0 * b4) + (a2 * b5) + this[4];
-        this[5] = (a1 * b4) + (a3 * b5) + this[5];
+        this.a = (a0 * b0) + (a2 * b1);
+        this.b = (a1 * b0) + (a3 * b1);
+        this.c = (a0 * b2) + (a2 * b3);
+        this.d = (a1 * b2) + (a3 * b3);
+        this.tx = (a0 * b4) + (a2 * b5) + this.tx;
+        this.ty = (a1 * b4) + (a3 * b5) + this.ty;
 
         return this;
     }
@@ -373,17 +291,17 @@ export default class Matrix2d extends Float32Array
      */
     rotate(rad)
     {
-        const a0 = this[0];
-        const a1 = this[1];
-        const a2 = this[2];
-        const a3 = this[3];
+        const a0 = this.a;
+        const a1 = this.b;
+        const a2 = this.c;
+        const a3 = this.d;
         const s = Math.sin(rad);
         const c = Math.cos(rad);
 
-        this[0] = (a0 * c) + (a2 * s);
-        this[1] = (a1 * c) + (a3 * s);
-        this[2] = (a0 * -s) + (a2 * c);
-        this[3] = (a1 * -s) + (a3 * c);
+        this.a = (a0 * c) + (a2 * s);
+        this.b = (a1 * c) + (a3 * s);
+        this.c = (a0 * -s) + (a2 * c);
+        this.d = (a1 * -s) + (a3 * c);
 
         return this;
     }
@@ -397,15 +315,15 @@ export default class Matrix2d extends Float32Array
      **/
     scale(x, y)
     {
-        const a0 = this[0];
-        const a1 = this[1];
-        const a2 = this[2];
-        const a3 = this[3];
+        const a0 = this.a;
+        const a1 = this.b;
+        const a2 = this.c;
+        const a3 = this.d;
 
-        this[0] = a0 * x;
-        this[1] = a1 * x;
-        this[2] = a2 * y;
-        this[3] = a3 * y;
+        this.a = a0 * x;
+        this.b = a1 * x;
+        this.c = a2 * y;
+        this.d = a3 * y;
 
         return this;
     }
@@ -419,8 +337,8 @@ export default class Matrix2d extends Float32Array
      **/
     translate(x, y)
     {
-        this[4] = (this[0] * x) + (this[2] * y) + this[4];
-        this[5] = (this[1] * x) + (this[3] * y) + this[5];
+        this.tx = (this.a * x) + (this.c * y) + this.tx;
+        this.ty = (this.b * x) + (this.d * y) + this.ty;
 
         return this;
     }
@@ -432,7 +350,7 @@ export default class Matrix2d extends Float32Array
      */
     toString()
     {
-        return `Matrix2d(${this[0]}, ${this[1]}, ${this[2]}, ${this[3]}, ${this[4]}, ${this[5]})`;
+        return `Matrix2d(${this.a}, ${this.b}, ${this.c}, ${this.d}, ${this.tx}, ${this.ty})`;
     }
 
     /**
@@ -444,12 +362,12 @@ export default class Matrix2d extends Float32Array
     {
         return (
             Math.sqrt(
-                Math.pow(this[0], 2)
-                + Math.pow(this[1], 2)
-                + Math.pow(this[2], 2)
-                + Math.pow(this[3], 2)
-                + Math.pow(this[4], 2)
-                + Math.pow(this[5], 2)
+                Math.pow(this.a, 2)
+                + Math.pow(this.b, 2)
+                + Math.pow(this.c, 2)
+                + Math.pow(this.d, 2)
+                + Math.pow(this.tx, 2)
+                + Math.pow(this.ty, 2)
                 + 1
             )
         );
@@ -463,12 +381,12 @@ export default class Matrix2d extends Float32Array
      */
     add(b)
     {
-        this[0] += b[0];
-        this[1] += b[1];
-        this[2] += b[2];
-        this[3] += b[3];
-        this[4] += b[4];
-        this[5] += b[5];
+        this.a += b.a;
+        this.b += b.b;
+        this.c += b.c;
+        this.d += b.d;
+        this.tx += b.tx;
+        this.ty += b.ty;
 
         return this;
     }
@@ -481,12 +399,12 @@ export default class Matrix2d extends Float32Array
      */
     subtract(b)
     {
-        this[0] -= b[0];
-        this[1] -= b[1];
-        this[2] -= b[2];
-        this[3] -= b[3];
-        this[4] -= b[4];
-        this[5] -= b[5];
+        this.a -= b.a;
+        this.b -= b.b;
+        this.c -= b.c;
+        this.d -= b.d;
+        this.tx -= b.tx;
+        this.ty -= b.ty;
 
         return this;
     }
@@ -499,12 +417,12 @@ export default class Matrix2d extends Float32Array
      */
     multiplyScalar(b)
     {
-        this[0] *= b;
-        this[1] *= b;
-        this[2] *= b;
-        this[3] *= b;
-        this[4] *= b;
-        this[5] *= b;
+        this.a *= b;
+        this.b *= b;
+        this.c *= b;
+        this.d *= b;
+        this.tx *= b;
+        this.ty *= b;
 
         return this;
     }
@@ -519,12 +437,12 @@ export default class Matrix2d extends Float32Array
      */
     multiplyScalarAndAdd(b, scale)
     {
-        this[0] += (b[0] * scale);
-        this[1] += (b[1] * scale);
-        this[2] += (b[2] * scale);
-        this[3] += (b[3] * scale);
-        this[4] += (b[4] * scale);
-        this[5] += (b[5] * scale);
+        this.a += (b.a * scale);
+        this.b += (b.b * scale);
+        this.c += (b.c * scale);
+        this.d += (b.d * scale);
+        this.tx += (b.tx * scale);
+        this.ty += (b.ty * scale);
 
         return this;
     }
@@ -538,12 +456,12 @@ export default class Matrix2d extends Float32Array
      */
     exactEquals(b)
     {
-        return this[0] === b[0]
-            && this[1] === b[1]
-            && this[2] === b[2]
-            && this[3] === b[3]
-            && this[4] === b[4]
-            && this[5] === b[5];
+        return this.a === b.a
+            && this.b === b.b
+            && this.c === b.c
+            && this.d === b.d
+            && this.tx === b.tx
+            && this.ty === b.ty;
     }
 
     /**
@@ -555,18 +473,20 @@ export default class Matrix2d extends Float32Array
      */
     equals(b)
     {
-        const a0 = this[0];
-        const a1 = this[1];
-        const a2 = this[2];
-        const a3 = this[3];
-        const a4 = this[4];
-        const a5 = this[5];
-        const b0 = b[0];
-        const b1 = b[1];
-        const b2 = b[2];
-        const b3 = b[3];
-        const b4 = b[4];
-        const b5 = b[5];
+        if (!b) return false;
+
+        const a0 = this.a;
+        const a1 = this.b;
+        const a2 = this.c;
+        const a3 = this.d;
+        const a4 = this.tx;
+        const a5 = this.ty;
+        const b0 = b.a;
+        const b1 = b.b;
+        const b2 = b.c;
+        const b3 = b.d;
+        const b4 = b.tx;
+        const b5 = b.ty;
 
         return (Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0))
             && Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1))

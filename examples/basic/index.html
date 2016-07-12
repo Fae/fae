@@ -1,22 +1,20 @@
 <html>
     <head>
-        <script src="../../node_modules/gl-matrix/dist/gl-matrix-min.js"></script>
-
         <script src="../../dist/fay.js"></script>
     </head>
     <body>
         <canvas id="view" width="1024" height="1024" />
 
         <script>
-            let renderer = new Fay.Renderer(document.getElementById('view'));
-            let image = new Image();
+            let renderer = new Fay.render.Renderer(document.getElementById('view'));
+            let img = new Image();
 
             img.src = 'bunny.png';
             img.addEventListener('load', function ()
             {
-                let sprite = new Fay.Sprite(renderer.createTexture(img));
+                let sprite = new Fay.sprite.Sprite(new Fay.textures.Texture(img));
 
-                renderer.draw(sprite);
+                renderer.render(sprite);
             });
         </script>
     </body>

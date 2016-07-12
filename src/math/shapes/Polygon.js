@@ -115,7 +115,7 @@ export default class Polygon
      */
     equals(polygon)
     {
-        if (this.points.length !== polygon.points.length)
+        if (!polygon || this.points.length !== polygon.points.length)
         {
             return false;
         }

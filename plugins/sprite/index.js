@@ -4,7 +4,7 @@ export { default as SpriteRenderer } from './SpriteRenderer';
 
 export const shaders = {
     texture: {
-        vert: require('./shader/texture.vert'),
-        frag: require('./shader/texture.frag'),
+        vert: require('./shader/multi-texture.vert'),
+        frag: require('./shader/multi-texture.frag'),
     },
 };

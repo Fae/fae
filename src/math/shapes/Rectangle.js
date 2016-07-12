@@ -313,7 +313,8 @@ export default class Rectangle
      */
     equals(rectangle)
     {
-        return rectangle.x === this.x
+        return !!rectangle
+            && rectangle.x === this.x
             && rectangle.y === this.y
             && rectangle.width === this.width
             && rectangle.height === this.height;

@@ -8,7 +8,7 @@ import { debug, glutil } from '@fay/core';
  *
  * @class
  */
-class TextureSource
+export default class TextureSource
 {
     /**
      * @param {CanvasImageSource} source - The drawable source.
@@ -144,6 +144,14 @@ class TextureSource
         this._source = null;
 
         /**
+         * The tracker for the video update loop if needed.
+         *
+         * @private
+         * @member {number}
+         */
+        this._updateLoop = 0;
+
+        /**
          * A map of renderer IDs to GLTexture instances.
          *
          * @member {object<number, WebGLTexture>}
@@ -157,6 +165,7 @@ class TextureSource
         this._boundOnSourceError = this._onSourceError.bind(this);
         this._boundOnSourcePlay = this._onSourcePlay.bind(this);
         this._boundOnSourceStop = this._onSourceStop.bind(this);
+        this._boundVideoUpdateLoop = this._videoUpdateLoop.bind(this);
 
         // run source setter
         this.source = source;
@@ -166,9 +175,9 @@ class TextureSource
         const s = this.scaleMode;
         const w = this.wrapMode;
 
-        debug.ASSERT(s === c.LINEAR || s === c.NEAREST, `Invalid scaleMode: ${s}.`);
-        debug.ASSERT(w === c.CLAMP_TO_EDGE || w === c.REPEAT || w === c.MIRRORED_REPEAT, `Invalid warpMode: ${w}.`);
-        debug.ASSERT(typeof this.mipmap !== 'boolean', `Invalid mipmap value: ${this.mipmap}.`);
+        debug.ASSERT(s === c.LINEAR || s === c.NEAREST, `Invalid scaleMode: ${s} (${typeof s}).`);
+        debug.ASSERT(w === c.CLAMP_TO_EDGE || w === c.REPEAT || w === c.MIRRORED_REPEAT, `Invalid warpMode: ${w} (${typeof w}).`);
+        debug.ASSERT(typeof this.mipmap === 'boolean', `Invalid mipmap value: ${this.mipmap} (${typeof this.mipmap}).`);
         // @endif
     }
 
@@ -194,9 +203,10 @@ class TextureSource
      * Updates the texture properties based on the source.
      *
      * @param {Renderer} [renderer] - The renderer to update on. If not passed, all are updated.
+     * @param {boolean} silent - Should we skip dispatching the update event?
      * @return {TextureSource} Returns itself.
      */
-    update(renderer)
+    update(renderer, silent = false)
     {
         this.width = this.source.naturalWidth || this.source.videoWidth || this.source.width;
         this.height = this.source.naturalHeight || this.source.videoHeight || this.source.height;
@@ -212,7 +222,15 @@ class TextureSource
             Object.keys(this._glTextures).forEach((k) => this._update(k));
         }
 
-        this.onUpdate.dispatch();
+        if (this.source.currentTime && !this.source.paused && !this.source.ended)
+        {
+            this._onSourcePlay();
+        }
+
+        if (!silent)
+        {
+            this.onUpdate.dispatch();
+        }
 
         return this;
     }
@@ -405,7 +423,7 @@ class TextureSource
     _onSourceLoad()
     {
         // if we have no width/height, consider the load a failure.
-        this.update(true);
+        this.update(null, true);
         if (!this.width || !this.height)
         {
             this._onSourceError({ message: 'Source failed to load.' });
@@ -439,6 +457,38 @@ class TextureSource
     }
 
     /**
+     * Runs the update loop when the video is ready to play
+     *
+     * @private
+     */
+    _onSourcePlay()
+    {
+        cancelAnimationFrame(this._updateLoop);
+        this._videoUpdateLoop();
+    }
+
+    /**
+     * Stops the update loop when the video is paused
+     *
+     * @private
+     */
+    _onSourceStop()
+    {
+        cancelAnimationFrame(this._updateLoop);
+    }
+
+    /**
+     * Updates the texture for the video element.
+     *
+     * @private
+     */
+    _videoUpdateLoop()
+    {
+        this._updateLoop = requestAnimationFrame(this._boundVideoUpdateLoop);
+        this.update(null, true);
+    }
+
+    /**
      * Binds listeners to a source image or video.
      *
      * @private
@@ -457,7 +507,6 @@ class TextureSource
         {
             this._source.addEventListener('play', this._boundOnSourcePlay);
             this._source.addEventListener('pause', this._boundOnSourceStop);
-            this._source.addEventListener('stop', this._boundOnSourceStop);
         }
     }
 
@@ -480,7 +529,6 @@ class TextureSource
         {
             this._source.removeEventListener('play', this._boundOnSourcePlay);
             this._source.removeEventListener('pause', this._boundOnSourceStop);
-            this._source.removeEventListener('stop', this._boundOnSourceStop);
         }
     }
 }

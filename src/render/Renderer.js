@@ -23,7 +23,7 @@ export default class Renderer
      * @param {boolean} [options.preserveDrawingBuffer=false] - Enables drawing buffer preservation,
      *  enable this if you need to call toDataUrl on the webgl context.
      */
-    constructor(context, options)
+    constructor(context, options = {})
     {
         /**
          * The main rendering context used for drawing.
@@ -52,34 +52,6 @@ export default class Renderer
          * @member {boolean}
          */
         this.preserveDrawingBuffer = options.preserveDrawingBuffer || false;
-
-        /**
-         * An empty renderer.
-         *
-         * @member {ObjectRenderer}
-         */
-        this.emptyRenderer = new ObjectRenderer(this);
-
-        /**
-         * The currently activer object renderer.
-         *
-         * @member {ObjectRenderer}
-         */
-        this.currentRenderer = this.emptyRenderer;
-
-        /**
-         * The current state of the renderer.
-         *
-         * @member {WebGLState}
-         */
-        this.state = new RenderState(this);
-
-        /**
-         * The root render target, that represents the screen.
-         *
-         * @member {RenderTarget}
-         */
-        this.screen = null;
 
         /**
          * Dispatched when context has been lost.
@@ -121,6 +93,34 @@ export default class Renderer
          * @member {Signal}
          */
         this.onAfterRender = new Signal();
+
+        /**
+         * An empty renderer.
+         *
+         * @member {ObjectRenderer}
+         */
+        this.emptyRenderer = new ObjectRenderer(this);
+
+        /**
+         * The currently activer object renderer.
+         *
+         * @member {ObjectRenderer}
+         */
+        this.currentRenderer = this.emptyRenderer;
+
+        /**
+         * The current state of the renderer.
+         *
+         * @member {WebGLState}
+         */
+        this.state = new RenderState(this);
+
+        /**
+         * The root render target, that represents the screen.
+         *
+         * @member {RenderTarget}
+         */
+        this.screen = null;
 
         /**
          * Map of all the ObjectRenderer instances.
@@ -288,9 +288,9 @@ export default class Renderer
 
         this.screen = new RenderTarget(gl, gl.canvas.width, gl.canvas.height, true);
 
-        this.bindRenderTarget(this.screen);
+        this.state.setRenderTarget(this.screen);
 
-        this.reset(gl.canvas.width, gl.canvas.height);
+        // this.resize(gl.canvas.width, gl.canvas.height);
 
         this.onContextChange.dispatch(gl);
     }

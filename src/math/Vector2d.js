@@ -37,60 +37,27 @@ const EPSILON = 0.000001;
  *
  * @class
  */
-export default class Vector2d extends Float32Array
+export default class Vector2d
 {
     /**
      * Creates a new, empty Vector2d
      *
-     * @param {ArrayBuffer|SharedArrayBufffer} buffer - The buffer to write to.
-     * @param {number} byteOffset - The byteOffset into the buffer to write to.
      */
-    constructor(buffer = new ArrayBuffer(24), byteOffset = 0)
+    constructor()
     {
-        super(buffer, byteOffset, Vector2d.LENGTH);
+        /**
+         * The `x` component of the Vector2d.
+         *
+         * @member {number}
+         */
+        this.x = 0;
 
-        this[0] = 0;
-        this[1] = 0;
-    }
-
-    /**
-     * The `x` (index 0) component of the Vector2d.
-     *
-     * @member {number}
-     */
-    get x()
-    {
-        return this[0];
-    }
-
-    /**
-     * Sets the `x` (index 0) component of the Vector2d.
-     *
-     * @param {number} v - The value to set to.
-     */
-    set x(v)
-    {
-        this[0] = v;
-    }
-
-    /**
-     * The `y` (index 1) component of the Vector2d.
-     *
-     * @member {number}
-     */
-    get y()
-    {
-        return this[1];
-    }
-
-    /**
-     * Sets the `y` (index 1) component of the Vector2d.
-     *
-     * @param {number} v - The value to set to.
-     */
-    set y(v)
-    {
-        this[1] = v;
+        /**
+         * The `y` component of the Vector2d.
+         *
+         * @member {number}
+         */
+        this.y = 0;
     }
 
     /**
@@ -101,8 +68,8 @@ export default class Vector2d extends Float32Array
      */
     copy(b)
     {
-        this[0] = b[0];
-        this[1] = b[1];
+        this.x = b.x;
+        this.y = b.y;
 
         return this;
     }
@@ -116,8 +83,8 @@ export default class Vector2d extends Float32Array
      */
     set(x, y)
     {
-        this[0] = x;
-        this[1] = y;
+        this.x = x;
+        this.y = y;
 
         return this;
     }
@@ -130,8 +97,8 @@ export default class Vector2d extends Float32Array
      */
     add(b)
     {
-        this[0] += b[0];
-        this[1] += b[1];
+        this.x += b.x;
+        this.y += b.y;
 
         return this;
     }
@@ -144,8 +111,8 @@ export default class Vector2d extends Float32Array
      */
     subtract(b)
     {
-        this[0] -= b[0];
-        this[1] -= b[1];
+        this.x -= b.x;
+        this.y -= b.y;
 
         return this;
     }
@@ -158,8 +125,8 @@ export default class Vector2d extends Float32Array
      */
     multiply(b)
     {
-        this[0] *= b[0];
-        this[1] *= b[1];
+        this.x *= b.x;
+        this.y *= b.y;
 
         return this;
     }
@@ -172,8 +139,8 @@ export default class Vector2d extends Float32Array
      */
     divide(b)
     {
-        this[0] /= b[0];
-        this[1] /= b[1];
+        this.x /= b.x;
+        this.y /= b.y;
 
         return this;
     }
@@ -185,8 +152,8 @@ export default class Vector2d extends Float32Array
      */
     ceil()
     {
-        this[0] = Math.ceil(this[0]);
-        this[1] = Math.ceil(this[1]);
+        this.x = Math.ceil(this.x);
+        this.y = Math.ceil(this.y);
 
         return this;
     }
@@ -198,8 +165,8 @@ export default class Vector2d extends Float32Array
      */
     floor()
     {
-        this[0] = Math.floor(this[0]);
-        this[1] = Math.floor(this[1]);
+        this.x = Math.floor(this.x);
+        this.y = Math.floor(this.y);
 
         return this;
     }
@@ -212,8 +179,8 @@ export default class Vector2d extends Float32Array
      */
     min(b)
     {
-        this[0] = Math.min(this[0], b[0]);
-        this[1] = Math.min(this[1], b[1]);
+        this.x = Math.min(this.x, b.x);
+        this.y = Math.min(this.y, b.y);
 
         return this;
     }
@@ -226,8 +193,8 @@ export default class Vector2d extends Float32Array
      */
     max(b)
     {
-        this[0] = Math.max(this[0], b[0]);
-        this[1] = Math.max(this[1], b[1]);
+        this.x = Math.max(this.x, b.x);
+        this.y = Math.max(this.y, b.y);
 
         return this;
     }
@@ -239,8 +206,8 @@ export default class Vector2d extends Float32Array
      */
     round()
     {
-        this[0] = Math.round(this[0]);
-        this[1] = Math.round(this[1]);
+        this.x = Math.round(this.x);
+        this.y = Math.round(this.y);
 
         return this;
     }
@@ -253,8 +220,8 @@ export default class Vector2d extends Float32Array
      */
     scale(b)
     {
-        this[0] *= b;
-        this[1] *= b;
+        this.x *= b;
+        this.y *= b;
 
         return this;
     }
@@ -269,8 +236,8 @@ export default class Vector2d extends Float32Array
      */
     scaleAndAdd(b, scale)
     {
-        this[0] += (b[0] * scale);
-        this[1] += (b[1] * scale);
+        this.x += (b.x * scale);
+        this.y += (b.y * scale);
 
         return this;
     }
@@ -283,8 +250,8 @@ export default class Vector2d extends Float32Array
      */
     distance(b)
     {
-        const x = b[0] - this[0];
-        const y = b[1] - this[1];
+        const x = b.x - this.x;
+        const y = b.y - this.y;
 
         return Math.sqrt((x * x) + (y * y));
     }
@@ -297,8 +264,8 @@ export default class Vector2d extends Float32Array
      */
     squaredDistance(b)
     {
-        const x = b[0] - this[0];
-        const y = b[1] - this[1];
+        const x = b.x - this.x;
+        const y = b.y - this.y;
 
         return (x * x) + (y * y);
     }
@@ -310,8 +277,8 @@ export default class Vector2d extends Float32Array
      */
     length()
     {
-        const x = this[0];
-        const y = this[1];
+        const x = this.x;
+        const y = this.y;
 
         return Math.sqrt((x * x) + (y * y));
     }
@@ -323,8 +290,8 @@ export default class Vector2d extends Float32Array
      */
     squaredLength()
     {
-        const x = this[0];
-        const y = this[1];
+        const x = this.x;
+        const y = this.y;
 
         return (x * x) + (y * y);
     }
@@ -336,8 +303,8 @@ export default class Vector2d extends Float32Array
      */
     negate()
     {
-        this[0] = -this[0];
-        this[1] = -this[1];
+        this.x = -this.x;
+        this.y = -this.y;
 
         return this;
     }
@@ -349,8 +316,8 @@ export default class Vector2d extends Float32Array
      */
     inverse()
     {
-        this[0] = 1.0 / this[0];
-        this[1] = 1.0 / this[1];
+        this.x = 1.0 / this.x;
+        this.y = 1.0 / this.y;
 
         return this;
     }
@@ -362,8 +329,8 @@ export default class Vector2d extends Float32Array
      */
     normalize()
     {
-        const x = this[0];
-        const y = this[1];
+        const x = this.x;
+        const y = this.y;
 
         let len = (x * x) + (y * y);
 
@@ -371,8 +338,8 @@ export default class Vector2d extends Float32Array
         {
             // TODO: evaluate use of glm_invsqrt here?
             len = 1 / Math.sqrt(len);
-            this[0] = this[0] * len;
-            this[1] = this[1] * len;
+            this.x = this.x * len;
+            this.y = this.y * len;
         }
 
         return this;
@@ -386,7 +353,7 @@ export default class Vector2d extends Float32Array
      */
     dot(b)
     {
-        return (this[0] * b[0]) + (this[1] * b[1]);
+        return (this.x * b.x) + (this.y * b.y);
     }
 
     /**
@@ -399,8 +366,8 @@ export default class Vector2d extends Float32Array
      */
     lerp(b, t)
     {
-        this[0] += (t * (b[0] - this[0]));
-        this[1] += (t * (b[1] - this[1]));
+        this.x += (t * (b.x - this.x));
+        this.y += (t * (b.y - this.y));
 
         return this;
     }
@@ -415,8 +382,8 @@ export default class Vector2d extends Float32Array
     {
         const r = Math.random() * 2.0 * Math.PI;
 
-        this[0] = Math.cos(r) * scale;
-        this[1] = Math.sin(r) * scale;
+        this.x = Math.cos(r) * scale;
+        this.y = Math.sin(r) * scale;
 
         return this;
     }
@@ -429,11 +396,11 @@ export default class Vector2d extends Float32Array
      */
     transformMatrix2d(m)
     {
-        const x = this[0];
-        const y = this[1];
+        const x = this.x;
+        const y = this.y;
 
-        this[0] = (m[0] * x) + (m[2] * y) + m[4];
-        this[1] = (m[1] * x) + (m[3] * y) + m[5];
+        this.x = (m.a * x) + (m.c * y) + m.tx;
+        this.y = (m.b * x) + (m.d * y) + m.ty;
 
         return this;
     }
@@ -445,7 +412,7 @@ export default class Vector2d extends Float32Array
      */
     toString()
     {
-        return `Vector2d(${this[0]}, ${this[1]})`;
+        return `Vector2d(${this.x}, ${this.y})`;
     }
 
     /**
@@ -457,7 +424,7 @@ export default class Vector2d extends Float32Array
      */
     exactEquals(b)
     {
-        return this[0] === b[0] && this[1] === b[1];
+        return this.x === b.x && this.y === b.y;
     }
 
     /**
@@ -469,10 +436,12 @@ export default class Vector2d extends Float32Array
      */
     equals(b)
     {
-        const a0 = this[0];
-        const a1 = this[1];
-        const b0 = b[0];
-        const b1 = b[1];
+        if (!b) return false;
+
+        const a0 = this.x;
+        const a1 = this.y;
+        const b0 = b.x;
+        const b1 = b.y;
 
         return (Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0))
             && Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)));

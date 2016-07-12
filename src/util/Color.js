@@ -25,7 +25,7 @@ export default class Color
      */
     constructor(r = 0, g = 0, b = 0, normalized = false)
     {
-        this._data = new ArrayBuffer(3);
+        this._data = new ArrayBuffer(12);
         this._value = new Float32Array(this._data);
         this._components = new Uint8Array(this._data);
 
@@ -345,6 +345,8 @@ export default class Color
      */
     equals(color)
     {
+        if (!color) return false;
+
         if (this.normalized !== color.normalized)
         {
             Color._tempColor.copy(color);
@@ -360,8 +362,7 @@ export default class Color
             }
         }
 
-        return !!color
-            && this.red === color.red
+        return this.red === color.red
             && this.green === color.green
             && this.blue === color.blue;
     }

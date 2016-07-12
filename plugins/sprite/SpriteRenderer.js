@@ -1,6 +1,6 @@
 import Device from 'ismobilejs';
 import bitTwiddle from 'bit-twiddle';
-import { Renderer, ObjectRenderer, Shader, glutil, util/* @ifdef DEBUG */, debug/* @endif */ } from '@fay/core';
+import { render, glutil, util/* @ifdef DEBUG */, debug/* @endif */ } from '@fay/core';
 
 const vertSource = require('./shader/multi-texture.vert');
 const fragTemplate = require('./shader/multi-texture.frag');
@@ -8,7 +8,7 @@ const fragTemplate = require('./shader/multi-texture.frag');
 /**
  * @class
  */
-export default class SpriteRenderer extends ObjectRenderer
+export default class SpriteRenderer extends render.ObjectRenderer
 {
     /**
      * @param {Renderer} renderer - The renderer this manager works for.
@@ -435,7 +435,7 @@ function generateMultiTextureShader(gl, maxTextures)
     fragSource = fragSource.replace(/\{\{count\}\}/gi, maxTextures);
     fragSource = fragSource.replace(/\{\{texture_choice\}\}/gi, generateSampleSrc(maxTextures));
 
-    const shader = new Shader(gl, vertSource, fragSource);
+    const shader = new render.Shader(gl, vertSource, fragSource);
 
     const sampleValues = [];
 
@@ -491,4 +491,4 @@ SpriteRenderer.DEFAULT_SPRITE_BATCH_SIZE = 4096;
  */
 SpriteRenderer.MAX_TEXTURE_COUNT = Device.tablet || Device.phone ? 2 : 32;
 
-Renderer.registerObjectRenderer(SpriteRenderer);
+render.Renderer.registerObjectRenderer(SpriteRenderer);

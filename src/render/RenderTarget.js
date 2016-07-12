@@ -1,5 +1,7 @@
 import GLFramebuffer from '../gl/GLFramebuffer';
-import math from '../math';
+import Vector2d from '../math/Vector2d';
+import Matrix2d from '../math/Matrix2d';
+import Rectangle from '../math/shapes/Rectangle';
 import Color from '../util/Color';
 
 /**
@@ -25,15 +27,15 @@ export default class RenderTarget
 
         this.clearColor = Color.BLACK.clone();
 
-        this.size = new math.Vector2d();
+        this.size = new Vector2d();
 
-        this.projectionMatrix = new math.Matrix2d();
+        this.projectionMatrix = new Matrix2d();
 
         this.transform = null;
 
         this.scaleMode = scaleMode;
 
-        this.defaultFrame = new math.Rectangle();
+        this.defaultFrame = new Rectangle();
         this.destinationFrame = null;
         this.sourceFrame = null;
 
@@ -43,11 +45,11 @@ export default class RenderTarget
 
             if (this.scaleMode === WebGLRenderingContext.NEAREST)
             {
-                this.frameBuffer.texture.enableNearestScaling();
+                this.framebuffer.texture.enableNearestScaling();
             }
             else
             {
-                this.frameBuffer.texture.enableLinearScaling();
+                this.framebuffer.texture.enableLinearScaling();
             }
         }
         else
@@ -93,7 +95,7 @@ export default class RenderTarget
 
         this.framebuffer.bind();
 
-        this.calculateProjection(this.destrinationFrame, this.sourceFrame);
+        this.calculateProjection(this.destinationFrame, this.sourceFrame);
 
         if (this.transform)
         {
@@ -178,7 +180,7 @@ export default class RenderTarget
         this.defaultFrame.width = width;
         this.defaultFrame.height = height;
 
-        this.frameBuffer.resize(width/* * this.resolution*/, height/* * this.resolution*/);
+        this.framebuffer.resize(width/* * this.resolution*/, height/* * this.resolution*/);
 
         const projectionFrame = this.frame || this.size;
 
@@ -191,10 +193,10 @@ export default class RenderTarget
      */
     destroy()
     {
-        this.frameBuffer.destroy();
+        this.framebuffer.destroy();
 
         this.gl = null;
-        this.frameBuffer = null;
+        this.framebuffer = null;
         this.clearColor = null;
         this.size = null;
         this.projectionMatrix = null;

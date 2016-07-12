@@ -1,33 +1,7 @@
 import Matrix2d from '../math/Matrix2d';
 import Vector2d from '../math/Vector2d';
 
-const INDEX = {
-    POSITION: 0,
-    SCALE: Vector2d.LENGTH,
-    SKEW: Vector2d.LENGTH * 2,
-    PIVOT: Vector2d.LENGTH * 3,
-    DELTA: Vector2d.LENGTH * 4,
-    ROTATION: Vector2d.LENGTH * 5,
-    LOCAL_MATRIX: (Vector2d.LENGTH * 5) + 1,
-};
-
-const BYTE_OFFSET = {
-    POSITION: 0,
-    SCALE: Vector2d.BYTE_SIZE,
-    SKEW: Vector2d.BYTE_SIZE * 2,
-    PIVOT: Vector2d.BYTE_SIZE * 3,
-    DELTA: Vector2d.LENGTH * 4,
-    ROTATION: Vector2d.BYTE_SIZE * 5,
-    LOCAL_MATRIX: (Vector2d.BYTE_SIZE * 5) + Float32Array.BYTES_PER_ELEMENT,
-};
-
-/**
- * Size in bytes of a Transform.
- *
- * @static
- * @returns {number} byte size of a Transform.
- */
-const DATA_BYTE_SIZE = BYTE_OFFSET.LOCAL_MATRIX + Matrix2d.BYTE_SIZE;
+// TODO: Pivot and skew
 
 /**
  * Generic class to deal with traditional 2D matrix transforms
@@ -40,33 +14,22 @@ export default class Transform
 {
     /**
      *
-     * @param {ArrayBuffer|SharedArrayBuffer} outBuffer - The buffer for the transform to write the world transform to.
-     * @param {number} outByteOffset - The offset in the buffer to write to.
      */
-    constructor(outBuffer, outByteOffset)
+    constructor()
     {
-        /**
-         * Raw data buffer that contains the data of this transform.
-         *
-         * @private
-         * @member {ArrayBuffer|SharedArrayBuffer}
-         */
-        this._buffer = new ArrayBuffer(DATA_BYTE_SIZE);
-        this._data = new Float32Array(this._buffer);
-
         /**
          * The global matrix transform, it is written to the passed in output buffer.
          *
          * @member {Matrix2d}
          */
-        this._wt = new Matrix2d(outBuffer, outByteOffset);
+        this._wt = new Matrix2d();
 
         /**
          * The local matrix transform.
          *
          * @member {Matrix2d}
          */
-        this._lt = new Matrix2d(this._buffer, BYTE_OFFSET.LOCAL_MATRIX);
+        this._lt = new Matrix2d();
 
         /**
          * A tracker for delta changes for passing into matrix functions.
@@ -74,11 +37,51 @@ export default class Transform
          * @private
          * @member {Vector2d}
          */
-        this._delta = new Vector2d(this._buffer, BYTE_OFFSET.DELTA);
+        this._delta = new Vector2d();
+
+        /**
+         * Position component of transform.
+         *
+         * @private
+         * @member {Vector2d}
+         */
+        this._position = new Vector2d();
+
+        /**
+         * Scale component of transform.
+         *
+         * @private
+         * @member {Vector2d}
+         */
+        this._scale = new Vector2d();
+
+        /**
+         * Skew component of transform.
+         *
+         * @private
+         * @member {Vector2d}
+         */
+        this._skew = new Vector2d();
+
+        /**
+         * Pivot component of transform.
+         *
+         * @private
+         * @member {Vector2d}
+         */
+        this._pivot = new Vector2d();
+
+        /**
+         * Rotation component of transform.
+         *
+         * @private
+         * @member {number}
+         */
+        this._rotation = 0;
 
         // set scale to 1
-        this._data[INDEX.SCALE] = 1.0;
-        this._data[INDEX.SCALE + 1] = 1.0;
+        this.scaleX = 1.0;
+        this.scaleY = 1.0;
     }
 
     /**
@@ -108,7 +111,7 @@ export default class Transform
      */
     get x()
     {
-        return this._data[INDEX.POSITION];
+        return this._position.x;
     }
 
     /**
@@ -118,7 +121,7 @@ export default class Transform
      */
     get y()
     {
-        return this._data[INDEX.POSITION + 1];
+        return this._position.y;
     }
 
     /**
@@ -128,7 +131,7 @@ export default class Transform
      */
     get scaleX()
     {
-        return this._data[INDEX.SCALE];
+        return this._scale.x;
     }
 
     /**
@@ -138,7 +141,7 @@ export default class Transform
      */
     get scaleY()
     {
-        return this._data[INDEX.SCALE + 1];
+        return this._scale.y;
     }
 
     /**
@@ -148,7 +151,7 @@ export default class Transform
      */
     get skewX()
     {
-        return this._data[INDEX.SKEW];
+        return this._skew.x;
     }
 
     /**
@@ -158,7 +161,7 @@ export default class Transform
      */
     get skewY()
     {
-        return this._data[INDEX.SKEW + 1];
+        return this._skew.y;
     }
 
     /**
@@ -168,7 +171,7 @@ export default class Transform
      */
     get pivotX()
     {
-        return this._data[INDEX.PIVOT];
+        return this._pivot.x;
     }
 
     /**
@@ -178,7 +181,7 @@ export default class Transform
      */
     get pivotY()
     {
-        return this._data[INDEX.PIVOT + 1];
+        return this._pivot.y;
     }
 
     /**
@@ -188,7 +191,7 @@ export default class Transform
      */
     get rotation()
     {
-        return this._data[INDEX.ROTATION];
+        return this._rotation;
     }
 
     /**
@@ -198,7 +201,7 @@ export default class Transform
      */
     set x(v)
     {
-        this.translate(v - this.x, 0.0);
+        this.translate(v - this._position.x, 0.0);
     }
 
     /**
@@ -208,7 +211,7 @@ export default class Transform
      */
     set y(v)
     {
-        this.translate(0.0, v - this.y);
+        this.translate(0.0, v - this._position.y);
     }
 
     /**
@@ -218,7 +221,7 @@ export default class Transform
      */
     set scaleX(v)
     {
-        this.scale(v - this.scaleX, 0.0);
+        this.scale(v - this._scale.x, 0.0);
     }
 
     /**
@@ -228,7 +231,7 @@ export default class Transform
      */
     set scaleY(v)
     {
-        this.scale(0.0, v - this.scaleY);
+        this.scale(0.0, v - this._scale.y);
     }
 
     /**
@@ -238,7 +241,7 @@ export default class Transform
      */
     set skewX(v)
     {
-        this.skew(v - this.skewX, 0.0);
+        this.skew(v - this._skew.x, 0.0);
     }
 
     /**
@@ -248,7 +251,7 @@ export default class Transform
      */
     set skewY(v)
     {
-        this.skew(0.0, v - this.skewY);
+        this.skew(0.0, v - this._skew.y);
     }
 
     /**
@@ -259,7 +262,7 @@ export default class Transform
     set pivotX(v)
     {
         /* empty for now */
-        this._data[INDEX.PIVOT] = v;
+        this._pivot.x = v;
     }
 
     /**
@@ -270,7 +273,7 @@ export default class Transform
     set pivotY(v)
     {
         /* empty for now */
-        this._data[INDEX.PIVOT + 1] = v;
+        this._pivot.y = v;
     }
 
     /**
@@ -280,7 +283,7 @@ export default class Transform
      */
     set rotation(v)
     {
-        this.rotate(v - this.rotation);
+        this.rotate(v - this._rotation);
     }
 
     /**
@@ -305,8 +308,8 @@ export default class Transform
     {
         this._lt.translate(x, y);
 
-        this._data[INDEX.POSITION] += x;
-        this._data[INDEX.POSITION + 1] += y;
+        this._position.x += x;
+        this._position.y += y;
 
         return this;
     }
@@ -322,8 +325,8 @@ export default class Transform
     {
         this._lt.scale(x, y);
 
-        this._data[INDEX.SCALE] += x;
-        this._data[INDEX.SCALE + 1] += y;
+        this._scale.x += x;
+        this._scale.y += y;
 
         return this;
     }
@@ -337,8 +340,8 @@ export default class Transform
      */
     skew(x, y)
     {
-        this._data[INDEX.SKEW] = x;
-        this._data[INDEX.SKEW + 1] = y;
+        this._skew.x = x;
+        this._skew.y = y;
 
         return this;
     }
@@ -353,7 +356,7 @@ export default class Transform
     {
         this._lt.rotate(rad);
 
-        this._data[INDEX.ROTATION] += rad;
+        this._rotation += rad;
 
         return this;
     }
@@ -363,10 +366,12 @@ export default class Transform
      */
     destroy()
     {
-        this._buffer = null;
-        this._data = null;
         this._wt = null;
         this._lt = null;
         this._delta = null;
+        this._position = null;
+        this._scale = null;
+        this._skew = null;
+        this._pivot = null;
     }
 }

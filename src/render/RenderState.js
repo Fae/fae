@@ -118,7 +118,7 @@ export default class RenderState
             // automatically set the projection matrix
             if (this.target && shader.uniforms.projectionMatrix)
             {
-                shader.uniforms.projectionMatrix = this.target.projectionMatrix.toMat3();
+                shader.uniforms.projectionMatrix = this.target.projectionMatrix.toMat3Array();
             }
         }
         else
@@ -148,7 +148,7 @@ export default class RenderState
 
             if (this.shader && this.shader.uniforms.projectionMatrix)
             {
-                this.shader.uniforms.projectionMatrix = target.projectionMatrix.toMat3();
+                this.shader.uniforms.projectionMatrix = target.projectionMatrix.toMat3Array();
             }
         }
 
@@ -216,13 +216,27 @@ export default class RenderState
 
         this.stateFlags.set(flag, enabled);
 
-        if (enabled)
+        if (flag === RenderState.FLAG.FRONT_FACE)
         {
-            this.renderer.gl.enable(RenderState.FLAG_GL_MAP[flag]);
+            if (enabled)
+            {
+                this.renderer.gl.frontFace(WebGLRenderingContext.CW);
+            }
+            else
+            {
+                this.renderer.gl.frontFace(WebGLRenderingContext.CCW);
+            }
         }
         else
         {
-            this.renderer.gl.disable(RenderState.FLAG_GL_MAP[flag]);
+            if (enabled)
+            {
+                this.renderer.gl.enable(RenderState.FLAG_GL_MAP[flag]);
+            }
+            else
+            {
+                this.renderer.gl.disable(RenderState.FLAG_GL_MAP[flag]);
+            }
         }
 
         return true;
@@ -262,12 +276,7 @@ export default class RenderState
         // reset all attributs..
         this.resetAttributes();
 
-        // set active state so we can force overrides of gl state
-        for (let i = 0; i < this.activeState.length; i++)
-        {
-            this.activeState[i] = 2;
-        }
-
+        // reset flipY
         this.renderer.gl.pixelStorei(this.renderer.gl.UNPACK_FLIP_Y_WEBGL, false);
 
         // force setting each state flag to default values
@@ -333,5 +342,3 @@ RenderState.FLAG_GL_MAP = {
 };
 
 RenderState.defaultStateFlags = new Flags(RenderState.FLAG.BLEND);
-
-RenderState.default = new RenderState();

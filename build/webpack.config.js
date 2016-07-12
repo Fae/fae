@@ -52,7 +52,7 @@ module.exports = {
     },
     plugins: [
         // generate entry file
-        new EntryGeneratorPlugin(),
+        new EntryGeneratorPlugin(['scene', 'sprite', 'textures']),
 
         // don't emit output when there are errors
         new webpack.NoErrorsPlugin(),

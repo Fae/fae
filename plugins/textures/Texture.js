@@ -147,6 +147,7 @@ export default class Texture
             v.x >= 0 && v.y >= 0 && v.x + v.width <= this.source.width && v.y + v.height <= this.source.height,
             'Frame for texture doesn\'t fit within the source size'
         );
+        // @endif
 
         if (!this.trim && !this.rotate)
         {
