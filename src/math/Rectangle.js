@@ -55,6 +55,17 @@ export default class Rectangle
     }
 
     /**
+     * Sets the left-most X coord of this rectangle. This is the same
+     * as setting the X coord and will move the rectangle.
+     *
+     * @param {number} v - The position for the left of this rectangle.
+     */
+    set left(v)
+    {
+        this.x = v;
+    }
+
+    /**
      * The right-most X coord of this rectangle.
      *
      * @member {number}
@@ -62,6 +73,17 @@ export default class Rectangle
     get right()
     {
         return this.x + this.width;
+    }
+
+    /**
+     * Sets the right-most X coord of this rectangle. This has the effect
+     * of modifying the width.
+     *
+     * @param {number} v - The position for the right of this rectangle.
+     */
+    set right(v)
+    {
+        this.width = (v - this.x);
     }
 
     /**
@@ -75,6 +97,17 @@ export default class Rectangle
     }
 
     /**
+     * Sets the top-most Y coord of this rectangle. This is the same
+     * as setting the Y coord and will move the rectangle.
+     *
+     * @param {number} v - The position for the top of this rectangle.
+     */
+    set top(v)
+    {
+        this.y = v;
+    }
+
+    /**
      * The bottom-most Y coord of this rectangle.
      *
      * @member {number}
@@ -82,6 +115,27 @@ export default class Rectangle
     get bottom()
     {
         return this.y + this.height;
+    }
+
+    /**
+     * Sets the bottom-most Y coord of this rectangle. This has the effect
+     * of modifying the height.
+     *
+     * @param {number} v - The position for the bottom of this rectangle.
+     */
+    set bottom(v)
+    {
+        this.height = (v - this.y);
+    }
+
+    /**
+     * Is this rectangle empty?
+     *
+     * @return {boolean} True if empty.
+     */
+    isEmpty()
+    {
+        return this.width === 0 && this.height === 0;
     }
 
     /**

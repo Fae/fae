@@ -36,14 +36,6 @@ export default class Transform
         this._lt = new Matrix2d();
 
         /**
-         * A tracker for delta changes for passing into matrix functions.
-         *
-         * @private
-         * @member {Vector2d}
-         */
-        this._delta = new Vector2d();
-
-        /**
          * Position component of transform.
          *
          * @private
@@ -57,8 +49,7 @@ export default class Transform
          * @private
          * @member {Vector2d}
          */
-        this._scale = new Vector2d();
-        this._scale.x = this._scale.y = 1.0;
+        this._scale = new Vector2d(1, 1);
 
         /**
          * Skew component of transform.
@@ -84,18 +75,19 @@ export default class Transform
          */
         this._rotation = 0;
 
-        // set scale to 1
-        this.scaleX = 1.0;
-        this.scaleY = 1.0;
+        // dirty trackers when updates are made to matrices
+        this._updateId = 0;
+        this._localUpdateId = 0;
+        this._cachedLocalUpdateId = -1;
+        this._cachedParentUpdateId = -1;
 
-        /**
-         * Tracker for if the transform has changed. This Transform
-         * object will only set it to true. It is up to the owning object
-         * to decide it is "no longer dirty".
-         *
-         * @member {boolean}
-         */
-        this.dirty = true;
+        // cache vars for expensive trig functions
+        this._sr = Math.sin(0);
+        this._cr = Math.cos(0);
+        this._cy = Math.cos(0); // skewY
+        this._sy = Math.sin(0); // skewY
+        this._sx = Math.sin(0); // skewX
+        this._cx = Math.cos(0); // skewX
     }
 
     /**
@@ -129,6 +121,17 @@ export default class Transform
     }
 
     /**
+     * Sets X position of the transform.
+     *
+     * @param {number} v - The value to set to.
+     */
+    set x(v)
+    {
+        this._position.x = v;
+        this._localUpdateId++;
+    }
+
+    /**
      * The Y position.
      *
      * @member {number}
@@ -136,6 +139,17 @@ export default class Transform
     get y()
     {
         return this._position.y;
+    }
+
+    /**
+     * Sets Y position of the transform.
+     *
+     * @param {number} v - The value to set to.
+     */
+    set y(v)
+    {
+        this._position.y = v;
+        this._localUpdateId++;
     }
 
     /**
@@ -149,6 +163,17 @@ export default class Transform
     }
 
     /**
+     * Sets X scale of the transform.
+     *
+     * @param {number} v - The value to set to.
+     */
+    set scaleX(v)
+    {
+        this._scale.x = v;
+        this._localUpdateId++;
+    }
+
+    /**
      * The Y scale.
      *
      * @member {number}
@@ -156,6 +181,17 @@ export default class Transform
     get scaleY()
     {
         return this._scale.y;
+    }
+
+    /**
+     * Sets Y scale of the transform.
+     *
+     * @param {number} v - The value to set to.
+     */
+    set scaleY(v)
+    {
+        this._scale.y = v;
+        this._localUpdateId++;
     }
 
     /**
@@ -169,6 +205,19 @@ export default class Transform
     }
 
     /**
+     * Sets X skew of the transform.
+     *
+     * @param {number} v - The value to set to.
+     */
+    set skewX(v)
+    {
+        this._skew.x = v;
+        this._sx = Math.sin(v);
+        this._cx = Math.cos(v);
+        this._localUpdateId++;
+    }
+
+    /**
      * The Y skew.
      *
      * @member {number}
@@ -176,6 +225,19 @@ export default class Transform
     get skewY()
     {
         return this._skew.y;
+    }
+
+    /**
+     * Sets Y skew of the transform.
+     *
+     * @param {number} v - The value to set to.
+     */
+    set skewY(v)
+    {
+        this._skew.y = v;
+        this._cy = Math.cos(v);
+        this._sy = Math.sin(v);
+        this._localUpdateId++;
     }
 
     /**
@@ -189,6 +251,17 @@ export default class Transform
     }
 
     /**
+     * Sets X pivot of the transform.
+     *
+     * @param {number} v - The value to set to.
+     */
+    set pivotX(v)
+    {
+        this._pivot.x = v;
+        this._localUpdateId++;
+    }
+
+    /**
      * The Y pivot.
      *
      * @member {number}
@@ -196,6 +269,17 @@ export default class Transform
     get pivotY()
     {
         return this._pivot.y;
+    }
+
+    /**
+     * Sets Y pivot of the transform.
+     *
+     * @param {number} v - The value to set to.
+     */
+    set pivotY(v)
+    {
+        this._pivot.y = v;
+        this._localUpdateId++;
     }
 
     /**
@@ -209,95 +293,25 @@ export default class Transform
     }
 
     /**
-     * Sets X position of the transform.
-     *
-     * @param {number} v - The value to set to.
-     */
-    set x(v)
-    {
-        this.translate(v - this._position.x, 0.0);
-    }
-
-    /**
-     * Sets Y position of the transform.
-     *
-     * @param {number} v - The value to set to.
-     */
-    set y(v)
-    {
-        this.translate(0.0, v - this._position.y);
-    }
-
-    /**
-     * Sets X scale of the transform.
-     *
-     * @param {number} v - The value to set to.
-     */
-    set scaleX(v)
-    {
-        this.scale(v / this._scale.x, 1.0);
-    }
-
-    /**
-     * Sets Y scale of the transform.
-     *
-     * @param {number} v - The value to set to.
-     */
-    set scaleY(v)
-    {
-        this.scale(1.0, v / this._scale.y);
-    }
-
-    /**
-     * Sets X skew of the transform.
-     *
-     * @param {number} v - The value to set to.
-     */
-    set skewX(v)
-    {
-        this.skew(v - this._skew.x, 0.0);
-    }
-
-    /**
-     * Sets Y skew of the transform.
-     *
-     * @param {number} v - The value to set to.
-     */
-    set skewY(v)
-    {
-        this.skew(0.0, v - this._skew.y);
-    }
-
-    /**
-     * Sets X pivot of the transform.
-     *
-     * @param {number} v - The value to set to.
-     */
-    set pivotX(v)
-    {
-        /* empty for now */
-        this._pivot.x = v;
-    }
-
-    /**
-     * Sets Y pivot of the transform.
-     *
-     * @param {number} v - The value to set to.
-     */
-    set pivotY(v)
-    {
-        /* empty for now */
-        this._pivot.y = v;
-    }
-
-    /**
      * Sets rotation of the transform.
      *
      * @param {number} v - The value to set to.
      */
     set rotation(v)
     {
-        this.rotate(v - this._rotation);
+        this._rotation = v;
+        this._sr = Math.sin(v);
+        this._cr = Math.cos(v);
+        this._localUpdateId++;
+    }
+
+    /**
+     * Invalidates the cached parent transform which forces an update next time.
+     *
+     */
+    invalidate()
+    {
+        this._cachedParentUpdateId = -1;
     }
 
     /**
@@ -307,90 +321,54 @@ export default class Transform
      */
     update(parent)
     {
-        this.dirty = true;
+        // this.dirty = true;
+
+        const pt = parent._wt;
+        const wt = this._wt;
+        const lt = this._lt;
+
+        if (this._localUpdateId !== this._cachedLocalUpdateId)
+        {
+            const a =  this._cr * this._scale.x;
+            const b =  this._sr * this._scale.x;
+            const c = -this._sr * this._scale.y;
+            const d =  this._cr * this._scale.y;
+
+            // skew
+            lt.a = (this._cy * a) + (this._sy * c);
+            lt.b = (this._cy * b) + (this._sy * d);
+            lt.c = (this._sx * a) + (this._cx * c);
+            lt.d = (this._sx * b) + (this._cx * d);
+
+            // translation
+            lt.tx = this._position.x - ((this._pivot.x * lt.a) + (this._pivot.y * lt.c));
+            lt.ty = this._position.y - ((this._pivot.x * lt.b) + (this._pivot.y * lt.d));
+
+            this._cachedLocalUpdateId = this._localUpdateId;
+            this._cachedParentUpdateId = -1;
+        }
 
         // @ifdef DEBUG
         ASSERT(this._lt.valid(), 'Invalid local transform, property is set incorrectly somewhere...');
         // @endif
 
-        this._wt.copy(this._lt);
-        this._wt.multiply(parent._wt);
+        if (this._cachedParentUpdateId !== parent._updateId)
+        {
+            // multiply the parent matrix with the objects transform.
+            wt.a = (lt.a * pt.a) + (lt.b * pt.c);
+            wt.b = (lt.a * pt.b) + (lt.b * pt.d);
+            wt.c = (lt.c * pt.a) + (lt.d * pt.c);
+            wt.d = (lt.c * pt.b) + (lt.d * pt.d);
+            wt.tx = (lt.tx * pt.a) + (lt.ty * pt.c) + pt.tx;
+            wt.ty = (lt.tx * pt.b) + (lt.ty * pt.d) + pt.ty;
+
+            this._cachedParentUpdateId = parent._updateId;
+            this._updateId++;
+        }
 
         // @ifdef DEBUG
-        ASSERT(this._wt.valid(), 'Invalid local transform, property is set incorrectly somewhere...');
+        ASSERT(this._wt.valid(), 'Invalid world transform, property is set incorrectly somewhere...');
         // @endif
-    }
-
-    /**
-     * Translates the transform by the given coords.
-     *
-     * @param {number} x - The X amount to translate by.
-     * @param {number} y - The Y amount to translate by.
-     * @return {Transform} returns itself.
-     */
-    translate(x, y)
-    {
-        this.dirty = true;
-
-        this._lt.translate(x, y);
-
-        this._position.x += x;
-        this._position.y += y;
-
-        return this;
-    }
-
-    /**
-     * Scales the transform by the given coords.
-     *
-     * @param {number} x - The X amount to scale by.
-     * @param {number} y - The Y amount to scale by.
-     * @return {Transform} returns itself.
-     */
-    scale(x, y)
-    {
-        this.dirty = true;
-
-        this._lt.scale(x, y);
-
-        this._scale.x *= x;
-        this._scale.y *= y;
-
-        return this;
-    }
-
-    /**
-     * Skews the transform by the given coords.
-     *
-     * @param {number} x - The X amount to skew by.
-     * @param {number} y - The Y amount to skew by.
-     * @return {Transform} returns itself.
-     */
-    skew(x, y)
-    {
-        this.dirty = true;
-
-        this._skew.x = x;
-        this._skew.y = y;
-
-        return this;
-    }
-
-    /**
-     * Scales the transform by the given coords.
-     *
-     * @param {number} rad - The angle to rotate by in radians.
-     * @return {Transform} returns itself.
-     */
-    rotate(rad)
-    {
-        this.dirty = true;
-
-        this._lt.rotate(rad);
-
-        this._rotation += rad;
-
-        return this;
     }
 
     /**
@@ -400,7 +378,6 @@ export default class Transform
     {
         this._wt = null;
         this._lt = null;
-        this._delta = null;
         this._position = null;
         this._scale = null;
         this._skew = null;

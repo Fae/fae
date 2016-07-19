@@ -1,4 +1,4 @@
-import { Container } from '@fay/scene';
+import { SceneObject } from '@fay/scene';
 import { Texture } from '@fay/textures';
 import { util } from '@fay/core';
 import SpriteRenderer from './SpriteRenderer';
@@ -10,7 +10,7 @@ import SpriteRenderer from './SpriteRenderer';
  *
  * @class
  */
-export default class Sprite extends Container
+export default class Sprite extends SceneObject
 {
     /**
      * @param {Texture} texture - The texture to use.
@@ -50,7 +50,7 @@ export default class Sprite extends Container
          * @readonly
          * @member {Float32Array}
          */
-        this.vertexData = new Float32Array(16);
+        this.vertexData = new Float32Array(8);
 
         /**
          * The X coord of the attachment point of the texture.
@@ -84,6 +84,8 @@ export default class Sprite extends Container
          */
         this._texture = null;
         this._onTextureUpdateBinding = null;
+
+        this._cachedTransformUpdateId = -1;
 
         // run texture setter
         this.texture = texture;
@@ -174,28 +176,22 @@ export default class Sprite extends Container
      * - Multiply transform matrix by the parent matrix,
      * - Multiply local alpha by the parent world alpha,
      * - Update the boundingBox
-     *
-     * @return {boolean} True if the object was updated, false otherwise.
      */
     update()
     {
-        if (!super.update()) return false;
+        if (!this.visible) return;
 
-        if (this._texture.ready && (this._vertsDirty || this.transform.dirty))
+        const parent = this.parent || SceneObject.EMPTY;
+
+        this.transform.update(parent.transform);
+        this.worldAlpha = this.alpha * parent.worldAlpha;
+
+        if (this._texture.ready && (this._vertsDirty || this._cachedTransformUpdateId !== this.transform._updateId))
         {
             this.calculateVertices();
+            this._cachedTransformUpdateId = this.transform._updateId;
+            this._vertsDirty = false;
         }
-
-        // TODO: Bounds need to take into account transform,
-        // base them on verts instead.
-
-        if (this._texture && this._texture.ready)
-        {
-            this.boundingBox.width = this._texture.orig.width;
-            this.boundingBox.height = this._texture.orig.height;
-        }
-
-        return true;
     }
 
     /**
@@ -207,14 +203,7 @@ export default class Sprite extends Container
      */
     hitTest(x, y)
     {
-        const hit = super.hitTest(x, y);
-
-        if (hit)
-        {
-            return hit;
-        }
-
-        if (this.boundingBox.contains(x, y))
+        if (this.bounds.contains(x, y))
         {
             return this;
         }
@@ -241,7 +230,6 @@ export default class Sprite extends Container
     calculateVertices()
     {
         // set the vertex data
-        const texture = this._texture;
         const wt = this.transform.worldTransform;
         const a = wt.a;
         const b = wt.b;
@@ -250,8 +238,9 @@ export default class Sprite extends Container
         const tx = wt.tx;
         const ty = wt.ty;
         const vertexData = this.vertexData;
-        const trim = texture.trim;
-        const orig = texture.orig;
+        const trim = this._texture.texture.trim;
+        const orig = this._texture.texture.orig;
+
         let w0;
         let w1;
         let h0;
@@ -291,8 +280,6 @@ export default class Sprite extends Container
         // xy
         vertexData[6] = (a * w1) + (c * h0) + tx;
         vertexData[7] = (d * h0) + (b * w1) + ty;
-
-        this._vertsDirty = false;
     }
 
     /**
@@ -336,5 +323,20 @@ export default class Sprite extends Container
     _onTextureUpdate()
     {
         this._vertsDirty = true;
+    }
+
+    /**
+     * Updates the bounds of this object.
+     *
+     * @protected
+     */
+    _updateBounds()
+    {
+        this._bounds.clear();
+        this._boundsDirty = false;
+
+        if (!this.visible) return;
+
+        this._bounds.addQuad(this.vertexData);
     }
 }

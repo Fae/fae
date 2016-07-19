@@ -11,7 +11,7 @@ import { debug, glutil } from '@fay/core';
 export default class TextureSource
 {
     /**
-     * @param {CanvasImageSource} source - The drawable source.
+     * @param {CanvasImageSource|RenderTarget} source - The drawable source.
      * @param {number} scaleMode - How to scale the texture source. Either `WebGLRenderingContext.LINEAR`
      *  or `WebGLRenderingContext.NEAREST`.
      * @param {number} wrapMode - How to scale the texture source. Either `WebGLRenderingContext.CLAMP_TO_EDGE`,
@@ -263,6 +263,21 @@ export default class TextureSource
     {
         if (!this.ready) return null;
 
+        // support for RenderTarget as source.
+        if (this.source.framebuffer)
+        {
+            if (this.source.framebuffer.texture)
+            {
+                return this.source.framebuffer.texture;
+            }
+
+            // @ifdef DEBUG
+            debug.ASSERT(false, 'Tried to render a RenderTexture source that has no GLTexture created.');
+            // @endif
+
+            return null;
+        }
+
         let glTexture = this._glTextures[renderer.uid];
 
         if (!glTexture)
@@ -384,8 +399,17 @@ export default class TextureSource
 
         if (!source) return;
 
+        // handle RenderTarget
+        if (source.framebuffer)
+        {
+            // @ifdef DEBUG
+            debug.ASSERT(source.width && source.height, 'RenderTarget source is missing width or height.');
+            // @endif
+
+            this._onSourceLoad();
+        }
         // handle canvas
-        if (source.getContext)
+        else if (source.getContext)
         {
             // @ifdef DEBUG
             debug.ASSERT(source.width && source.height, 'Canvas source is missing width or height.');

@@ -1,4 +1,4 @@
-import Vector2d from '../Vector2d';
+import Vector2d from './Vector2d';
 
 /**
  * A simple class representing a polygon.

@@ -30,7 +30,7 @@ const EPSILON = 0.000001;
 /**
  * A 2x3 matrix.
  *
- * A Matrix2d is a Float32Array that contains six elements defined as:
+ * A Matrix2d is an object that contains six elements defined as:
  *
  * ```js
  * [a, b, c, d, tx, ty]
@@ -44,7 +44,7 @@ const EPSILON = 0.000001;
  * | 0  0  1 |
  * ```
  *
- * The last row is ignored so the array is shorter and operations are faster.
+ * Since the last row is ignored so the data structure is smaller and operations are faster.
  *
  * For those unfamiliar with 3x3 transformation matrices, you could say that:
  *
@@ -61,8 +61,14 @@ export default class Matrix2d
     /**
      * Creates a new identity Matrix2d
      *
+     * @param {number} a - The `a` component.
+     * @param {number} b - The `b` component.
+     * @param {number} c - The `c` component.
+     * @param {number} d - The `d` component.
+     * @param {number} tx - The `tx` component.
+     * @param {number} ty - The `ty` component.
      */
-    constructor()
+    constructor(a = 1, b = 0, c = 0, d = 1, tx = 0, ty = 0)
     {
         this._mat3 = null;
 
@@ -71,42 +77,42 @@ export default class Matrix2d
          *
          * @member {number}
          */
-        this.a = 1;
+        this.a = a;
 
         /**
          * The `b` component of the Matrix2d.
          *
          * @member {number}
          */
-        this.b = 0;
+        this.b = b;
 
         /**
          * The `c` component of the Matrix2d.
          *
          * @member {number}
          */
-        this.c = 0;
+        this.c = c;
 
         /**
          * The `d` component of the Matrix2d.
          *
          * @member {number}
          */
-        this.d = 1;
+        this.d = d;
 
         /**
          * The `tx` component of the Matrix2d.
          *
          * @member {number}
          */
-        this.tx = 0;
+        this.tx = tx;
 
         /**
          * The `ty` component of the Matrix2d.
          *
          * @member {number}
          */
-        this.ty = 0;
+        this.ty = ty;
     }
 
     /**
@@ -255,28 +261,22 @@ export default class Matrix2d
     /**
      * Multiplies this matrix by another Matrix2d.
      *
-     * @param {Matrix2d} b - the operand to multiply this matrix by.
+     * @param {Matrix2d} o - The other matrix to multiply this matrix by.
      * @return {Matrix2d} returns itself.
      */
-    multiply(b)
+    multiply(o)
     {
-        const a0 = this.a;
-        const a1 = this.b;
-        const a2 = this.c;
-        const a3 = this.d;
-        const b0 = b.a;
-        const b1 = b.b;
-        const b2 = b.c;
-        const b3 = b.d;
-        const b4 = b.tx;
-        const b5 = b.ty;
+        const a = this.a;
+        const b = this.b;
+        const c = this.c;
+        const d = this.d;
 
-        this.a = (a0 * b0) + (a2 * b1);
-        this.b = (a1 * b0) + (a3 * b1);
-        this.c = (a0 * b2) + (a2 * b3);
-        this.d = (a1 * b2) + (a3 * b3);
-        this.tx = (a0 * b4) + (a2 * b5) + this.tx;
-        this.ty = (a1 * b4) + (a3 * b5) + this.ty;
+        this.a = (a * o.a) + (c * o.b);
+        this.b = (b * o.a) + (d * o.b);
+        this.c = (a * o.c) + (c * o.d);
+        this.d = (b * o.c) + (d * o.d);
+        this.tx = (a * o.tx) + (c * o.ty) + this.tx;
+        this.ty = (b * o.tx) + (d * o.ty) + this.ty;
 
         return this;
     }

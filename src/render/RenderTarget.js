@@ -1,10 +1,12 @@
 import GLFramebuffer from '../gl/GLFramebuffer';
 import Vector2d from '../math/Vector2d';
 import Matrix2d from '../math/Matrix2d';
-import Rectangle from '../math/shapes/Rectangle';
+import Rectangle from '../math/Rectangle';
 import Color from '../util/Color';
 
 /**
+ * A RenderTarget is a wrapper around framebuffer to be rendered to.
+ *
  * @class
  */
 export default class RenderTarget
@@ -60,6 +62,30 @@ export default class RenderTarget
 
         this.setFrame();
         this.resize(width, height);
+    }
+
+    /**
+     * The width of this render target. Proxy for `.size.x`.
+     *
+     * To set this, call `.resize(width, height)`
+     *
+     * @member {number}
+     */
+    get width()
+    {
+        return this.size.x;
+    }
+
+    /**
+     * The width of this render target. Proxy for `.size.x`.
+     *
+     * To set this, call `.resize(width, height)`
+     *
+     * @member {number}
+     */
+    get height()
+    {
+        return this.size.y;
     }
 
     /**
@@ -182,7 +208,7 @@ export default class RenderTarget
 
         this.framebuffer.resize(width/* * this.resolution*/, height/* * this.resolution*/);
 
-        const projectionFrame = this.frame || this.size;
+        const projectionFrame = this.size;
 
         this.calculateProjection(projectionFrame);
     }

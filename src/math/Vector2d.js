@@ -29,7 +29,7 @@ THE SOFTWARE. */
 const EPSILON = 0.000001;
 
 /**
- * A Vector2d is a Float32Array defined as:
+ * A Vector2d is an object defined as:
  *
  * ```js
  * [x, y]
@@ -42,22 +42,24 @@ export default class Vector2d
     /**
      * Creates a new, empty Vector2d
      *
+     * @param {number} x - The starting x value.
+     * @param {number} y - The starting y value.
      */
-    constructor()
+    constructor(x = 0, y = 0)
     {
         /**
          * The `x` component of the Vector2d.
          *
          * @member {number}
          */
-        this.x = 0;
+        this.x = x;
 
         /**
          * The `y` component of the Vector2d.
          *
          * @member {number}
          */
-        this.y = 0;
+        this.y = y;
     }
 
     /**

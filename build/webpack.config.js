@@ -29,9 +29,9 @@ module.exports = {
         loaders: [
             {
                 test: /\.js$/,
-                exclude: /(node_modules|vendor)/,
+                exclude: /node_modules/,
                 loaders: [
-                    'babel?cacheDirectory=true&presets[]=es2015',
+                    'babel?cacheDirectory=true&presets[]=es2015-loose',
                     `preprocess?${JSON.stringify(config)}`,
                 ],
             },

@@ -3,6 +3,9 @@ import GLTexture from './GLTexture';
 /**
  * Helper class to create a WebGL framebuffer.
  *
+ * Generally you do not want to create this class directly, but instead
+ * use the static {@link GLFramebuffer#createRGBA} and {@link GLFramebuffer#createFloat32}
+ *
  * @class
  */
 export default class GLFramebuffer

@@ -22,12 +22,14 @@ export default class Container extends SceneObject
         /**
          * children of this container
          *
-         * @type {DisplayObject[]}
+         * @type {SceneObject[]}
          */
         this.children = [];
 
         /**
          * Dispatched when the children array changes
+         *
+         * No params are passed to the callback.
          *
          * @type {Signal}
          */
@@ -40,28 +42,30 @@ export default class Container extends SceneObject
      * - Multiply transform matrix by the parent matrix,
      * - Multiply local alpha by the parent world alpha,
      * - Update the boundingBox
-     *
-     * @return {boolean} True if the object was updated, false otherwise.
      */
     update()
     {
-        if (!super.update()) return false;
+        if (!this.visible) return;
+
+        const parent = this.parent || SceneObject.EMPTY;
+
+        this.transform.update(parent.transform);
+        this.worldAlpha = this.alpha * parent.worldAlpha;
 
         for (let i = 0; i < this.children.length; ++i)
         {
-            const child = this.children[i];
-
-            if (child.update())
-            {
-                this.boundingBox.union(child.boundingBox);
-            }
+            this.children[i].update();
         }
-
-        return true;
     }
 
     /**
-     * Called for this object to render itself.
+     * Called for this object to render itself. This render method only
+     * renders children, but it does also call a protected `_render()`
+     * method internally so that objects that extend Container can
+     * render themselves if they want to.
+     *
+     * If you extend Container it is most likely you want to override
+     * the `_render()` method to render yourself, and not this one.
      *
      * @param {!Renderer} renderer - The renderer to render with.
      */
@@ -107,7 +111,7 @@ export default class Container extends SceneObject
     /**
      * Adds a child or multiple children to the container.
      *
-     * @param {...DisplayObject} child - The child, or children, to add.
+     * @param {...SceneObject} child - The child, or children, to add.
      * @return {Container} returns itself.
      */
     addChild(...args)
@@ -124,7 +128,9 @@ export default class Container extends SceneObject
             }
 
             child.parent = this;
-            child.transform.update(this.transform);
+
+            // ensure transform is recalculated
+            child.transform.invalidate();
 
             this.children.push(child);
 
@@ -138,7 +144,7 @@ export default class Container extends SceneObject
     /**
      * Removes a child or multiple children from the container.
      *
-     * @param {...DisplayObject} child - The child, or children, to add.
+     * @param {...SceneObject} child - The child, or children, to add.
      * @return {Container} returns itself.
      */
     removeChild(...args)
@@ -197,13 +203,39 @@ export default class Container extends SceneObject
 
     /**
      * Called internally for this object to render itself. This is only called
-     * if the container is visible has a worldAlpha > 0.
+     * if the container is visible has a worldAlpha > 0. This method is here
+     * to support objects that want to extend Container, but also have a visual.
      *
-     * @private
+     * This allows the object to reuse the logic in Container for rendering children,
+     * but also render itself.
+     *
+     * @protected
      * @param {!Renderer} renderer - The renderer to render with.
      */
     _render(/* renderer */)
     {
         /* Abstract */
+    }
+
+    /**
+     * Updates the bounds of this object.
+     *
+     * @protected
+     */
+    _updateBounds()
+    {
+        this._bounds.clear();
+        this._boundsDirty = false;
+
+        if (!this.visible) return;
+
+        for (let i = 0; i < this.children.length; ++i)
+        {
+            const child = this.children[i];
+
+            child._updateBounds();
+
+            this._bounds.addChild(child._bounds);
+        }
     }
 }

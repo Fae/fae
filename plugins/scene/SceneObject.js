@@ -55,39 +55,9 @@ export default class SceneObject
         this.parent = null;
 
         /**
-         * The bounding box of this scene object.
-         *
-         * @member {Rectangle}
-         */
-        this.boundingBox = new math.Rectangle();
-
-        /**
-         * Dispatched in the update loop, each frame.
-         *
-         * @member {Signal}
-         */
-        this.onUpdate = new Signal();
-
-        /**
-         * Dispatched before the object is rendered.
-         *
-         * @member {Signal}
-         */
-        this.onPreRender = new Signal();
-
-        /**
-         * Dispatched after the object is rendered.
-         *
-         * @member {Signal}
-         */
-        this.onPostRender = new Signal();
-
-        /**
          * Dispatched when this object is added to a new parent.
          *
-         * The parameters passed handlers are:
-         *
-         * 1. {DisplayObject} parent - The parent it was added to.
+         * The callback looks like {@link SceneObject.OnAddedToParentCallback}
          *
          * @member {Signal}
          */
@@ -96,13 +66,45 @@ export default class SceneObject
         /**
          * Dispatched when this object is removed from its parent.
          *
-         * The parameters passed handlers are:
-         *
-         * 1. {DisplayObject} parent - The parent it was removed from.
+         * The callback looks like {@link SceneObject.OnRemovedFromParentCallback}
          *
          * @member {Signal}
          */
         this.onRemovedFromParent = new Signal();
+
+        /**
+         * The bounding box of this scene object.
+         *
+         * @private
+         * @member {BoundingBox}
+         */
+        this._bounds = new math.BoundingBox();
+
+        /**
+         * Tracker for if the bounds are dirty. Each time the object
+         * is updated, the bounds are marked as dirty and recalculated
+         * next time they are requested.
+         *
+         * @private
+         * @member {boolean}
+         */
+        this._boundsDirty = true;
+
+        /**
+         * When added to a new parent, the parent is passed in the dispatch.
+         *
+         * @memberof SceneObject
+         * @callback OnAddedToParentCallback
+         * @param {SceneObject} parent - The parent it was added to.
+         */
+
+        /**
+         * When removed from a parent, the parent is passed in the dispatch.
+         *
+         * @memberof SceneObject
+         * @callback OnRemovedFromParentCallback
+         * @param {SceneObject} parent - The parent it was added to.
+         */
     }
 
     /**
@@ -111,24 +113,17 @@ export default class SceneObject
      * - Multiply transform matrix by the parent matrix,
      * - Multiply local alpha by the parent world alpha,
      * - Update the boundingBox
-     *
-     * @return {boolean} True if the object was updated, false otherwise.
      */
     update()
     {
-        if (!this.visible) return false;
+        if (!this.visible) return;
 
-        if (this.parent)
-        {
-            this.transform.update(this.parent.transform);
+        const parent = this.parent || SceneObject.EMPTY;
 
-            this.worldAlpha = this.alpha * this.parent.worldAlpha;
-        }
+        this.transform.update(parent.transform);
+        this.worldAlpha = this.alpha * parent.worldAlpha;
 
-        this.boundingBox.x = this.transform.x;
-        this.boundingBox.y = this.transform.y;
-
-        return true;
+        this._boundsDirty = true;
     }
 
     /**
@@ -155,6 +150,48 @@ export default class SceneObject
     }
 
     /**
+     * Returns the bounding box of this scene object. Since the bounding
+     * box is calculated based on the objects transform matrix it is only
+     * accurrate *after* calling `.update()`.
+     *
+     * For example:
+     *
+     * ```js
+     * var obj = new SceneObject();
+     *
+     * obj.getBounds(); // 0, 0, 0, 0
+     *
+     * obj.transform.x += 10;
+     *
+     * obj.getBounds(); // 0, 0, 0, 0
+     *
+     * obj.update();
+     *
+     * obj.getBounds(); // 10, 0, 0, 0
+     *
+     * obj.transform.y += 20;
+     *
+     * obj.getBounds(); // 10, 0, 0, 0
+     *
+     * obj.update();
+     *
+     * obj.getBounds(); // 10, 20, 0, 0
+     * ```
+     *
+     * @return {BoundingBox} The object's bounding box.
+     *
+     */
+    getBounds()
+    {
+        if (this._boundsDirty)
+        {
+            this._updateBounds();
+        }
+
+        return this._bounds;
+    }
+
+    /**
      * Destroys this display object.
      */
     destroy()
@@ -166,19 +203,25 @@ export default class SceneObject
 
         this.parent = null;
 
-        this.onUpdate.detachAll();
-        this.onUpdate = null;
-
-        this.onPreRender.detachAll();
-        this.onPreRender = null;
-
-        this.onPostRender.detachAll();
-        this.onPostRender = null;
-
         this.onAddedToParent.detachAll();
         this.onAddedToParent = null;
 
         this.onRemovedFromParent.detachAll();
         this.onRemovedFromParent = null;
+
+        this._bounds = null;
+    }
+
+    /**
+     * Updates the bounds of this object.
+     *
+     * @protected
+     */
+    _updateBounds()
+    {
+        this._bounds.clear();
+        this._boundsDirty = false;
     }
 }
+
+SceneObject.EMPTY = new SceneObject();
