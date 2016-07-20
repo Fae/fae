@@ -40,13 +40,11 @@
     "async": "^2.0.0-rc.6",
     "babel-core": "^6.10.4",
     "babel-loader": "^6.2.4",
-    "babel-preset-es2015": "^6.9.0",
     "babel-preset-es2015-loose": "^7.0.0",
     "bench": "^0.3.6",
     "benchmark": "^2.1.0",
     "enhanced-resolve": "^2.2.2",
     "eslint": "^3.0.0",
-    "microtime": "^2.1.1",
     "preprocess-loader": "^0.2.0",
     "webpack": "^1.13.1",
     "webpack-glsl-loader": "^1.0.1"

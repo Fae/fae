@@ -17,7 +17,6 @@
     "Sprite.js",
     "SpriteRenderer.js",
     "index.js",
-    "config.js",
     "shader/"
   ],
   "dependencies": {

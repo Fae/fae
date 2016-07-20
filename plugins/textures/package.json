@@ -14,10 +14,13 @@
     "url": "https://github.com/englercj/fay/issues"
   },
   "files": [
-    "BaseTexture.js",
-    "Texture.js"
+    "index.js",
+    "Texture.js",
+    "TextureSource.js",
+    "TextureUVs.js"
   ],
   "dependencies": {
-    "@fay/core": "^1.0.0"
+    "@fay/core": "^1.0.0",
+    "mini-signals": "^1.1.1"
   }
 }

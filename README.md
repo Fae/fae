@@ -20,7 +20,14 @@ though you could collect many plugins together to create a game only using Fay.
 - Filters
 - Custom shaders
 - DevicePixelRatio
+- Input handling
 - Interactions (https://github.com/pixijs/pixi.js/issues/241)
+- Loader
+- Mesh
+- Text/BitmapText
+- Animated sprites
+- Particle system
+- Tiled Editor/Tile maps
 
 [mini-signals]: https://github.com/Hypercubed/mini-signals
 [ee3]: https://github.com/primus/eventemitter3
