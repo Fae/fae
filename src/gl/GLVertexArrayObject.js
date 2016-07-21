@@ -1,3 +1,5 @@
+import Device from 'ismobilejs';
+
 /**
  * Helper class to work with WebGL GLVertexArrayObjects (vaos)
  * Only works if WebGL extensions are enabled (they usually are)
@@ -237,10 +239,15 @@ export default class GLVertexArrayObject
  * Some devices behave a bit funny when using the newer extensions (im looking at you ipad 2!)
  * If you find on older devices that things have gone a bit weird then set this to true.
  *
+ * This defaults to `true` for mobile devices and `false` for desktop.
+ *
  * @static
- * @property {boolean} [FORCE_NATIVE=false]
+ * @constant
+ * @memberof GLVertexArrayObject
+ * @type {boolean}
+ * @default false
  */
-GLVertexArrayObject.FORCE_NATIVE = false;
+GLVertexArrayObject.FORCE_NATIVE = Device.tablet || Device.phone;
 
 /**
  * @param {!WebGLRenderingContext} gl - The current WebGL context

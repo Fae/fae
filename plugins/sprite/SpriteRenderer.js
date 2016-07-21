@@ -487,16 +487,18 @@ function generateSampleSrc(maxTextures)
  * @constant
  * @memberof SpriteRenderer
  * @type {number}
+ * @default 4096
  */
 SpriteRenderer.DEFAULT_SPRITE_BATCH_SIZE = 4096;
 
 /**
- * Default batch size for the sprite renderer.
+ * Default batch size for the sprite renderer. Defaults to 32 for desktop and 2 for phones.
  *
  * @static
  * @constant
  * @memberof SpriteRenderer
  * @type {number}
+ * @default 32
  */
 SpriteRenderer.MAX_TEXTURE_COUNT = Device.tablet || Device.phone ? 2 : 32;
 

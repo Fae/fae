@@ -557,9 +557,49 @@ export default class TextureSource
     }
 }
 
+/**
+ * The default scale mode to use when a new source is created, and no
+ * scale mode is specified.
+ *
+ * @static
+ * @constant
+ * @memberof TextureSource
+ * @type {number}
+ * @default WebGLRenderingContext.LINEAR
+ */
 TextureSource.defaultScaleMode = WebGLRenderingContext.LINEAR;
+
+/**
+ * The default mipmap mode to use when a new source is created, and no
+ * mipmap mode is specified.
+ *
+ * @static
+ * @constant
+ * @memberof TextureSource
+ * @type {boolean}
+ * @default true
+ */
 TextureSource.defaultMipMap = true;
+
+/**
+ * The default wrapping mode to use when a new source is created, and no
+ * wrapping mode is specified.
+ *
+ * @static
+ * @constant
+ * @memberof TextureSource
+ * @type {number}
+ * @default WebGLRenderingContext.CLAMP_TO_EDGE
+ */
 TextureSource.defaultWrapMode = WebGLRenderingContext.CLAMP_TO_EDGE;
 
+/**
+ * An empty texture source instance.
+ *
+ * @static
+ * @constant
+ * @memberof TextureSource
+ * @type {TextureSource}
+ */
 TextureSource.EMPTY = new TextureSource();
 TextureSource.EMPTY.destroy = function _noop() { /* empty */ }; // eslint-disable-line brace-style

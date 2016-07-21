@@ -22,6 +22,7 @@
   "dependencies": {
     "@fay/core": "^1.0.0",
     "@fay/scene": "^1.0.0",
-    "@fay/textures": "^1.0.0"
+    "@fay/textures": "^1.0.0",
+    "ismobilejs": "0.4.0"
   }
 }

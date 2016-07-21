@@ -290,5 +290,13 @@ export default class Texture
     }
 }
 
+/**
+ * An empty texture instance.
+ *
+ * @static
+ * @constant
+ * @memberof Texture
+ * @type {Texture}
+ */
 Texture.EMPTY = new Texture(TextureSource.EMPTY);
 Texture.EMPTY.destroy = function _noop() { /* empty */ }; // eslint-disable-line brace-style

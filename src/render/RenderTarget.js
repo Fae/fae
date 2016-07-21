@@ -233,4 +233,13 @@ export default class RenderTarget
     }
 }
 
+/**
+ * The default scale mode for a render target.
+ *
+ * @static
+ * @constant
+ * @memberof RenderTarget
+ * @type {number}
+ * @default WebGLRenderingContext.LINEAR
+ */
 RenderTarget.defaultScaleMode = WebGLRenderingContext.LINEAR;
