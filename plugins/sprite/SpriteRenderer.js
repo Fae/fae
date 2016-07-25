@@ -469,7 +469,7 @@ function generateSampleSrc(maxTextures)
 
         if (i < maxTextures - 1)
         {
-            src += `    if(vTextureId == ${i}.0)`;
+            src += `    if(textureId == ${i}.0)`;
         }
 
         src += `\n    {\n        color = texture2D(uSamplers[${i}], vTextureCoord);\n    }`;
