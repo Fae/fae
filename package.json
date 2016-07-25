@@ -1,7 +1,7 @@
 {
   "name": "@fay/core",
   "version": "1.0.0",
-  "description": "The next generation of pixi.js",
+  "description": "A next-gen 2D renderer for the web.",
   "author": "Chad Engler <chad@pantherdev.com>",
   "license": "MIT",
   "main": "./dist/fay.js",
@@ -28,7 +28,10 @@
     "dev": "npm run hash && webpack -d --config ./build/webpack.config.js --output-filename fay.js --progress --colors",
     "watch": "npm run dev -- --watch",
     "lint": "eslint src/ && eslint plugins/",
-    "start": "npm run build"
+    "start": "npm run build",
+    "test": "npm run build && karma start build/karma.conf.js --single-run",
+    "test-dev": "npm run build && karma start build/karma.conf.js",
+    "test-ci": "npm run build && karma start build/karma.conf.js"
   },
   "dependencies": {
     "bit-twiddle": "^1.0.2",
@@ -41,10 +44,18 @@
     "babel-core": "^6.10.4",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015-loose": "^7.0.0",
-    "bench": "^0.3.6",
     "benchmark": "^2.1.0",
-    "enhanced-resolve": "^2.2.2",
+    "chai": "^3.5.0",
     "eslint": "^3.0.0",
+    "karma": "^1.1.1",
+    "karma-browserstack-launcher": "^1.0.1",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-mocha": "^1.1.1",
+    "karma-mocha-reporter": "^2.0.4",
+    "karma-sauce-launcher": "^1.0.0",
+    "mocha": "^2.5.3",
     "preprocess-loader": "^0.2.0",
     "webpack": "^1.13.1",
     "webpack-glsl-loader": "^1.0.1"

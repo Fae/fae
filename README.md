@@ -18,7 +18,7 @@ though you could collect many plugins together to create a game only using Fay.
 
 - Masks
 - Filters
-- Custom shaders
+- Custom Shaders
 - DevicePixelRatio
 - Input handling
 - Interactions (https://github.com/pixijs/pixi.js/issues/241)
