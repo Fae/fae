@@ -1,6 +1,6 @@
 import Signal from 'mini-signals';
 import SceneObject from './SceneObject';
-import { util/* @ifdef DEBUG */, debug/* @endif */ } from '@fay/core';
+import { util/* @ifdef DEBUG */, debug/* @endif */ } from '@fae/core';
 
 /**
  * A Container is a SceneObject that has children. It overrides

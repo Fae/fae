@@ -1,6 +1,6 @@
 import Device from 'ismobilejs';
 import bitTwiddle from 'bit-twiddle';
-import { render, glutil, util/* @ifdef DEBUG */, debug/* @endif */ } from '@fay/core';
+import { render, glutil, util/* @ifdef DEBUG */, debug/* @endif */ } from '@fae/core';
 
 const vertSource = require('./shader/multi-texture.vert');
 const fragTemplate = require('./shader/multi-texture.frag');

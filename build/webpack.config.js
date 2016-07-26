@@ -21,7 +21,7 @@ module.exports = {
     // entry: path.join(__dirname, '..', 'src', 'index.js'),
     output: {
         path: path.join(__dirname, '..', 'dist'),
-        library: 'Fay',
+        library: 'Fae',
         libraryTarget: 'umd',
         umdNamedDefine: true,
     },
@@ -44,10 +44,10 @@ module.exports = {
     },
     resolve: {
         alias: {
-            '@fay/core': srcBase,
-            '@fay/scene': path.join(pluginbase, 'scene'),
-            '@fay/sprite': path.join(pluginbase, 'sprite'),
-            '@fay/textures': path.join(pluginbase, 'textures'),
+            '@fae/core': srcBase,
+            '@fae/scene': path.join(pluginbase, 'scene'),
+            '@fae/sprite': path.join(pluginbase, 'sprite'),
+            '@fae/textures': path.join(pluginbase, 'textures'),
         },
     },
     plugins: [

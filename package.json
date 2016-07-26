@@ -30,8 +30,7 @@
     "lint": "eslint src/ && eslint plugins/",
     "start": "npm run build",
     "test": "npm run build && karma start build/karma.conf.js --single-run",
-    "test-dev": "npm run build && karma start build/karma.conf.js",
-    "test-ci": "npm run build && karma start build/karma.conf.js"
+    "test-dev": "npm run build && karma start build/karma.conf.js"
   },
   "dependencies": {
     "bit-twiddle": "^1.0.2",

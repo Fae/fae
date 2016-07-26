@@ -1,5 +1,5 @@
 /**
- * Fay.js v{{version}}
+ * Fae.js v{{version}}
  *
  * {{compileDate}} - {{commitHash}}
  *

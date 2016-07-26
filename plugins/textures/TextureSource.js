@@ -1,6 +1,6 @@
 import Signal from 'mini-signals';
 import bitTwiddle from 'bit-twiddle';
-import { debug, glutil } from '@fay/core';
+import { debug, glutil } from '@fae/core';
 
 /**
  * A TextureSource is a wrapper around a raw object that can be drawn with the

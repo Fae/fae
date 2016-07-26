@@ -17,7 +17,7 @@ class EntryGeneratorWebpackPlugin
      */
     constructor(plugins)
     {
-        plugins = plugins || (process.env.FAY_PLUGINS ? process.env.FAY_PLUGINS.split(',') : []);
+        plugins = plugins || (process.env.FAE_PLUGINS ? process.env.FAE_PLUGINS.split(',') : []);
 
         this.outputFile = `entry-${buildName(plugins)}.js`;
         this.plugins = plugins;
@@ -87,7 +87,7 @@ class EntryGeneratorWebpackPlugin
             // it doesn't exist at all. Either way, we can continue.
 
             // set entry string with export for core.
-            let str = 'export * from \'@fay/core\';\n\n';
+            let str = 'export * from \'@fae/core\';\n\n';
 
             this.loadPluginData((err, pluginData) =>
             {
@@ -98,7 +98,7 @@ class EntryGeneratorWebpackPlugin
                 {
                     const data = pluginData[i];
                     const pkg = data.pkg;
-                    const namespace = pkg.fay && pkg.fay.namespace ? pkg.fay.namespace : pkg.name.replace('@fay/', '');
+                    const namespace = pkg.fae && pkg.fae.namespace ? pkg.fae.namespace : pkg.name.replace('@fae/', '');
 
                     str += `import * as ${namespace} from '${data.pkg.name}';\n`;
                     str += `export { ${namespace} };\n\n`;

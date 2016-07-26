@@ -3,6 +3,8 @@ import { ASSERT } from '../debug';
 // @endif
 
 /**
+ * Simple ArrayBuffer wrapper that manages offsets and views into that buffer.
+ *
  * @class
  */
 export default class Buffer

@@ -19,7 +19,7 @@ export { default as Flags } from './Flags';
  */
 export function error(...args)
 {
-    args[0] = `[Fay Error] ${args[0]}`;
+    args[0] = `[Fae Error] ${args[0]}`;
 
     console.error(...args); // eslint-disable-line no-console
 }
@@ -31,7 +31,7 @@ export function error(...args)
  */
 export function log(...args)
 {
-    args[0] = `[Fay] ${args[0]}`;
+    args[0] = `[Fae] ${args[0]}`;
 
     console.log(...args); // eslint-disable-line no-console
 }

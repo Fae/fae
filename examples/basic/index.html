@@ -1,19 +1,19 @@
 <html>
     <head>
-        <script src="../../dist/fay.js"></script>
+        <script src="../../dist/fae.js"></script>
     </head>
     <body>
         <canvas id="view" width="512" height="512"></canvas>
 
         <script>
-            let renderer = new Fay.render.Renderer(document.getElementById('view'));
+            let renderer = new Fae.render.Renderer(document.getElementById('view'));
             let img = new Image();
             let sprite = null;
 
             img.src = 'bunny.png';
             img.addEventListener('load', function ()
             {
-                sprite = new Fay.sprite.Sprite(new Fay.textures.Texture(img));
+                sprite = new Fae.sprite.Sprite(new Fae.textures.Texture(img));
 
                 render();
             });

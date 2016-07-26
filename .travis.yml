@@ -23,7 +23,7 @@ install:
   - npm install
 
 script:
-  - npm run test-ci
+  - npm test
 
 after_script:
   - ./build/print_logs.sh

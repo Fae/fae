@@ -1,6 +1,6 @@
-import { SceneObject } from '@fay/scene';
-import { Texture } from '@fay/textures';
-import { util } from '@fay/core';
+import { SceneObject } from '@fae/scene';
+import { Texture } from '@fae/textures';
+import { util } from '@fae/core';
 import SpriteRenderer from './SpriteRenderer';
 
 /**

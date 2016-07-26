@@ -1,5 +1,5 @@
 import Signal from 'mini-signals';
-import { math } from '@fay/core';
+import { math } from '@fae/core';
 
 /**
  * Base class for an object that has a transform in the scene.

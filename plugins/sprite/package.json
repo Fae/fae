@@ -1,17 +1,17 @@
 {
-  "name": "@fay/sprite",
+  "name": "@fae/sprite",
   "version": "1.0.0",
   "description": "Adds support for sprites.",
   "author": "Chad Engler <chad@pantherdev.com>",
   "license": "MIT",
   "main": "./index.js",
-  "homepage": "https://github.com/englercj/fay#readme",
+  "homepage": "https://github.com/englercj/fae#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/englercj/fay.git"
+    "url": "git+https://github.com/englercj/fae.git"
   },
   "bugs": {
-    "url": "https://github.com/englercj/fay/issues"
+    "url": "https://github.com/englercj/fae/issues"
   },
   "files": [
     "Sprite.js",
@@ -20,9 +20,9 @@
     "shader/"
   ],
   "dependencies": {
-    "@fay/core": "^1.0.0",
-    "@fay/scene": "^1.0.0",
-    "@fay/textures": "^1.0.0",
+    "@fae/core": "^1.0.0",
+    "@fae/scene": "^1.0.0",
+    "@fae/textures": "^1.0.0",
     "ismobilejs": "0.4.0"
   }
 }

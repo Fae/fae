@@ -15,12 +15,12 @@ module.exports = function conf(config)
         browserNoActivityTimeout: 30000,
 
         sauceLabs: {
-            testName: 'Fay.js',
+            testName: 'Fae',
             startConnect: true,
         },
 
         browserStack: {
-            project: 'Fay.js',
+            project: 'Fae',
             name: 'Unit Tests',
             startTunnel: true,
             timeout: 600,
@@ -28,7 +28,7 @@ module.exports = function conf(config)
 
         files: [
             // our code
-            'dist/fay.js',
+            'dist/fae.js',
 
             // fixtures
             {

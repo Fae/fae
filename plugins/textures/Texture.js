@@ -1,5 +1,5 @@
 import Signal from 'mini-signals';
-import { math/* @ifdef DEBUG */, debug/* @endif */ } from '@fay/core';
+import { math/* @ifdef DEBUG */, debug/* @endif */ } from '@fae/core';
 import TextureSource from './TextureSource';
 import TextureUVs from './TextureUVs';
 

@@ -1,17 +1,17 @@
 {
-  "name": "@fay/textures",
+  "name": "@fae/textures",
   "version": "1.0.0",
   "description": "Adds support for high-level texture management.",
   "author": "Chad Engler <chad@pantherdev.com>",
   "license": "MIT",
   "main": "./index.js",
-  "homepage": "https://github.com/englercj/fay#readme",
+  "homepage": "https://github.com/englercj/fae#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/englercj/fay.git"
+    "url": "git+https://github.com/englercj/fae.git"
   },
   "bugs": {
-    "url": "https://github.com/englercj/fay/issues"
+    "url": "https://github.com/englercj/fae/issues"
   },
   "files": [
     "index.js",
@@ -20,7 +20,7 @@
     "TextureUVs.js"
   ],
   "dependencies": {
-    "@fay/core": "^1.0.0",
+    "@fae/core": "^1.0.0",
     "mini-signals": "^1.1.1"
   }
 }
