@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Fae Benchmark Suite</title>
+
+        <script src="../../../dist/fae.min.js"></script>
+        <script src="../../../node_modules/pixi.js/bin/pixi.js"></script>
+
+        <script src="../../../node_modules/benchmark/node_modules/lodash/lodash.js"></script>
+        <script src="../../../node_modules/benchmark/node_modules/platform/platform.js"></script>
+        <script src="../../../node_modules/benchmark/benchmark.js"></script>
+
+        <link rel="stylesheet/less" type="text/css" href="../lib/bleacher.less" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.7.1/less.min.js"></script>
+    </head>
+    <body>
+        <div id="bleacher"></div>
+
+        <script src="../lib/bleacher.js"></script>
+        <script>Bleacher.init('bleacher', 'Fae vs Pixi - Benchmarks');</script>
+
+        <!-- Benchmarks that can run -->
+        <script src="update.bench.js"></script>
+        <script src="transform.bench.js"></script>
+    </body>
+</html>

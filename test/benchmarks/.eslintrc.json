@@ -1,0 +1,23 @@
+{
+    "extends": "../.eslintrc.json",
+    "env": {
+        "commonjs": false,
+        "browser": true
+    },
+    "globals": {
+        "Fae": false,
+        "PIXI": false,
+        "Benchmark": false,
+        "Bench": true
+    },
+    "parserOptions": {
+        "sourceType": "script"
+    },
+    "rules": {
+        "no-console": 0,
+        "no-unused-vars": 0,
+        "func-names": 0,
+        "no-undef": 0,
+        "strict": [2, "function"]
+    }
+}
