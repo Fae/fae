@@ -1,17 +1,17 @@
 {
-  "name": "@fay/core",
+  "name": "@fae/core",
   "version": "1.0.0",
   "description": "A next-gen 2D renderer for the web.",
   "author": "Chad Engler <chad@pantherdev.com>",
   "license": "MIT",
-  "main": "./dist/fay.js",
-  "homepage": "https://github.com/englercj/fay#readme",
+  "main": "./dist/fae.js",
+  "homepage": "https://github.com/englercj/fae#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/englercj/fay.git"
+    "url": "git+https://github.com/englercj/fae.git"
   },
   "bugs": {
-    "url": "https://github.com/englercj/fay/issues"
+    "url": "https://github.com/englercj/fae/issues"
   },
   "directories": {
     "lib": "./src",
@@ -24,8 +24,8 @@
   "scripts": {
     "clean": "rm -rf dist/",
     "hash": "git rev-parse HEAD > .commit",
-    "build": "set NODE_ENV=production && npm run hash && webpack -p --config ./build/webpack.config.js --output-filename fay.min.js --progress ",
-    "dev": "npm run hash && webpack -d --config ./build/webpack.config.js --output-filename fay.js --progress --colors",
+    "build": "set NODE_ENV=production && npm run hash && webpack -p --config ./build/webpack.config.js --output-filename fae.min.js --progress ",
+    "dev": "npm run hash && webpack -d --config ./build/webpack.config.js --output-filename fae.js --progress --colors",
     "watch": "npm run dev -- --watch",
     "lint": "eslint src/ && eslint plugins/",
     "start": "npm run build",

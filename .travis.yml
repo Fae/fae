@@ -30,7 +30,7 @@ after_script:
 
 env:
   global:
-    - LOGS_DIR=/tmp/fay-build/logs
+    - LOGS_DIR=/tmp/fae-build/logs
     - secure: HmOtltC4FkPxLvsJKvvlmqSLykLW2K9dT2dhHnqhLv8AgDcClcNM2JF0w31QJs/BZJuHULzsvGJvQF4zfM4AUZuFuCdTVc9CpLgzq9ES43nudjZW8mSv5zKSJFsGPDRyBJmVtBZdP6M9CQcwIYYbW+cx2A8RT6XD/0PNJQvwj0rfCioTxqLcDEzngFZYgwCkM2duKm7ElQ2j1jlNF0WZ6rRJ5F1b425vHeuQtttAFMIi/qiElqMU4b8YpEB2VH5+Dwu64n3AfWwxdK+/hZQWTZnjWMRMLMAfPBWpd2xFXjm3owg6gq2uYEOq1/V5RmrbmetOwc+70dBRzTafWltcMcSY2W/ZYBmngICFC4U9W/S7eNjUgI8MZv4gNrImkfkPKbaMc0O5JIARVEoesLyoPWalenqxqkqBd0OyV6dF88S8dOYaYiDIPFazGKN5xlif4n4uOnheaWr2JCFjuVwUv4tqujynS/ACutpxZbvOOXWt//dttP0UUXcW7AXfGuKdhrDtWbwsGTCo4SAjFvt3/vlj7Z2trsQxjUDIheI/yvOA8OM1JCgXgneq4y06f8HPmTd82Ofdc38FR4ZRmDW2284nHcggHAdWf0Tv3gTYcQjs3A07lMU0O8F5am6MW7EA9pZYha1KE2LTBOf2+1ALjpxC4r4X+obsKw97BuHtl/Q=
 
 notifications:
