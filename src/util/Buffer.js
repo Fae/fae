@@ -40,8 +40,8 @@ export default class Buffer
             _buffer = parentBufferOrSize.buffer;
         }
 
-        const bytesLength = length !== -1 ? length : _buffer.byteLength;
-        const view32Length = length !== -1 ? length / 4 : _buffer.byteLength / 4;
+        const bytesLength = length !== -1 ? length : (_buffer.byteLength - offset);
+        const view32Length = length !== -1 ? length / 4 : ((_buffer.byteLength / 4) - (offset / 4));
 
         // @ifdef DEBUG
         ASSERT(offset + bytesLength <= _buffer.byteLength, 'Offset + length > size of memory buffer.');
@@ -96,8 +96,8 @@ export default class Buffer
      */
     destroy()
     {
-        this.arraybuffer = null;
-        this.uint8View = null;
+        this.buffer = null;
+        this.bytes = null;
         this.float32View = null;
         this.uint32View = null;
     }

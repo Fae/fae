@@ -4,7 +4,7 @@ module.exports = function conf(config)
 {
     config.set({
         basePath: '../',
-        frameworks: ['mocha', 'chai'],
+        frameworks: ['mocha', 'sinon-chai'],
         autoWatch: true,
         logLevel: config.LOG_INFO,
         logColors: true,
@@ -38,7 +38,7 @@ module.exports = function conf(config)
 
             // tests
             {
-                pattern: `test/unit/*.test.js`,
+                pattern: `test/unit/**/*.test.js`,
                 served: true,
                 included: true,
                 watched: true,
@@ -46,8 +46,8 @@ module.exports = function conf(config)
         ],
 
         plugins: [
-            'karma-chai',
             'karma-mocha',
+            'karma-sinon-chai',
             'karma-mocha-reporter',
             'karma-chrome-launcher',
             'karma-firefox-launcher',
