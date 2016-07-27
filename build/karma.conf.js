@@ -185,12 +185,6 @@ module.exports = function conf(config)
         config.sauceLabs.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
         config.sauceLabs.recordScreenshots = true;
 
-        // Debug logging into a file, that we print out at the end of the build.
-        config.loggers.push({
-            type: 'file',
-            filename: `${process.env.LOGS_DIR}/karma.log`,
-        });
-
         // if (process.env.BROWSER_PROVIDER === 'saucelabs' || !process.env.BROWSER_PROVIDER)
         // {
             // Allocating a browser can take pretty long (eg. if we are out of capacity and need to wait
