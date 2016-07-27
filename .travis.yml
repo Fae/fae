@@ -26,7 +26,7 @@ script:
   - npm test
 
 after_script:
-  - ./build/print_logs.sh
+  - sh ./build/print_logs.sh
 
 addons:
   sauce_connect: true
