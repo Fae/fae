@@ -164,6 +164,8 @@ module.exports = function conf(config)
         },
     });
 
+    console.log(process.env);
+
     if (process.env.TRAVIS)
     {
         const buildLabel = `TRAVIS #${process.env.TRAVIS_BUILD_NUMBER} (${process.env.TRAVIS_BUILD_ID})`;
@@ -184,12 +186,6 @@ module.exports = function conf(config)
         config.sauceLabs.startConnect = false;
         config.sauceLabs.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
         config.sauceLabs.recordScreenshots = true;
-
-        // Debug logging into a file, that we print out at the end of the build.
-        config.loggers.push({
-            type: 'file',
-            filename: `${process.env.LOGS_DIR}/karma.log`,
-        });
 
         // if (process.env.BROWSER_PROVIDER === 'saucelabs' || !process.env.BROWSER_PROVIDER)
         // {
