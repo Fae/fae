@@ -164,8 +164,6 @@ module.exports = function conf(config)
         },
     });
 
-    console.log(process.env);
-
     if (process.env.TRAVIS)
     {
         const buildLabel = `TRAVIS #${process.env.TRAVIS_BUILD_NUMBER} (${process.env.TRAVIS_BUILD_ID})`;
