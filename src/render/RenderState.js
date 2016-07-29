@@ -1,5 +1,4 @@
 import Flags from '../util/Flags';
-import BlendMode from '../util/BlendMode';
 
 /**
  * @class
