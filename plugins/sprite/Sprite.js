@@ -217,7 +217,7 @@ export default class Sprite extends SceneObject
      * @private
      * @param {!Renderer} renderer - The renderer to render with.
      */
-    _render(renderer)
+    render(renderer)
     {
         renderer.setObjectRenderer(SpriteRenderer);
         renderer.currentRenderer.render(this);
@@ -238,8 +238,8 @@ export default class Sprite extends SceneObject
         const tx = wt.tx;
         const ty = wt.ty;
         const vertexData = this.vertexData;
-        const trim = this._texture.texture.trim;
-        const orig = this._texture.texture.orig;
+        const trim = this._texture.trim;
+        const orig = this._texture.orig;
 
         let w0;
         let w1;
