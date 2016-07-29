@@ -4,6 +4,8 @@ import { ASSERT } from '../debug';
 let FLOATING_POINT_AVAILABLE = false;
 // @endif
 
+let lastBoundTextureId = 0;
+
 /**
  * Helper class to create a WebGL texture.
  *
@@ -181,7 +183,7 @@ export default class GLTexture
     {
         const gl = this.gl;
 
-        if (location > -1)
+        if (location > -1 && location !== lastBoundTextureId)
         {
             gl.activeTexture(gl.TEXTURE0 + location);
         }
