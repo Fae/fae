@@ -48,14 +48,6 @@ export default class SpriteRenderer extends render.ObjectRenderer
         this.buffers = [];
 
         /**
-         * Raw ArrayBuffer used to store all the buffers in.
-         *
-         * @private
-         * @member {ArrayBuffer}
-         */
-        this._buffersMem = new ArrayBuffer(this.size * 4 * this.vertByteSize);
-
-        /**
          * Holds the indices of the geometry (quads) to draw
          *
          * @member {Uint16Array}
@@ -76,7 +68,7 @@ export default class SpriteRenderer extends render.ObjectRenderer
         {
             const viewSize = i * 4 * this.vertByteSize;
 
-            this.buffers.push(new util.Buffer(this._buffersMem, 0, viewSize));
+            this.buffers.push(new util.Buffer(viewSize));
         }
 
         this.currentIndex = 0;
@@ -131,6 +123,11 @@ export default class SpriteRenderer extends render.ObjectRenderer
         this.shaders[1] = generateMultiTextureShader(gl, 2);
 
         // create a couple of buffers
+        if (this.indexBuffer)
+        {
+            this.indexBuffer.destroy();
+        }
+
         this.indexBuffer = glutil.GLBuffer.createIndexBuffer(gl, this.indices, gl.STATIC_DRAW);
 
         // we use the second shader as the first one depending on your browser may omit aTextureId
@@ -302,7 +299,7 @@ export default class SpriteRenderer extends render.ObjectRenderer
         debug.ASSERT(this.vertexBuffers.length > this.vertexCount, 'Number of Vertex Buffers is too small.');
         // @endif
 
-        this.vertexBuffers[this.vertexCount].upload(buffer.bytes, 0);
+        this.vertexBuffers[this.vertexCount].upload(buffer.buffer, 0);
         this.vao = this.vaos[this.vertexCount].bind();
 
         // render the groups..
