@@ -212,7 +212,7 @@ export default class Sprite extends SceneObject
     }
 
     /**
-     * Called internally for this object to render itself.
+     * Called for this object to render itself.
      *
      * @private
      * @param {!Renderer} renderer - The renderer to render with.
@@ -280,6 +280,8 @@ export default class Sprite extends SceneObject
         // xy
         vertexData[6] = (a * w1) + (c * h0) + tx;
         vertexData[7] = (d * h0) + (b * w1) + ty;
+
+        this._boundsDirty = true;
     }
 
     /**

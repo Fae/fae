@@ -56,6 +56,8 @@ export default class Container extends SceneObject
         {
             this.children[i].update();
         }
+
+        this._boundsDirty = true;
     }
 
     /**
