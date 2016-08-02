@@ -9,14 +9,27 @@ const EntryGeneratorPlugin = require('./EntryGeneratorPlugin');
 
 const srcBase = path.join(__dirname, '..', 'src');
 const pluginbase = path.join(__dirname, '..', 'plugins');
+const pluginList = process.env.FAE_PLUGINS ? process.env.FAE_PLUGINS.split(',') : fs.readdirSync(pluginbase);
 
 const config = { pkg };
 
+// set debug if not in prod build mode
 if (process.env.NODE_ENV !== 'production')
 {
     config.DEBUG = true;
 }
 
+// configure aliases for plugins
+const aliases = {
+    '@fae/core': srcBase,
+};
+
+for (let i = 0; i < pluginList.length; ++i)
+{
+    aliases[`@fae/${pluginList[i]}`] = path.join(pluginbase, pluginList[i]);
+}
+
+// main config
 module.exports = {
     // entry: path.join(__dirname, '..', 'src', 'index.js'),
     output: {
@@ -43,16 +56,11 @@ module.exports = {
         ],
     },
     resolve: {
-        alias: {
-            '@fae/core': srcBase,
-            '@fae/scene': path.join(pluginbase, 'scene'),
-            '@fae/sprite': path.join(pluginbase, 'sprite'),
-            '@fae/textures': path.join(pluginbase, 'textures'),
-        },
+        alias: aliases,
     },
     plugins: [
         // generate entry file
-        new EntryGeneratorPlugin(['scene', 'sprite', 'textures']),
+        new EntryGeneratorPlugin(pluginList),
 
         // don't emit output when there are errors
         new webpack.NoErrorsPlugin(),

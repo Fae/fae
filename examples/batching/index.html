@@ -1,0 +1,157 @@
+<html>
+    <head>
+        <script src="../../dist/fae.js"></script>
+        <script src="//rawgit.com/mrdoob/stats.js/master/build/stats.min.js"></script>
+    </head>
+    <body>
+        <canvas id="view" width="512" height="512" style="float:left"></canvas>
+        <div style="float:left">
+            GPU max textures: <span id="max-textures"></span><br/>
+            Sprites per batch: <span id="batch-size"></span><br/>
+            Active sprites: <span id="num-sprites"></span><br/>
+            Number of Batches: <span id="num-batches"></span><br/>
+        </div>
+
+        <script>
+            const stats = new Stats();
+            document.body.appendChild(stats.dom);
+
+            const maxTextures = document.getElementById('max-textures');
+            const batchSize = document.getElementById('batch-size');
+            const numSprites = document.getElementById('num-sprites');
+            const numBatches = document.getElementById('num-batches');
+
+            const view = document.getElementById('view');
+            const renderer = new Fae.render.Renderer(view);
+            const stage = new Fae.scene.Container();
+
+            const startCount = 10000;
+            const maxCount = 50000;
+            const stepCount = 100;
+            const gravity = 0.75;
+
+            const minX = 0;
+            const maxX = view.width;
+            const minY = 0;
+            const maxY = view.height;
+
+            const textureUrls  = [
+                'imgs/diamond_A.png',
+                'imgs/diamond_K.png',
+                'imgs/diamond_Q.png',
+                'imgs/diamond_J.png',
+                'imgs/spade_A.png',
+                'imgs/spade_K.png',
+                'imgs/spade_Q.png',
+                'imgs/spade_J.png',
+            ];
+
+            const textures = textureUrls.map((u) =>
+            {
+                const img = new Image();
+                img.src = u;
+
+                return new Fae.textures.Texture(img)
+            });
+
+            let isAdding = false;
+            let count = 0;
+
+            view.addEventListener('mousedown', () => isAdding = true);
+            view.addEventListener('mouseup', () => isAdding = false);
+
+            // cut off extra textures if your GPU supports less than 12
+            textures.length = Math.min(renderer.gl.getParameter(renderer.gl.MAX_TEXTURE_IMAGE_UNITS), textures.length);
+
+            for (let i = 0; i < startCount; ++i)
+            {
+                createCard();
+            }
+
+            render();
+            updateInfo();
+
+            function render()
+            {
+                requestAnimationFrame(render);
+                stats.begin();
+
+                // add moar
+                if (isAdding && count < maxCount)
+                {
+                    for (let i = 0; i < stepCount; ++i)
+                    {
+                        createCard();
+                    }
+
+                    updateInfo();
+                }
+
+                // update them all
+                for (let i = 0; i < stage.children.length; ++i)
+                {
+                    const card = stage.children[i];
+
+                    card.transform.x += card.speedX;
+                    card.transform.y += card.speedY;
+                    card.speedY += gravity;
+
+                    if (card.transform.x <= minX || card.transform.x >= maxX)
+                    {
+                        card.speedX *= -1
+                    }
+
+                    if (card.transform.y >= maxY)
+                    {
+                        card.speedY *= -gravity;
+
+                        // random boosts
+                        if (Math.random() > 0.5)
+                        {
+                            card.speedY -= Math.random() * 10;
+                        }
+                    }
+                    else if (card.transform.y <= minY)
+                    {
+                        card.transform.y = 1;
+                        card.speedY = 0;
+                    }
+                }
+
+                stage.update();
+
+                renderer.render(stage);
+                stats.end();
+            }
+
+            function createCard()
+            {
+                const card = new Fae.sprite.Sprite(textures[count % textures.length]);
+
+                card.speedX = Math.random() * 10;
+                card.speedY = (Math.random() * 10) - 5;
+
+                card.anchorX = 0.5;
+                card.anchorY = 1.0;
+                card.transform.rotation = count * 0.1;
+
+                card.transform.scaleX = 0.5;
+                card.transform.scaleY = 0.5;
+
+                count++;
+
+                stage.addChild(card);
+
+                return card;
+            }
+
+            function updateInfo()
+            {
+                maxTextures.textContent = renderer.currentRenderer._maxTextures;
+                batchSize.textContent = renderer.currentRenderer.size;
+                numSprites.textContent = count;
+                numBatches.textContent = renderer.currentRenderer.vertexBuffers.length;
+            }
+        </script>
+    </body>
+</html>
