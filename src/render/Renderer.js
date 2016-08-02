@@ -3,12 +3,14 @@ import GLContext from '../gl/GLContext';
 import RenderTarget from './RenderTarget';
 import RenderState from './RenderState';
 import ObjectRenderer from './managers/ObjectRenderer';
-import GLVertexArrayObject from '../gl/GLVertexArrayObject';
 import { uid } from '../util';
 
 const rendererRegistry = {};
 
 /**
+ * The Renderer is just a container for the WebGLRenderingContext, the render state,
+ * and the current object renderer that is doing the rendering.
+ *
  * @class
  */
 export default class Renderer
@@ -203,16 +205,6 @@ export default class Renderer
             this.currentRenderer = this._objectRenderers[RendererClass._rendererUid];
             this.currentRenderer.start();
         }
-    }
-
-    /**
-     * Creates a VAO for this renderer context.
-     *
-     * @return {GLVertexArrayObject} The new VAO.
-     */
-    createVao()
-    {
-        return new GLVertexArrayObject(this.gl, this.state.attribState);
     }
 
     /**

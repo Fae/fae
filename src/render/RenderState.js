@@ -46,23 +46,6 @@ export default class RenderState
         this.target = null;
 
         /**
-         * The maximum number of attributes this context can deal with.
-         *
-         * @member {number}
-         */
-        this.maxAttribs = this.renderer.gl.getParameter(this.renderer.gl.MAX_VERTEX_ATTRIBS);
-
-        /**
-         * Atribute state management.
-         *
-         * @member {object<string, boolean[]>}
-         */
-        this.attribState = {
-            tempAttribState: new Array(this.maxAttribs),
-            attribState: new Array(this.maxAttribs),
-        };
-
-        /**
          * The native VAO Extension if this context supports it.
          *
          * @member {*}
@@ -226,38 +209,16 @@ export default class RenderState
                 this.renderer.gl.frontFace(WebGLRenderingContext.CCW);
             }
         }
+        else if (enabled)
+        {
+            this.renderer.gl.enable(RenderState.FLAG_GL_MAP[flag]);
+        }
         else
         {
-            if (enabled)
-            {
-                this.renderer.gl.enable(RenderState.FLAG_GL_MAP[flag]);
-            }
-            else
-            {
-                this.renderer.gl.disable(RenderState.FLAG_GL_MAP[flag]);
-            }
+            this.renderer.gl.disable(RenderState.FLAG_GL_MAP[flag]);
         }
 
         return true;
-    }
-
-    /**
-     * Disables all vertex attribute arrays.
-     *
-     */
-    resetAttributes()
-    {
-        for (let i = 0; i < this.maxAttribs; ++i)
-        {
-            this.attribState.tempAttribState[i] = false;
-            this.attribState.attribState[i] = false;
-        }
-
-        // assume one is always active for performance reasons.
-        for (let i = 1; i < this.maxAttribs; ++i)
-        {
-            this.renderer.gl.disableVertexAttribArray(i);
-        }
     }
 
     /**
@@ -271,9 +232,6 @@ export default class RenderState
         {
             this.nativeVaoExtension.bindVertexArrayOES(null);
         }
-
-        // reset all attributs..
-        this.resetAttributes();
 
         // reset flipY
         this.renderer.gl.pixelStorei(this.renderer.gl.UNPACK_FLIP_Y_WEBGL, false);
@@ -301,7 +259,6 @@ export default class RenderState
         this.blendMode = null;
         this.shader = null;
         this.target = null;
-        this.attribState = null;
         this.nativeVaoExtension = null;
     }
 }

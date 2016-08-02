@@ -53,7 +53,7 @@ export default class GLBuffer
         this.data = EMPTY_ARRAY_BUFFER;
 
         // uplaod data if there is some
-        if (data !== EMPTY_ARRAY_BUFFER)
+        if (data && data !== EMPTY_ARRAY_BUFFER)
         {
             this.upload(data);
         }
@@ -94,15 +94,12 @@ export default class GLBuffer
      * @param {number} offset - if only a subset of the data should be uploaded, this is the amount of data to subtract
      * @param {boolean} dontBind - whether to bind the buffer before uploading it
      */
-    upload(data, offset, dontBind)
+    upload(data = this.data, offset = 0, dontBind = false)
     {
         // todo - needed?
         if (!dontBind) this.bind();
 
         const gl = this.gl;
-
-        data = data || this.data;
-        offset = offset || 0;
 
         if (this.data.byteLength >= data.byteLength)
         {

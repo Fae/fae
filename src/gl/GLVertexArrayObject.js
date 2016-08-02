@@ -12,31 +12,9 @@ export default class GLVertexArrayObject
      * @param {!WebGLRenderingContext} gl - The current WebGL rendering context
      * @param {object} state - ??
      */
-    constructor(gl, state)
+    constructor(gl)
     {
-        this.nativeVaoExtension = null;
-
-        if (!GLVertexArrayObject.FORCE_NATIVE)
-        {
-            this.nativeVaoExtension = gl.getExtension('OES_vertex_array_object')
-                                    || gl.getExtension('MOZ_OES_vertex_array_object')
-                                    || gl.getExtension('WEBKIT_OES_vertex_array_object');
-        }
-
-        this.nativeState = state;
-
-        if (this.nativeVaoExtension)
-        {
-            this.nativeVao = this.nativeVaoExtension.createVertexArrayOES();
-
-            const maxAttribs = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
-
-            // VAO - overwrite the state..
-            this.nativeState = {
-                tempAttribState: new Array(maxAttribs),
-                attribState: new Array(maxAttribs),
-            };
-        }
+        const maxAttribs = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
 
         /**
          * The current WebGL rendering context
@@ -44,6 +22,32 @@ export default class GLVertexArrayObject
          * @member {WebGLRenderingContext}
          */
         this.gl = gl;
+
+        /**
+         * The native VAO extension to use.
+         *
+         * @member {*}
+         */
+        this.nativeVaoExtension = null;
+
+        /**
+         * The actual native Vertex Array Object to use.
+         *
+         * @member {*}
+         */
+        this.nativeVao = null;
+
+        /**
+         * The attribute state.
+         *
+         * @member {object}
+         * @property {boolean[]} tempAttribState - Temp store for attrib state
+         * @property {boolean[]} attribState - The attrib state
+         */
+        this.state = {
+            tempAttribState: new Array(maxAttribs),
+            attribState: new Array(maxAttribs),
+        };
 
         /**
          * An array of attributes
@@ -63,6 +67,18 @@ export default class GLVertexArrayObject
          * @member {Boolean}
          */
         this.dirty = false;
+
+        if (!GLVertexArrayObject.FORCE_NO_NATIVE)
+        {
+            this.nativeVaoExtension = gl.getExtension('OES_vertex_array_object')
+                                    || gl.getExtension('MOZ_OES_vertex_array_object')
+                                    || gl.getExtension('WEBKIT_OES_vertex_array_object');
+
+            if (this.nativeVaoExtension)
+            {
+                this.nativeVao = this.nativeVaoExtension.createVertexArrayOES();
+            }
+        }
     }
 
     /**
@@ -128,7 +144,7 @@ export default class GLVertexArrayObject
             attrib.attribute.setup(gl, attrib);
         }
 
-        setVertexAttribArrays(gl, this.attributes, this.nativeState);
+        setVertexAttribArrays(gl, this.attributes, this.state);
 
         this.indexBuffer.bind();
 
@@ -222,7 +238,7 @@ export default class GLVertexArrayObject
         this.gl = null;
         this.indexBuffer = null;
         this.attributes = null;
-        this.nativeState = null;
+        this.state = null;
 
         if (this.nativeVao)
         {
@@ -235,7 +251,7 @@ export default class GLVertexArrayObject
 }
 
 /**
- * Lets the VAO know if you should use the WebGL extension or the native methods.
+ * Lets the VAO know if you should use the WebGL extension or the js methods.
  * Some devices behave a bit funny when using the newer extensions (im looking at you ipad 2!)
  * If you find on older devices that things have gone a bit weird then set this to true.
  *
@@ -247,7 +263,7 @@ export default class GLVertexArrayObject
  * @type {boolean}
  * @default false
  */
-GLVertexArrayObject.FORCE_NATIVE = Device.tablet || Device.phone;
+GLVertexArrayObject.FORCE_NO_NATIVE = Device.tablet || Device.phone;
 
 /**
  * @param {!WebGLRenderingContext} gl - The current WebGL context

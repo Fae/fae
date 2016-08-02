@@ -91,7 +91,7 @@ export default class SpriteRenderer extends render.ObjectRenderer
         this.vertexBuffers = [];
         this.vaos = [];
 
-        this.vertexCount = 0;
+        this.vertexCount = -1;
 
         this.indexBuffer = null;
 
@@ -150,7 +150,7 @@ export default class SpriteRenderer extends render.ObjectRenderer
      */
     onBeforeRender()
     {
-        this.vertexCount = 0;
+        this.vertexCount = -1;
     }
 
     /**
@@ -424,7 +424,7 @@ export default class SpriteRenderer extends render.ObjectRenderer
 
         // build the vao object that will render..
         this.vaos.push(
-            this.renderer.createVao()
+            new glutil.GLVertexArrayObject(this.renderer.gl)
                 .setIndexBuffer(this.indexBuffer)
                 .addAttribute(vbuffer, attribs.aVertexPosition, gl.FLOAT, false, this.vertByteSize, 0)
                 .addAttribute(vbuffer, attribs.aTextureCoord, gl.UNSIGNED_SHORT, true, this.vertByteSize, 2 * 4)
