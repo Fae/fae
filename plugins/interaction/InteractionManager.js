@@ -1,6 +1,5 @@
 import Interaction from './Interaction';
 import Signal from 'mini-signals';
-import { util } from '@fae/core';
 
 /**
  * @class

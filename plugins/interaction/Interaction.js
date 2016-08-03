@@ -12,7 +12,6 @@ export default class Interaction
      */
     constructor(target)
     {
-
         /**
          * The unique ID of this interaction, not necessarily sequential!
          *
@@ -71,16 +70,22 @@ export default class Interaction
     {
         this.events.push(event);
 
-        if (this.events.length > )
-
         // set the type on the first event.
         if (this.events.length === 1)
         {
             switch (event.type[0])
             {
-                case 'm': this.type = Interaction.TYPE.MOUSE; break;
-                case 't': this.type = Interaction.TYPE.TOUCH; break;
-                case 'p': this.type = Interaction.TYPE.POINTER; break;
+                case 'm':
+                    this.type = Interaction.TYPE.MOUSE;
+                    break;
+
+                case 't':
+                    this.type = Interaction.TYPE.TOUCH;
+                    break;
+
+                case 'p':
+                    this.type = Interaction.TYPE.POINTER;
+                    break;
             }
         }
 
