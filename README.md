@@ -5,6 +5,8 @@
 Based on [pixi.js](https://github.com/pixijs/pixi.js) but with a heavier focus on WebGL
 and a few core design differences that result in a familiar but slightly different API.
 
+Join the discussion in Discord: https://discord.gg/qghcMmr
+
 The major goals of Fae are:
 
 1. High amounts of modularity.
