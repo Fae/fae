@@ -5,7 +5,7 @@
 Based on [pixi.js](https://github.com/pixijs/pixi.js) but with a heavier focus on WebGL
 and a few core design differences that result in a familiar but slightly different API.
 
-Join the discussion in Discord: <a href="https://discord.gg/qghcMmr" target="_blank">https://discord.gg/qghcMmr</a>
+Join the discussion in Discord: https://discord.gg/qghcMmr
 
 The major goals of Fae are:
 
