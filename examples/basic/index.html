@@ -14,18 +14,9 @@
             img.addEventListener('load', function ()
             {
                 sprite = new Fae.sprite.Sprite(new Fae.textures.Texture(img));
-
-                render();
-            });
-
-            function render()
-            {
-                requestAnimationFrame(render);
-
                 sprite.update();
-
                 renderer.render(sprite);
-            }
+            });
         </script>
     </body>
 </html>
