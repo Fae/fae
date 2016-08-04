@@ -92,28 +92,38 @@ export default class Interaction
         // update state
         switch (event.type)
         {
-            // mouse events
             case 'mousedown':
-            case 'mouseup':
-            case 'mousemove':
-            case 'mouseover':
-            case 'mouseout':
-
-            // touch events
             case 'touchstart':
-            case 'touchmove':
-            case 'touchend':
-            case 'touchcancel':
-
-            // pointer events
             case 'pointerdown':
-            case 'pointerup':
-            case 'pointermove':
-            case 'pointerover':
-            case 'pointerout':
+                this.state = Interaction.STATE.START;
+                break;
 
-            // scrolling
+            case 'mouseup':
+            case 'touchend':
+            case 'pointerup':
+                this.state = Interaction.STATE.END;
+                break;
+
+            case 'mousemove':
+            case 'touchmove':
+            case 'pointermove':
+                this.state = Interaction.STATE.MOVE;
+                break;
+
+            case 'mouseover':
+            case 'pointerover':
+                this.state = Interaction.STATE.OVER;
+                break;
+
+            case 'mouseout':
+            case 'touchcancel':
+            case 'pointerout':
+                this.state = Interaction.STATE.CANCEL;
+                break;
+
             case 'wheel':
+                this.state = Interaction.STATE.SCROLL;
+                break;
         }
     }
 
@@ -174,14 +184,16 @@ Interaction.TYPE = {
 Interaction.STATE = {
     /** Unknown state (nothing has happened) */
     UNKNOWN: 0,
-    /** Unknown state (nothing has happened) */
+    /** Start state (mousedown, touchstart, or pointerdown) */
     START: 1,
-    /** Unknown state (nothing has happened) */
+    /** Move state (mousemove, touchmove, or pointermove) */
     MOVE: 2,
-    /** Unknown state (nothing has happened) */
+    /** End state (mouseup, touchend, or pointerup) */
     END: 3,
-    /** Unknown state (nothing has happened) */
-    CANCEL: 4,
-    /** Unknown state (nothing has happened) */
-    SCROLL: 5,
+    /** Over state (mouseover, or pointerover) */
+    OVER: 4,
+    /** Cancel state (mouseout, touchcancel, or pointerout) */
+    CANCEL: 5,
+    /** Scroll state (wheel) */
+    SCROLL: 6,
 };
