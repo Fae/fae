@@ -21,17 +21,22 @@ though you could collect many plugins together to create a game only using Fae.
 - Custom Shaders
 - Filters
 - Masks
-- Mesh
 - DevicePixelRatio
+- Move math shapes to plugin (Rectangle, BoundingBox, Polygon)
+- Move `Color` to a plugin
+- Compressed textures
+
+## Plugins to Make
+
+- Mesh
 - Animated sprites
 - Text/BitmapText
 - Tiled Editor/Tile maps
 - Loader
 - Particle System
-- Input handling
-- Interactions (https://github.com/pixijs/pixi.js/issues/241)
-- Move math shapes to plugin (Rectangle, BoundingBox, Polygon)
-- Move `Color` to a plugin
+- Interactions
+- Spine, Dragon Bones, etc
+- Lights
 
 [mini-signals]: https://github.com/Hypercubed/mini-signals
 [ee3]: https://github.com/primus/eventemitter3
