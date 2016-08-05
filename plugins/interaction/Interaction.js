@@ -37,92 +37,70 @@ export default class Interaction
         this.events = [];
 
         /**
-         * The type of interaction.
+         * Pointer data.
          *
          * @readonly
-         * @member {Interaction.TYPE}
+         * @member {PointerData[]}
          */
-        this.type = Interaction.TYPE.UNKNOWN;
+        this.pointers = [];
 
         /**
-         * The current state of the interaction, what is currently happening?
-         *
-         * @readonly
-         * @member {Interaction.STATE}
-         */
-        this.state = Interaction.STATE.UNKNOWN;
-
-        /**
-         * Has this interaction ended?
+         * Is this interaction active, or has the user ended the interaction?
          *
          * @readonly
          * @member {boolean}
          */
-        this.ended = false;
+        this.active = false;
     }
 
     /**
      * Adds an event to this interaction, which will modify the state of the interaction.
      *
      * @param {Event} event - The event to add.
+     * @param {boolean} hit - Was our target hit by this interaction?
      */
-    addEvent(event)
+    addEvent(event, hit)
     {
         this.events.push(event);
 
-        // set the type on the first event.
-        if (this.events.length === 1)
+        let eventPointerType = Interaction.POINTER_TYPE.UNKNOWN;
+
+        switch (event.type[0])
         {
-            switch (event.type[0])
-            {
-                case 'm':
-                    this.type = Interaction.TYPE.MOUSE;
-                    break;
+            case 'm':
+                eventPointerType = Interaction.POINTER_TYPE.MOUSE;
+                break;
 
-                case 't':
-                    this.type = Interaction.TYPE.TOUCH;
-                    break;
+            case 't':
+                eventPointerType = Interaction.POINTER_TYPE.TOUCH;
+                break;
 
-                case 'p':
-                    this.type = Interaction.TYPE.POINTER;
-                    break;
-            }
+            case 'p':
+                eventPointerType = event.pointerType;
+                break;
         }
 
         // update state
-        switch (event.type)
+        switch (Interaction.EVENT_STATE_MAP[event.type])
         {
-            case 'mousedown':
-            case 'touchstart':
-            case 'pointerdown':
-                this.state = Interaction.STATE.START;
+            case Interaction.STATE.START:
+                this._handleStart(eventPointerType);
                 break;
 
-            case 'mouseup':
-            case 'touchend':
-            case 'pointerup':
-                this.state = Interaction.STATE.END;
+            case Interaction.STATE.END:
+                this._handleEnd(eventPointerType);
                 break;
 
-            case 'mousemove':
-            case 'touchmove':
-            case 'pointermove':
-                this.state = Interaction.STATE.MOVE;
+            case Interaction.STATE.MOVE:
+                this._handleMove(eventPointerType);
                 break;
 
-            case 'mouseover':
-            case 'pointerover':
-                this.state = Interaction.STATE.OVER;
+            case Interaction.STATE.CANCEL:
+                this._handleCancel(eventPointerType);
                 break;
 
-            case 'mouseout':
-            case 'touchcancel':
-            case 'pointerout':
-                this.state = Interaction.STATE.CANCEL;
-                break;
-
-            case 'wheel':
-                this.state = Interaction.STATE.SCROLL;
+            case Interaction.STATE.SCROLL:
+                this._handleScroll(eventPointerType);
                 break;
         }
     }
@@ -137,9 +115,7 @@ export default class Interaction
         this.id = util.uid();
         this.target = target;
         this.events.length = 0;
-        this.type = Interaction.TYPE.UNKNOWN;
-        this.state = Interaction.STATE.UNKNOWN;
-        this.ended = false;
+        this.pointers.length = 0;
     }
 
     /**
@@ -154,6 +130,72 @@ export default class Interaction
             event.preventDefault();
         }
     }
+
+    /**
+     * Handles a start event.
+     *
+     * @private
+     * @param {Interaction.POINTER_TYPE} pointerType - The pointer type that spawned this event.
+     */
+    _handleStart(pointerType)
+    {
+        this.active = true;
+
+        // start up by adding a pointer?
+    }
+
+    /**
+     * Handles an end event.
+     *
+     * @private
+     * @param {Interaction.POINTER_TYPE} pointerType - The pointer type that spawned this event.
+     */
+    _handleEnd(pointerType)
+    {
+        if (this.active)
+        {
+            // click event
+        }
+
+        this.active = false;
+
+        // process end
+    }
+
+    /**
+     * Handles an end event.
+     *
+     * @private
+     * @param {Interaction.POINTER_TYPE} pointerType - The pointer type that spawned this event.
+     */
+    _handleMove(pointerType)
+    {
+        // process move
+    }
+
+    /**
+     * Handles a cancel event.
+     *
+     * @private
+     * @param {Interaction.POINTER_TYPE} pointerType - The pointer type that spawned this event.
+     */
+    _handleCancel(pointerType)
+    {
+        this.active = false;
+
+        // process cancel
+    }
+
+    /**
+     * Handles a scroll event.
+     *
+     * @private
+     * @param {Interaction.POINTER_TYPE} pointerType - The pointer type that spawned this event.
+     */
+    _handleScroll(pointerType)
+    {
+        // process scroll
+    }
 }
 
 /**
@@ -161,17 +203,17 @@ export default class Interaction
  *
  * @static
  * @readonly
- * @enum {number}
+ * @enum {string}
  */
-Interaction.TYPE = {
+Interaction.POINTER_TYPE = {
     /** Unknown type */
-    UNKNOWN: 0,
+    UNKNOWN: '',
     /** The interaction is from a mouse */
-    MOUSE: 1,
+    MOUSE: 'mouse',
     /** The interaction is from a touch */
-    TOUCH: 2,
-    /** The interaction is from a generic pointer device */
-    POINTER: 3,
+    TOUCH: 'touch',
+    /** The interaction is from a pen device */
+    PEN: 'pen',
 };
 
 /**
@@ -190,10 +232,53 @@ Interaction.STATE = {
     MOVE: 2,
     /** End state (mouseup, touchend, or pointerup) */
     END: 3,
-    /** Over state (mouseover, or pointerover) */
-    OVER: 4,
+    /** Hover state, over this element but not clicked */
+    HOVER: 4,
     /** Cancel state (mouseout, touchcancel, or pointerout) */
     CANCEL: 5,
     /** Scroll state (wheel) */
     SCROLL: 6,
 };
+
+/**
+ * Map of interaction events to the state they represent.
+ *
+ * @static
+ * @readonly
+ * @enum {string}
+ */
+Interaction.EVENT_STATE_MAP = {
+    mousedown:      Interaction.STATE.START,
+    touchstart:     Interaction.STATE.START,
+    pointerdown:    Interaction.STATE.START,
+
+    mouseup:        Interaction.STATE.END,
+    touchend:       Interaction.STATE.END,
+    pointerup:      Interaction.STATE.END,
+
+    mousemove:      Interaction.STATE.MOVE,
+    touchmove:      Interaction.STATE.MOVE,
+    pointermove:    Interaction.STATE.MOVE,
+
+    mouseout:       Interaction.STATE.CANCEL,
+    touchcancel:    Interaction.STATE.CANCEL,
+    pointerout:     Interaction.STATE.CANCEL,
+
+    wheel:          Interaction.STATE.SCROLL,
+};
+
+/**
+ * The interface for an object that can be added to the interaction manager.
+ *
+ * @interface InteractableObject
+ */
+
+/**
+ * The type of the pointer
+ *
+ * @method
+ * @name InteractableObject#hitTest
+ * @param {number} x - The x coord to test.
+ * @param {number} y - The y coord to test.
+ * @return {InteractableObject} The hit object, or null if nothing hit.
+ */

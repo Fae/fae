@@ -1,18 +1,27 @@
 import Interaction from './Interaction';
 import Signal from 'mini-signals';
 
+// @ifdef DEBUG
+import { debug } from '@fae/core';
+// @endif
+
 /**
  * @class
  */
 export default class InteractionManager
 {
     /**
-     * @param {Renderer} renderer - The renderer this interaction manager belongs to.
-     *  Used to get the element we are rendering to for conversion of input event coords
-     *  to world space coords.
+     * @param {HTMLCanvasElement} dom - The element to handle interactions on.
+     *  Usually this is same element you are rendering to.
      */
-    constructor(renderer)
+    constructor(dom)
     {
+        // @ifdef DEBUG
+        const name = dom && dom.nodeName && dom.nodeName.toLowerCase();
+
+        debug.ASSERT(name && name === 'canvas', 'InteractionManager requires a canvas to manage.');
+        // @endif
+
         /**
          * The currently active interactions.
          *
@@ -32,7 +41,7 @@ export default class InteractionManager
          *
          * @member {HTMLCanvasElement}
          */
-        this.domElement = renderer.gl.canvas;
+        this.domElement = dom;
 
         /**
          * Dispatched when an interaction occurs.
@@ -107,23 +116,25 @@ export default class InteractionManager
     {
         this.domElement = view;
 
-        // bind all the events.
-        this.domElement.addEventListener('mousedown', this._boundHandleEvent);
-        this.domElement.addEventListener('mouseup', this._boundHandleEvent);
-        this.domElement.addEventListener('mousemove', this._boundHandleEvent);
-        this.domElement.addEventListener('mouseover', this._boundHandleEvent);
-        this.domElement.addEventListener('mouseout', this._boundHandleEvent);
+        if (window.PointerEvent)
+        {
+            this.domElement.addEventListener('pointerdown', this._boundHandleEvent);
+            this.domElement.addEventListener('pointerup', this._boundHandleEvent);
+            this.domElement.addEventListener('pointermove', this._boundHandleEvent);
+            this.domElement.addEventListener('pointerout', this._boundHandleEvent);
+        }
+        else
+        {
+            this.domElement.addEventListener('mousedown', this._boundHandleEvent);
+            this.domElement.addEventListener('mouseup', this._boundHandleEvent);
+            this.domElement.addEventListener('mousemove', this._boundHandleEvent);
+            this.domElement.addEventListener('mouseout', this._boundHandleEvent);
 
-        this.domElement.addEventListener('touchstart', this._boundHandleEvent);
-        this.domElement.addEventListener('touchmove', this._boundHandleEvent);
-        this.domElement.addEventListener('touchend', this._boundHandleEvent);
-        this.domElement.addEventListener('touchcancel', this._boundHandleEvent);
-
-        this.domElement.addEventListener('pointerdown', this._boundHandleEvent);
-        this.domElement.addEventListener('pointerup', this._boundHandleEvent);
-        this.domElement.addEventListener('pointermove', this._boundHandleEvent);
-        this.domElement.addEventListener('pointerover', this._boundHandleEvent);
-        this.domElement.addEventListener('pointerout', this._boundHandleEvent);
+            this.domElement.addEventListener('touchstart', this._boundHandleEvent);
+            this.domElement.addEventListener('touchmove', this._boundHandleEvent);
+            this.domElement.addEventListener('touchend', this._boundHandleEvent);
+            this.domElement.addEventListener('touchcancel', this._boundHandleEvent);
+        }
 
         this.domElement.addEventListener('wheel', this._boundHandleEvent);
     }
@@ -134,23 +145,25 @@ export default class InteractionManager
      */
     unbindEvents()
     {
-        // bind all the events.
-        this.domElement.removeEventListener('mousedown', this._boundHandleEvent);
-        this.domElement.removeEventListener('mouseup', this._boundHandleEvent);
-        this.domElement.removeEventListener('mousemove', this._boundHandleEvent);
-        this.domElement.removeEventListener('mouseover', this._boundHandleEvent);
-        this.domElement.removeEventListener('mouseout', this._boundHandleEvent);
+        if (window.PointerEvent)
+        {
+            this.domElement.removeEventListener('pointerdown', this._boundHandleEvent);
+            this.domElement.removeEventListener('pointerup', this._boundHandleEvent);
+            this.domElement.removeEventListener('pointermove', this._boundHandleEvent);
+            this.domElement.removeEventListener('pointerout', this._boundHandleEvent);
+        }
+        else
+        {
+            this.domElement.removeEventListener('mousedown', this._boundHandleEvent);
+            this.domElement.removeEventListener('mouseup', this._boundHandleEvent);
+            this.domElement.removeEventListener('mousemove', this._boundHandleEvent);
+            this.domElement.removeEventListener('mouseout', this._boundHandleEvent);
 
-        this.domElement.removeEventListener('touchstart', this._boundHandleEvent);
-        this.domElement.removeEventListener('touchend', this._boundHandleEvent);
-        this.domElement.removeEventListener('touchmove', this._boundHandleEvent);
-        this.domElement.removeEventListener('touchcancel', this._boundHandleEvent);
-
-        this.domElement.removeEventListener('pointerdown', this._boundHandleEvent);
-        this.domElement.removeEventListener('pointerup', this._boundHandleEvent);
-        this.domElement.removeEventListener('pointermove', this._boundHandleEvent);
-        this.domElement.removeEventListener('pointerover', this._boundHandleEvent);
-        this.domElement.removeEventListener('pointerout', this._boundHandleEvent);
+            this.domElement.removeEventListener('touchstart', this._boundHandleEvent);
+            this.domElement.removeEventListener('touchend', this._boundHandleEvent);
+            this.domElement.removeEventListener('touchmove', this._boundHandleEvent);
+            this.domElement.removeEventListener('touchcancel', this._boundHandleEvent);
+        }
 
         this.domElement.removeEventListener('wheel', this._boundHandleEvent);
     }
@@ -183,22 +196,46 @@ export default class InteractionManager
     {
         this.unbindEvents();
 
-        this.interactions
+        this.interactions = null;
         this.objects = null;
         this.domElement = null;
+
+        this.onInteraction.detachAll();
+        this.onInteraction = null;
     }
 
+    /**
+     * @private
+     * @param {Event} event - The event to handle
+     * @param {*} data - Specific data to handle (like a specific touch)
+     */
     _handleInteraction(event, data = event)
     {
-        const hit = this.hitTest(data.clientX, data.clientY);
+        const hitObject = this.hitTest(data.clientX, data.clientY);
 
-        if (!hit) return;
+        // end and cancel event types need to go everywhere.
+        if (Interaction.EVENT_STATE_MAP[event.type] === Interaction.STATE.END
+            || Interaction.EVENT_STATE_MAP[event.type] === Interaction.STATE.CANCEL)
+        {
+            for (let i = 0; i < this.interactions.length; ++i)
+            {
+                const interaction = this.interactions[i];
 
-        const interaction = this._getInteraction(hit);
+                if (interaction.addEvent(event, hitObject === interaction.target))
+                {
+                    this.onInteraction.dispatch(interaction);
+                }
+            }
+        }
+        // all other events only go to a hit object
+        else if (hitObject)
+        {
+            const interaction = this._getInteraction(hitObject);
 
-        interaction.addEvent(event);
+            interaction.addEvent(event, true);
 
-        this.onInteraction.dispatch(interaction);
+            this.onInteraction.dispatch(interaction);
+        }
     }
 
     /**
@@ -207,6 +244,7 @@ export default class InteractionManager
      *
      * @private
      * @param {InteractableObject} target - The target for the interaction.
+     * @return {Interaction} The interaction to use.
      */
     _getInteraction(target)
     {

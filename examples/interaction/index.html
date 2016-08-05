@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <script src="../../dist/fae.js"></script>
+    </head>
+    <body>
+        <canvas id="view" width="512" height="512"></canvas>
+
+        <script>
+            const view = document.getElementById('view');
+            const renderer = new Fae.render.Renderer(view);
+            const interaction = new Fae.interaction.InteractionManager(view);
+            const img = new Image();
+            let sprite = null;
+
+            interaction.bindEvents();
+
+            img.src = 'spade_A.png';
+            img.addEventListener('load', function ()
+            {
+                setup();
+            });
+
+            function setup() {
+                sprite = new Fae.sprite.Sprite(new Fae.textures.Texture(img));
+            }
+
+            function render() {
+                requestAnimationFrame(render);
+
+                sprite.update();
+                renderer.render(sprite);
+            }
+        </script>
+    </body>
+</html>
