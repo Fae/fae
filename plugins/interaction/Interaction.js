@@ -1,4 +1,6 @@
-import { util } from '@fae/core';
+import { util /* @ifdef DEBUG */, debug /* @endif */ } from '@fae/core';
+import Singal from 'mini-signals';
+import Pointer from './Pointer';
 
 /**
  * The Interaction class represents a single interaction in the system.
@@ -9,17 +11,10 @@ export default class Interaction
 {
     /**
      * @param {InteractableObject} target - The target of this interaction.
+     * @param {InteractionManager} parent - The manager of this interaction.
      */
-    constructor(target)
+    constructor(target, parent)
     {
-        /**
-         * The unique ID of this interaction, not necessarily sequential!
-         *
-         * @readonly
-         * @member {number}
-         */
-        this.id = util.uid();
-
         /**
          * The target object that is being hit by these events.
          *
@@ -29,157 +24,210 @@ export default class Interaction
         this.target = target;
 
         /**
+         * The manager of this interaction.
+         *
+         * @readonly
+         * @member {InteractionManager}
+         */
+        this.parent = parent;
+
+        /**
          * The raw events this interaction deals with.
          *
          * @readonly
-         * @member {Event[]}
+         * @member {MouseEvent|PointerEvent|TouchEvent}
          */
-        this.events = [];
+        this.lastEvent = null;
 
         /**
-         * Pointer data.
+         * All the pointers that this interaction has dealt with.
          *
          * @readonly
-         * @member {PointerData[]}
+         * @member {Pointer[]}
          */
         this.pointers = [];
 
         /**
-         * Is this interaction active, or has the user ended the interaction?
+         * Changed pointers. When we send this interaction to users, this list
+         * is the list of pointers that were updated during that event.
          *
          * @readonly
-         * @member {boolean}
+         * @member {Pointer[]}
          */
-        this.active = false;
+        this.changedPointers = [];
+
+        /**
+         * Buffer for contacts that affect this interaction.
+         * Used by calling `addContact()` repeatedly, then calling `processEvent()`.
+         *
+         * @private
+         * @member {Pointer[]}
+         */
+        this._pointerBuffer = [];
+    }
+
+    /**
+     * Add a touch to the internal buffer, to be processed when `processEvent` is called.
+     *
+     * @param {MouseEvent|PointerEvent|Touch} data - The event data of the contact.
+     * @param {number} worldX - The X coord in world-space of this event.
+     * @param {number} worldY - The Y coord in world-space of this event.
+     */
+    addContact(data, worldX, worldY)
+    {
+        const pointer = this._getPointer(data);
+
+        pointer.setFromEventData(data, worldX, worldY);
+
+        this._pointerBuffer.push(pointer);
     }
 
     /**
      * Adds an event to this interaction, which will modify the state of the interaction.
      *
-     * @param {Event} event - The event to add.
-     * @param {boolean} hit - Was our target hit by this interaction?
+     * @param {MouseEvent|PointerEvent|TouchEvent} event - The event to process.
      */
-    addEvent(event, hit)
+    processEvent(event)
     {
-        this.events.push(event);
+        this.lastEvent = event;
+        this.changedPointers.length = 0;
 
-        let eventPointerType = Interaction.POINTER_TYPE.UNKNOWN;
+        // swap the pointer buffers so that _pointerBuffer is empty
+        // and changedPointers has the contacts
+        const temp = this._pointerBuffer;
+        this._pointerBuffer = this.changedPointers;
+        this.changedPointers = temp;
 
-        switch (event.type[0])
-        {
-            case 'm':
-                eventPointerType = Interaction.POINTER_TYPE.MOUSE;
-                break;
-
-            case 't':
-                eventPointerType = Interaction.POINTER_TYPE.TOUCH;
-                break;
-
-            case 'p':
-                eventPointerType = event.pointerType;
-                break;
-        }
-
-        // update state
+        // handle the event
         switch (Interaction.EVENT_STATE_MAP[event.type])
         {
             case Interaction.STATE.START:
-                this._handleStart(eventPointerType);
-                break;
+                return this._handleStart(event);
 
             case Interaction.STATE.END:
-                this._handleEnd(eventPointerType);
-                break;
+                return this._handleEnd(event);
 
             case Interaction.STATE.MOVE:
-                this._handleMove(eventPointerType);
-                break;
+                return this._handleMove(event);
 
             case Interaction.STATE.CANCEL:
-                this._handleCancel(eventPointerType);
-                break;
+                return this._handleCancel(event);
 
             case Interaction.STATE.SCROLL:
-                this._handleScroll(eventPointerType);
-                break;
+                return this._handleScroll(event);
         }
-    }
 
-    /**
-     * Resets the interaction to the empty state, re-assigns a new target and identifier.
-     *
-     * @param {InteractableObject} target - The target of this interaction.
-     */
-    reset(target)
-    {
-        this.id = util.uid();
-        this.target = target;
-        this.events.length = 0;
-        this.pointers.length = 0;
+        return false;
     }
 
     /**
      * Prevents default on the most recent event object.
+     *
      */
     preventDefault()
     {
-        const event = this.events[this.events.length - 1];
-
-        if (event)
+        if (this.lastEvent)
         {
-            event.preventDefault();
+            this.lastEvent.preventDefault();
         }
+    }
+
+    /**
+     * Gets or creates a pointer of ID/Type
+     *
+     * @private
+     * @param {MouseEvent|PointerEvent|Touch} data - The event data of the contact.
+     */
+    _getPointer(data)
+    {
+        let pointerId = 0;
+
+        if (typeof data.pointerId === 'number') pointerId = data.pointerId;
+        else if (typeof data.identifier === 'number') pointerId = data.identifier;
+
+        for (let i = 0; i < this.pointers.length; ++i)
+        {
+            if (this.pointers[i].id === id)
+            {
+                return this.pointers[i];
+            }
+        }
+
+        return new Pointer(id);
     }
 
     /**
      * Handles a start event.
      *
      * @private
-     * @param {Interaction.POINTER_TYPE} pointerType - The pointer type that spawned this event.
+     * @param {MouseEvent|PointerEvent|TouchEvent} event - The start event.
+     * @return {boolean} True if the event was handled, false otherwise.
      */
-    _handleStart(pointerType)
+    _handleStart(event)
     {
+        // @ifdef DEBUG
+        debug.ASSERT(!this.active, 'Got a start event while already active.');
+        debug.ASSERT(!this.changedPointers.length, 'Got a start event with no changed pointers.');
+        // @endif
+
         this.active = true;
 
-        // start up by adding a pointer?
+        // each pointer needs to be marked as down
+        for (let i = 0; i < this.changedPointers.length; ++i)
+        {
+            this.changedPointers[i].down = true;
+        }
     }
 
     /**
      * Handles an end event.
      *
      * @private
-     * @param {Interaction.POINTER_TYPE} pointerType - The pointer type that spawned this event.
+     * @param {MouseEvent|PointerEvent|TouchEvent} event - The end event.
+     * @return {boolean} True if the event was handled, false otherwise.
      */
-    _handleEnd(pointerType)
+    _handleEnd(event)
     {
         if (this.active)
         {
-            // click event
+            this.parent.onClick.dispatch(this);
         }
 
         this.active = false;
 
-        // process end
+        // each pointer needs to be marked as not down
+        for (let i = 0; i < this.changedPointers.length; ++i)
+        {
+            this.changedPointers[i].down = false;
+        }
     }
 
     /**
      * Handles an end event.
      *
      * @private
-     * @param {Interaction.POINTER_TYPE} pointerType - The pointer type that spawned this event.
+     * @param {MouseEvent|PointerEvent|TouchEvent} event - The move event.
+     * @return {boolean} True if the event was handled, false otherwise.
      */
-    _handleMove(pointerType)
+    _handleMove(event)
     {
-        // process move
+        if (!this.active)
+        {
+            this.parent.onHoverStart
+        }
+        else
+        {
+        }
     }
 
     /**
      * Handles a cancel event.
      *
      * @private
-     * @param {Interaction.POINTER_TYPE} pointerType - The pointer type that spawned this event.
+     * @param {MouseEvent|PointerEvent|TouchEvent} event - The cancel event.
+     * @return {boolean} True if the event was handled, false otherwise.
      */
-    _handleCancel(pointerType)
+    _handleCancel(event)
     {
         this.active = false;
 
@@ -190,31 +238,14 @@ export default class Interaction
      * Handles a scroll event.
      *
      * @private
-     * @param {Interaction.POINTER_TYPE} pointerType - The pointer type that spawned this event.
+     * @param {MouseEvent} event - The scroll event.
+     * @return {boolean} True if the event was handled, false otherwise.
      */
-    _handleScroll(pointerType)
+    _handleScroll(event)
     {
         // process scroll
     }
 }
-
-/**
- * The interaction type.
- *
- * @static
- * @readonly
- * @enum {string}
- */
-Interaction.POINTER_TYPE = {
-    /** Unknown type */
-    UNKNOWN: '',
-    /** The interaction is from a mouse */
-    MOUSE: 'mouse',
-    /** The interaction is from a touch */
-    TOUCH: 'touch',
-    /** The interaction is from a pen device */
-    PEN: 'pen',
-};
 
 /**
  * The interaction state.
@@ -232,8 +263,6 @@ Interaction.STATE = {
     MOVE: 2,
     /** End state (mouseup, touchend, or pointerup) */
     END: 3,
-    /** Hover state, over this element but not clicked */
-    HOVER: 4,
     /** Cancel state (mouseout, touchcancel, or pointerout) */
     CANCEL: 5,
     /** Scroll state (wheel) */

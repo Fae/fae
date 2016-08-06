@@ -5,6 +5,8 @@ import Signal from 'mini-signals';
 import { debug } from '@fae/core';
 // @endif
 
+const tempCoords = { x: 0, y: 0 };
+
 /**
  * @class
  */
@@ -53,6 +55,33 @@ export default class InteractionManager
         this.onInteraction = new Signal();
 
         /**
+         * Dispatched when a click occurs on an object.
+         *
+         * The callback looks like {@link InteractionManager.OnSingleInteractionCallback}
+         *
+         * @member {Signal}
+         */
+        this.onClick = new Signal();
+
+        /**
+         * Dispatched when a hover begins on an object.
+         *
+         * The callback looks like {@link InteractionManager.OnSingleInteractionCallback}
+         *
+         * @member {Signal}
+         */
+        this.OnHoverStart = new Signal();
+
+        /**
+         * Dispatched when a hover begins on an object.
+         *
+         * The callback looks like {@link InteractionManager.OnSingleInteractionCallback}
+         *
+         * @member {Signal}
+         */
+        this.OnHoverEnd = new Signal();
+
+        /**
          * Pool of available interaction objects, so we dont have to recreate a bunch over time.
          *
          * @private
@@ -68,7 +97,15 @@ export default class InteractionManager
          *
          * @memberof InteractionManager
          * @callback OnInteractionCallback
-         * @param {Interaction} interaction - The interaction that has been modified.
+         * @param {Interaction[]} interactions - The interactions that have been changed by this event.
+         */
+
+        /**
+         * When an interaction occurs the interaction object is passed to the callback.
+         *
+         * @memberof InteractionManager
+         * @callback OnSingleInteractionCallback
+         * @param {Interaction} interaction - The interaction that has been changed by this event.
          */
     }
 
@@ -81,20 +118,34 @@ export default class InteractionManager
     }
 
     /**
-     * Hit tests the interactable objects and returns the first hit object. Takes
-     * screen-space coords and converts them into world-space before running the tests.
+     * Converts client coords to world coords.
      *
-     * @param {number} x - The x coord, in screen space, to test.
-     * @param {number} y - The y coord, in screen space, to test.
+     * @param {number} x - The x coord, in client space, to convert.
+     * @param {number} y - The y coord, in client space, to convert.
+     * @param {object} out - The out object to assign values to.
+     * @param {number} out.x - The out X coord.
+     * @param {number} out.y - The out Y coord.
+     */
+    convertClientToWorld(x, y, out = { x: 0, y: 0 })
+    {
+        const rect = this.domElement.getBoundingClientRect();
+
+        out.x = ((x - rect.left) * (this.domElement.width / rect.width));
+        out.y = ((y - rect.top) * (this.domElement.height / rect.height));
+
+        return out;
+    }
+
+    /**
+     * Hit tests the interactable objects and returns the first hit object. Takes
+     * world-space coords.
+     *
+     * @param {number} x - The x coord, in world space, to test.
+     * @param {number} y - The y coord, in world space, to test.
      * @return {InteractableObject} The object that was interacted with, null if nothing hits.
      */
     hitTest(x, y)
     {
-        const rect = this.domElement.getBoundingClientRect();
-
-        x = ((x - rect.left) * (this.domElement.width / rect.width));
-        y = ((y - rect.top) * (this.domElement.height / rect.height));
-
         for (let i = 0; i < this.objects.length; ++i)
         {
             const pass = this.objects[i].hitTest(x, y);
@@ -175,17 +226,94 @@ export default class InteractionManager
      */
     handleEvent(event)
     {
+        const changedInteractions = [];
+
+        // add contacts from the event to the interaction
         if (event.changedTouches)
         {
             for (let i = 0; i < event.changedTouches.length; ++i)
             {
-                this._handleInteraction(event, event.changedTouches[i]);
+                const touch = event.changedTouches;
+                const pointer = this._getPointer(touch);
+                const worldCoords = this.convertClientToWorld(data.clientX, data.clientY, tempCoords);
+                const hitObject = this.hitTest(worldCoords.x, worldCoords.y);
+
+                pointer[Pointer.EVENT_CALL_MAP[event.type]](touch, hitObject, worldX, worldY);
             }
         }
         else
         {
-            this._handleInteraction(event);
+            const pointer = this._getPointer(touch);
+            const worldCoords = this.convertClientToWorld(data.clientX, data.clientY, tempCoords);
+            const hitObject = this.hitTest(worldCoords.x, worldCoords.y);
+
+            pointer[Pointer.EVENT_CALL_MAP[event.type]](event, hitObject, worldX, worldY);
         }
+
+        //////////////
+        // TODO: Remove Interaction in favor of just using Pointer????
+        /////////////
+
+        // now process the event.
+
+        // end and cancel event types need to go everywhere, so process the event on everything
+        // and add ones that handle the event to the changed list.
+        if (Interaction.EVENT_STATE_MAP[event.type] === Interaction.STATE.END
+            || Interaction.EVENT_STATE_MAP[event.type] === Interaction.STATE.CANCEL)
+        {
+            for (let i = 0; i < this.interactions.length; ++i)
+            {
+                const interaction = this.interactions[i];
+
+                if (interaction.processEvent(event))
+                {
+                    if (changedInteractions.indexOf(interaction) === -1)
+                    {
+                        changedInteractions.push(interaction);
+                    }
+                }
+            }
+        }
+        // all other events only go to interactions that have been modified
+        else
+        {
+            for (let i = 0; i < changedInteractions.length; ++i)
+            {
+                changedInteractions[i].processEvent(event);
+            }
+        }
+
+        // if some interactions were effected, then dispatch the signal
+        if (changedInteractions.length)
+        {
+            this.onInteraction.dispatch(changedInteractions);
+        }
+    }
+
+    /**
+     * Gets an interaction from the active list if the target has an active interaction
+     * or creates a new one.
+     *
+     * @param {InteractableObject} target - The target for the interaction.
+     * @return {Interaction} The interaction to use.
+     */
+    getInteraction(target, data)
+    {
+        // search for active interaction
+        for (let i = 0; i < this.interactions.length; ++i)
+        {
+            if (this.interactions[i].target === target)
+            {
+                return this.interactions[i];
+            }
+        }
+
+        // finally create a new one and add it as an active interaction
+        const interaction = new Interaction(target, this);
+
+        this.interactions.push(interaction);
+
+        return interaction;
     }
 
     /**
@@ -206,63 +334,23 @@ export default class InteractionManager
 
     /**
      * @private
-     * @param {Event} event - The event to handle
-     * @param {*} data - Specific data to handle (like a specific touch)
+     * @param {MouseEvent|PointerEvent|Touch} data - The contact data.
      */
-    _handleInteraction(event, data = event)
+    _handleInteraction(data)
     {
-        const hitObject = this.hitTest(data.clientX, data.clientY);
+        const worldCoords = this.convertClientToWorld(data.clientX, data.clientY, tempCoords);
+        const hitObject = this.hitTest(worldCoords.x, worldCoords.y);
 
-        // end and cancel event types need to go everywhere.
-        if (Interaction.EVENT_STATE_MAP[event.type] === Interaction.STATE.END
-            || Interaction.EVENT_STATE_MAP[event.type] === Interaction.STATE.CANCEL)
+        if (hitObject)
         {
-            for (let i = 0; i < this.interactions.length; ++i)
-            {
-                const interaction = this.interactions[i];
+            const interaction = this.getInteraction(hitObject);
 
-                if (interaction.addEvent(event, hitObject === interaction.target))
-                {
-                    this.onInteraction.dispatch(interaction);
-                }
-            }
-        }
-        // all other events only go to a hit object
-        else if (hitObject)
-        {
-            const interaction = this._getInteraction(hitObject);
+            interaction.addContact(data, worldCoords.x, worldCoords.y);
 
-            interaction.addEvent(event, true);
-
-            this.onInteraction.dispatch(interaction);
-        }
-    }
-
-    /**
-     * Gets an interaction from the active list if the target has an active interaction,
-     * the pool or creates a new one.
-     *
-     * @private
-     * @param {InteractableObject} target - The target for the interaction.
-     * @return {Interaction} The interaction to use.
-     */
-    _getInteraction(target)
-    {
-        // search for active interaction
-        for (let i = 0; i < this.interactions.length; ++i)
-        {
-            if (this.interactions[i].target === target)
-            {
-                return this.interactions[i];
-            }
+            return interaction;
         }
 
-        // finally create a new one and add it as an active interaction
-        const interaction = new Interaction(target);
-
-        this.interactions.push(interaction);
-
-        return interaction;
+        return null;
     }
 }
 
