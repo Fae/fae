@@ -1,0 +1,8 @@
+files:
+  - plugins/**/*.js
+  - src/**/*.js
+
+branches:
+  - master
+
+packageJson: package.json

@@ -29,7 +29,7 @@
     "watch": "npm run dev -- --watch",
     "lint": "eslint src/ && eslint plugins/",
     "start": "npm run build",
-    "test": "npm run dev && npm run test-dev -- --single-run",
+    "test": "npm run lint && npm run dev && npm run test-dev -- --single-run",
     "test-ci": "npm run test-dev -- --single-run",
     "test-dev": "karma start build/karma.conf.js"
   },
