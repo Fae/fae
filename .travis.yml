@@ -41,7 +41,7 @@ deploy:
     skip_cleanup: true
     acl: public_read
     region: us-west-2
-    load_dir: dist
+    local_dir: dist
     upload-dir: nightly
     on:
       branch: master
@@ -52,7 +52,7 @@ deploy:
     skip_cleanup: true
     acl: public_read
     region: us-west-2
-    load_dir: dist
+    local_dir: dist
     upload-dir: release/$TRAVIS_TAG
     on:
       tags: true
