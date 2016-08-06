@@ -31,7 +31,33 @@ after_script:
 addons:
   sauce_connect: true
 
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: "fae-builds"
+    skip_cleanup: true
+    acl: public_read
+    region: us-west-2
+    load_dir: dist
+    upload-dir: nightly
+    on:
+      branch: master
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: "fae-builds"
+    skip_cleanup: true
+    acl: public_read
+    region: us-west-2
+    load_dir: dist
+    upload-dir: release/$TRAVIS_TAG
+    on:
+      tags: true
+
 env:
   global:
     - SAUCE_USERNAME=englercj
     - secure: "baoRWqWe7ou5t/texf7c1M86iU9aw1kuyJC/5LXdkGk2jflDrZpTFqDJUI34FT5UkPO2eHXcrNtc7eZV10pDXTfWjtadCxpjyQWTjXIYchltpKSW345x9ZAB7KTUjlruMXKPbBsUAQm6ClJq3arOaWr+1ycO2gsoA1q1Ttt+vPrRQoioS88x1tmcvW3jRZBTIfGFpHV6FhlPgW1oecs5E/6v53muxuWkxjiMEmbW84gNvr68O7e2+LEoPBp88O8mJQkJSf3PBvaBGcfinZeVjmIGSle3iqmQpGlvA1dChPWK/7eAPYZ/LQJUfbj9VwtsbZHcjacnqGtvvPDGf2k/kg3QpVfAJELLokBaYnuL1rI2X++WYHcc1qLaYQ0WuYE4Cpj6gIkmiEjfMl3sQfmVTWeVtPmVpe5tj4bOb5zHdFR3g+3i7kCVyEDtAWzEV16Vx6NhIEBOMg/hhB9apRRLAmo1vmQfr7+Qf2WdzJS0V8jLN6AAuAiqFi28Agu2fNc1vwD2LnJh7qGDS9l7oYEs3X3HfRh6JdWbsam2O7BxRYZOr0fJkQcX80Bboz4PfnWC8354eipykY3X9vBb7dZCCEJ0uHkfz6ZWqwXgHynqfwIXtsf7elB72tAafcdOl6jtPnVlkLN0VAqYQPodG++AbaqZKZJZ9TTxhpZ+4BG8dc0="
+    - secure: "aTgQWMjQvOO5ppXcdeUgve33l07dykPKXBNf8KLM4hJshUONsVGdeIa5jRet/w6qA1/Q1v3OLp96Hle85PQZcGcjUUt/oijKRUAjyd1HJ7uvGMW5O2w1nuwtRyIwEXlIFSNld79Fmz9WpRYr4x5h2+UnSJl4peSnJ/1Ex16aIQrczfDjoehgzV43GL5Fa1tZiUS3VQ1YbM8pZCCY515uyagwrlKvBDGTX18iTtel0I4ZdZXEhtriLcojmAG3Gcg1paxgNP2F1FMIMOXEDbmnEVi0SAhdgD9xWkVCWfspSyxyFuPJITg8F9Ua1EKdgDPc0bAT6+hKvlm7h0o5fHR5NV5cwE30xWqoLptytpakCOGy9cv/EK3/jj7oWbcFl5PPWXyfdFtMY2ZDAlZl08hhIPHX0JBC8uRy8u4OgbhosFixPDT/Ap1jvJFt7kC6pmD6BW9nCF62qmt0IdEQhj7XQS9UK2rEAKvcOts3S5cmiCA0xy1VPXfVl8EfGFhSI8ywu5W2GUxMy/qh9gjExZcGsCJnrmzquuHecoT7z2hZgh2QVat/oJcPfFWUMOjf/fHN+FsVdELjiZbyNm2cQD4W6DeT5RRQkyMu2fd6jYlz4/2HMC5V00nYCcqDVn8TmoqVLQCnqxcx7c/mgeLG5KeIuzZDR6aAGvbXZ3x/I6nyLdM="
+    - secure: "wxq07p4X9B4+eWwFObIcevZLh79PkwHvUS9oFJDKdCZZqssWpS+2gfhWmLC+Lpr/R8qjScxzBoiqJWrn/E+nyoqSkllc9k/LYFZc4Z0P+1NSjLl32RdBLltPucqC7Rgr5DlUAvRvBlJY1jvKFaYW5BRaQ1ItozEbmOE5s8xiz3gmm9b493zFGCr4sdtrgjaB8LatWrYtyQLxJvtnfSnZnXfdZkOQssRCoAffk2gXb43TEZIuxBHMTOPS+Ia/XQWDvJNuniZD1EtQMgOAzhLM5JYnQHq4jU2Cyq79hLAC/7AZ1w++TM5pljHFP0jfbOuKk9IMBBGGrFd/3Ep8A/O3ZDJpuXnG8ltTYId5OYfQ32Xl2yN2BH5w1PiQw7lefdNDuqIBNs9t8o8OVfq9BjgQcDtwMinct9Osm6+ZWsiaVPyaaPmaeK9T3S3aWeE+I6UwHaFsKPJW95QnrdGR2FgJ4slAKWza9B0PqMj9eip7uManectZ/dFmCmWWuJwinXROG65dKoZyRvy+XGzIMqXO0o8iO9nW+9GXR2fd3wOW/cIdaFCvJfQuFpKcF2CaI0mWPEUAcLIJlvn4mJpJHSm4wtjWBPhIG9858IwnAfJbYVr+77Sv5SyT1TwKNtkj/GTZrMlAU47ldDls+WSqfy2H9k//vYguk8yu2EPk0+IUrPg="

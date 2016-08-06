@@ -52,7 +52,6 @@ module.exports = function conf(config)
             'karma-chrome-launcher',
             'karma-firefox-launcher',
             'karma-sauce-launcher',
-            // 'karma-browserstack-launcher',
         ],
 
         customLaunchers: {
@@ -85,18 +84,6 @@ module.exports = function conf(config)
                 platform: 'OS X 10.11',
                 version: '9',
             },
-            SL_IE_9: {
-                base: 'SauceLabs',
-                browserName: 'internet explorer',
-                platform: 'Windows 7',
-                version: '9',
-            },
-            SL_IE_10: {
-                base: 'SauceLabs',
-                browserName: 'internet explorer',
-                platform: 'Windows 8',
-                version: '10',
-            },
             SL_IE_11: {
                 base: 'SauceLabs',
                 browserName: 'internet explorer',
@@ -115,51 +102,6 @@ module.exports = function conf(config)
                 platform: 'OS X 10.10',
                 version: '8.1',
             },
-            // BS_Chrome: {
-            //     base: 'BrowserStack',
-            //     browser: 'chrome',
-            //     os: 'OS X',
-            //     os_version: 'Yosemite',
-            // },
-            // BS_Safari: {
-            //     base: 'BrowserStack',
-            //     browser: 'safari',
-            //     os: 'OS X',
-            //     os_version: 'Yosemite',
-            // },
-            // BS_Firefox: {
-            //     base: 'BrowserStack',
-            //     browser: 'firefox',
-            //     os: 'Windows',
-            //     os_version: '8',
-            // },
-            // BS_IE_9: {
-            //     base: 'BrowserStack',
-            //     browser: 'ie',
-            //     browser_version: '9.0',
-            //     os: 'Windows',
-            //     os_version: '7',
-            // },
-            // BS_IE_10: {
-            //     base: 'BrowserStack',
-            //     browser: 'ie',
-            //     browser_version: '10.0',
-            //     os: 'Windows',
-            //     os_version: '8',
-            // },
-            // BS_IE_11: {
-            //     base: 'BrowserStack',
-            //     browser: 'ie',
-            //     browser_version: '11.0',
-            //     os: 'Windows',
-            //     os_version: '8.1',
-            // },
-            // BS_iOS: {
-            //     base: 'BrowserStack',
-            //     device: 'iPhone 6',
-            //     os: 'ios',
-            //     os_version: '8.0',
-            // },
             /* eslint-enable camelcase */
         },
     });
@@ -171,7 +113,7 @@ module.exports = function conf(config)
         config.logLevel = config.LOG_DEBUG;
 
         config.reporters.push('saucelabs');
-        config.browsers = ['SL_Chrome', 'SL_Firefox', 'SL_Safari_8', 'SL_Safari_9', 'SL_IE_11', 'SL_iOS'];
+        config.browsers = ['SL_Chrome', 'SL_Firefox', 'SL_IE_11', 'SL_Edge'];
 
         // Karma (with socket.io 1.x) buffers by 50 and 50 tests can take a long time on IEs;-)
         config.browserNoActivityTimeout = 120000;
@@ -185,12 +127,9 @@ module.exports = function conf(config)
         config.sauceLabs.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
         config.sauceLabs.recordScreenshots = true;
 
-        // if (process.env.BROWSER_PROVIDER === 'saucelabs' || !process.env.BROWSER_PROVIDER)
-        // {
-            // Allocating a browser can take pretty long (eg. if we are out of capacity and need to wait
-            // for another build to finish) and so the `captureTimeout` typically kills
-            // an in-queue-pending request, which makes no sense.
-            config.captureTimeout = 0;
-        // }
+        // Allocating a browser can take pretty long (eg. if we are out of capacity and need to wait
+        // for another build to finish) and so the `captureTimeout` typically kills
+        // an in-queue-pending request, which makes no sense.
+        config.captureTimeout = 0;
     }
 };
