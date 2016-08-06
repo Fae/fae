@@ -113,7 +113,16 @@ module.exports = function conf(config)
         config.logLevel = config.LOG_DEBUG;
 
         config.reporters.push('saucelabs');
-        config.browsers = ['SL_Chrome', 'SL_Firefox', 'SL_IE_11', 'SL_Edge'];
+        config.browsers = [
+            'SL_Chrome',
+            'SL_Firefox',
+            'SL_IE_11',
+            // 'SL_Safari_7',
+            // 'SL_Safari_8',
+            // 'SL_Safari_9', // Safar doesn't like Fae right now
+            // 'SL_Edge', // Edge seems to be having issues on saucelabs right now
+            // 'SL_iOS', // iOS doesn't like Fae right now
+        ];
 
         // Karma (with socket.io 1.x) buffers by 50 and 50 tests can take a long time on IEs;-)
         config.browserNoActivityTimeout = 120000;

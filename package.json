@@ -24,13 +24,13 @@
   "scripts": {
     "clean": "rm -rf dist/",
     "hash": "git rev-parse HEAD > .commit",
-    "build": "set NODE_ENV=production && npm run clean && npm run hash && webpack -p --config ./build/webpack.config.js --output-filename fae.min.js --progress",
-    "dev": " npm run clean && npm run hash && webpack -d --config ./build/webpack.config.js --output-filename fae.js --progress --colors",
+    "build": "set NODE_ENV=production && npm run hash && webpack -p --config ./build/webpack.config.js --output-filename fae.min.js --progress",
+    "dev": "npm run hash && webpack -d --config ./build/webpack.config.js --output-filename fae.js --progress --colors",
     "watch": "npm run dev -- --watch",
     "lint": "eslint src/ && eslint plugins/",
     "start": "npm run build",
     "test": "npm run test-dev -- --single-run",
-    "test-dev": "npm run dev && karma start build/karma.conf.js"
+    "test-dev": "karma start build/karma.conf.js"
   },
   "dependencies": {
     "bit-twiddle": "^1.0.2",

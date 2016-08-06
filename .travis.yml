@@ -23,6 +23,8 @@ install:
   - npm install
 
 script:
+  - npm run build
+  - npm run dev
   - npm test
 
 after_script:
