@@ -26,8 +26,12 @@ enables it to be useful to end users as well as a standalone framework.
 <a name="download"></a>
 ## Download
 
+Coming Soon.
+
 <a name="get-started"></a>
 ## Getting Started
+
+Coming Soon.
 
 <a name="support"></a>
 ## Support
@@ -55,19 +59,7 @@ time.
 <a name="roadmap"></a>
 ## Roadmap
 
-<a name="contributing"></a>
-## Contributing
-
-The major goals of Fae are:
-
-1. High amounts of modularity.
-2. A slim and useful core.
-
-Fae is not meant to be a drop-in game framework, but instead a collection of useful utilities
-for rendering. I expect it will mainly be used inside other frameworks that use it for rendering,
-though you could collect many plugins together to create a game only using Fae.
-
-## Todo:
+### Todo:
 
 - Custom Shaders
 - Filters
@@ -77,7 +69,7 @@ though you could collect many plugins together to create a game only using Fae.
 - Move `Color` to a plugin
 - Compressed textures
 
-## Plugins to Make
+### Plugins to Make
 
 - Mesh
 - Animated sprites
@@ -89,8 +81,22 @@ though you could collect many plugins together to create a game only using Fae.
 - Spine, Dragon Bones, etc
 - Lights
 
+<a name="contributing"></a>
+## Contributing
+
+The [Contributing Guide]() contains the full details on how to contribute
+changes to the project.
+
+Main points:
+
+- Report bugs on [GitHub Issues][github-issues] and include a code sample.
+- Pull Requests should be made against `master`.
+- Before contributing read the [Code of Conduct][code-of-conduct].
+
 [mini-signals]: https://github.com/Hypercubed/mini-signals
 [ee3]: https://github.com/primus/eventemitter3
 [event-tests]: https://github.com/Hypercubed/EventsSpeedTests
+[github-issues]: https://github.com/Fae/fae/issues
+[code-of-conduct]: https://github.com/Fae/fae/blob/master/CODE_OF_CONDUCT.md
 
 [![Analytics](https://ga-beacon.appspot.com/UA-27838577-5/Fae/fae)](https://github.com/igrigorik/ga-beacon)
