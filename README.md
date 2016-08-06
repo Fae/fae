@@ -11,9 +11,9 @@ Fae is meant to be a highly modular rendering framework. The primary target use-
 to be easily intregrable into larger application frameworks. However, the plugin library for Fae
 enables it to be useful to end users as well as a standalone framework.
 
-**Website**: Coming Soon
-**Discord**: https://discord.gg/qghcMmr
-**Docs/Guides**: Coming Soon
+**Website**: Coming Soon<br />
+**Discord**: https://discord.gg/qghcMmr<br />
+**Docs/Guides**: Coming Soon<br />
 
 ## Contents
 
