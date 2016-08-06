@@ -2,7 +2,12 @@
 
 [![Build Status](https://travis-ci.org/Fae/fae.svg?branch=master)](https://travis-ci.org/Fae/fae)
 [![Dependency Status](https://gemnasium.com/badges/github.com/Fae/fae.svg)](https://gemnasium.com/github.com/Fae/fae)
+<br/>
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/faejs.svg)](https://saucelabs.com/u/faejs)
+<br/>
+<!-- [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)]() -->
+[![PayPal](https://img.shields.io/badge/paypal-donate-yellow.svg)][paypal-donate]
+
 
 Fae is originally based on [pixi.js](https://github.com/pixijs/pixi.js) but with a focus on WebGL
 and a few core design differences that result in a familiar but slightly different API.
@@ -43,15 +48,7 @@ development of Fae, please consider making a donation.
 There are a couple ways you can have an impact:
 
 - A monthly contribution via Patreon (Coming Soon).
-- A one-time donation via PayPal:
-
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-    <input type="hidden" name="cmd" value="_s-xclick">
-    <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
-    ">
-    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-    <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-</form>
+- A donation via PayPal: [![PayPal](https://img.shields.io/badge/paypal-donate-yellow.svg)][paypal-donate]
 
 All donations go right back into the Fae community in the form of server hosting, and development
 time.
@@ -98,5 +95,6 @@ Main points:
 [event-tests]: https://github.com/Hypercubed/EventsSpeedTests
 [github-issues]: https://github.com/Fae/fae/issues
 [code-of-conduct]: https://github.com/Fae/fae/blob/master/CODE_OF_CONDUCT.md
+[paypal-donate]: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=CAP4H5ZVLHMMW&lc=US&item_name=Fae&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 
 [![Analytics](https://ga-beacon.appspot.com/UA-27838577-5/Fae/fae)](https://github.com/igrigorik/ga-beacon)
