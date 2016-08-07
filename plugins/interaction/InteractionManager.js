@@ -1,5 +1,5 @@
-import Interaction from './Interaction';
 import Signal from 'mini-signals';
+import Pointer from './Pointer';
 
 // @ifdef DEBUG
 import { debug } from '@fae/core';
@@ -25,11 +25,11 @@ export default class InteractionManager
         // @endif
 
         /**
-         * The currently active interactions.
+         * The currently active pointers.
          *
-         * @member {Interaction[]}
+         * @member {Pointer[]}
          */
-        this.interactions = [];
+        this.pointers = [];
 
         /**
          * The objects that can be interacted with.
@@ -46,18 +46,54 @@ export default class InteractionManager
         this.domElement = dom;
 
         /**
-         * Dispatched when an interaction occurs.
+         * Dispatched when a pointer starts an interaction (mousedown, pointerdown, touchstart).
          *
          * The callback looks like {@link InteractionManager.OnInteractionCallback}
          *
          * @member {Signal}
          */
-        this.onInteraction = new Signal();
+        this.onDown = new Signal();
+
+        /**
+         * Dispatched when a pointer ends an interaction (mouseup, pointerup, touchend).
+         *
+         * The callback looks like {@link InteractionManager.OnInteractionCallback}
+         *
+         * @member {Signal}
+         */
+        this.onUp = new Signal();
+
+        /**
+         * Dispatched when a pointer moves (mousemove, pointermove, touchmove).
+         *
+         * The callback looks like {@link InteractionManager.OnInteractionCallback}
+         *
+         * @member {Signal}
+         */
+        this.onMove = new Signal();
+
+        /**
+         * Dispatched when a pointer cancels interaction (mouseout, pointerout, touchcancel).
+         *
+         * The callback looks like {@link InteractionManager.OnInteractionCallback}
+         *
+         * @member {Signal}
+         */
+        this.onCancel = new Signal();
+
+        /**
+         * Dispatched when a pointer has a scroll interaction (wheel).
+         *
+         * The callback looks like {@link InteractionManager.OnInteractionCallback}
+         *
+         * @member {Signal}
+         */
+        this.onScroll = new Signal();
 
         /**
          * Dispatched when a click occurs on an object.
          *
-         * The callback looks like {@link InteractionManager.OnSingleInteractionCallback}
+         * The callback looks like {@link InteractionManager.OnInteractionCallback}
          *
          * @member {Signal}
          */
@@ -66,7 +102,7 @@ export default class InteractionManager
         /**
          * Dispatched when a hover begins on an object.
          *
-         * The callback looks like {@link InteractionManager.OnSingleInteractionCallback}
+         * The callback looks like {@link InteractionManager.OnInteractionCallback}
          *
          * @member {Signal}
          */
@@ -75,19 +111,11 @@ export default class InteractionManager
         /**
          * Dispatched when a hover begins on an object.
          *
-         * The callback looks like {@link InteractionManager.OnSingleInteractionCallback}
+         * The callback looks like {@link InteractionManager.OnInteractionCallback}
          *
          * @member {Signal}
          */
         this.OnHoverEnd = new Signal();
-
-        /**
-         * Pool of available interaction objects, so we dont have to recreate a bunch over time.
-         *
-         * @private
-         * @member {Interaction[]}
-         */
-        this._interactionPool = [];
 
         // bound events use internally if needed
         this._boundHandleEvent = this.handleEvent.bind(this);
@@ -97,15 +125,8 @@ export default class InteractionManager
          *
          * @memberof InteractionManager
          * @callback OnInteractionCallback
-         * @param {Interaction[]} interactions - The interactions that have been changed by this event.
-         */
-
-        /**
-         * When an interaction occurs the interaction object is passed to the callback.
-         *
-         * @memberof InteractionManager
-         * @callback OnSingleInteractionCallback
-         * @param {Interaction} interaction - The interaction that has been changed by this event.
+         * @param {InteractableObject} target - The target of the interaction.
+         * @param {Pointer} pointer - The pointer the interaction happened on.
          */
     }
 
@@ -125,6 +146,7 @@ export default class InteractionManager
      * @param {object} out - The out object to assign values to.
      * @param {number} out.x - The out X coord.
      * @param {number} out.y - The out Y coord.
+     * @return {object} An object with x/y properties.
      */
     convertClientToWorld(x, y, out = { x: 0, y: 0 })
     {
@@ -170,21 +192,21 @@ export default class InteractionManager
         if (window.PointerEvent)
         {
             this.domElement.addEventListener('pointerdown', this._boundHandleEvent);
-            this.domElement.addEventListener('pointerup', this._boundHandleEvent);
             this.domElement.addEventListener('pointermove', this._boundHandleEvent);
             this.domElement.addEventListener('pointerout', this._boundHandleEvent);
+            window.addEventListener('pointerup', this._boundHandleEvent);
         }
         else
         {
             this.domElement.addEventListener('mousedown', this._boundHandleEvent);
-            this.domElement.addEventListener('mouseup', this._boundHandleEvent);
             this.domElement.addEventListener('mousemove', this._boundHandleEvent);
             this.domElement.addEventListener('mouseout', this._boundHandleEvent);
+            window.addEventListener('mouseup', this._boundHandleEvent);
 
             this.domElement.addEventListener('touchstart', this._boundHandleEvent);
             this.domElement.addEventListener('touchmove', this._boundHandleEvent);
-            this.domElement.addEventListener('touchend', this._boundHandleEvent);
             this.domElement.addEventListener('touchcancel', this._boundHandleEvent);
+            window.addEventListener('touchend', this._boundHandleEvent);
         }
 
         this.domElement.addEventListener('wheel', this._boundHandleEvent);
@@ -199,21 +221,21 @@ export default class InteractionManager
         if (window.PointerEvent)
         {
             this.domElement.removeEventListener('pointerdown', this._boundHandleEvent);
-            this.domElement.removeEventListener('pointerup', this._boundHandleEvent);
             this.domElement.removeEventListener('pointermove', this._boundHandleEvent);
             this.domElement.removeEventListener('pointerout', this._boundHandleEvent);
+            window.removeEventListener('pointerup', this._boundHandleEvent);
         }
         else
         {
             this.domElement.removeEventListener('mousedown', this._boundHandleEvent);
-            this.domElement.removeEventListener('mouseup', this._boundHandleEvent);
             this.domElement.removeEventListener('mousemove', this._boundHandleEvent);
             this.domElement.removeEventListener('mouseout', this._boundHandleEvent);
+            window.removeEventListener('mouseup', this._boundHandleEvent);
 
             this.domElement.removeEventListener('touchstart', this._boundHandleEvent);
-            this.domElement.removeEventListener('touchend', this._boundHandleEvent);
             this.domElement.removeEventListener('touchmove', this._boundHandleEvent);
             this.domElement.removeEventListener('touchcancel', this._boundHandleEvent);
+            window.removeEventListener('touchend', this._boundHandleEvent);
         }
 
         this.domElement.removeEventListener('wheel', this._boundHandleEvent);
@@ -226,8 +248,6 @@ export default class InteractionManager
      */
     handleEvent(event)
     {
-        const changedInteractions = [];
-
         // add contacts from the event to the interaction
         if (event.changedTouches)
         {
@@ -235,85 +255,20 @@ export default class InteractionManager
             {
                 const touch = event.changedTouches;
                 const pointer = this._getPointer(touch);
-                const worldCoords = this.convertClientToWorld(data.clientX, data.clientY, tempCoords);
+                const worldCoords = this.convertClientToWorld(touch.clientX, touch.clientY, tempCoords);
                 const hitObject = this.hitTest(worldCoords.x, worldCoords.y);
 
-                pointer[Pointer.EVENT_CALL_MAP[event.type]](touch, hitObject, worldX, worldY);
+                pointer[Pointer.EVENT_CALL_MAP[event.type]](touch, hitObject, worldCoords.x, worldCoords.y);
             }
         }
         else
         {
-            const pointer = this._getPointer(touch);
-            const worldCoords = this.convertClientToWorld(data.clientX, data.clientY, tempCoords);
+            const pointer = this._getPointer(event);
+            const worldCoords = this.convertClientToWorld(event.clientX, event.clientY, tempCoords);
             const hitObject = this.hitTest(worldCoords.x, worldCoords.y);
 
-            pointer[Pointer.EVENT_CALL_MAP[event.type]](event, hitObject, worldX, worldY);
+            pointer[Pointer.EVENT_CALL_MAP[event.type]](event, hitObject, worldCoords.x, worldCoords.y);
         }
-
-        //////////////
-        // TODO: Remove Interaction in favor of just using Pointer????
-        /////////////
-
-        // now process the event.
-
-        // end and cancel event types need to go everywhere, so process the event on everything
-        // and add ones that handle the event to the changed list.
-        if (Interaction.EVENT_STATE_MAP[event.type] === Interaction.STATE.END
-            || Interaction.EVENT_STATE_MAP[event.type] === Interaction.STATE.CANCEL)
-        {
-            for (let i = 0; i < this.interactions.length; ++i)
-            {
-                const interaction = this.interactions[i];
-
-                if (interaction.processEvent(event))
-                {
-                    if (changedInteractions.indexOf(interaction) === -1)
-                    {
-                        changedInteractions.push(interaction);
-                    }
-                }
-            }
-        }
-        // all other events only go to interactions that have been modified
-        else
-        {
-            for (let i = 0; i < changedInteractions.length; ++i)
-            {
-                changedInteractions[i].processEvent(event);
-            }
-        }
-
-        // if some interactions were effected, then dispatch the signal
-        if (changedInteractions.length)
-        {
-            this.onInteraction.dispatch(changedInteractions);
-        }
-    }
-
-    /**
-     * Gets an interaction from the active list if the target has an active interaction
-     * or creates a new one.
-     *
-     * @param {InteractableObject} target - The target for the interaction.
-     * @return {Interaction} The interaction to use.
-     */
-    getInteraction(target, data)
-    {
-        // search for active interaction
-        for (let i = 0; i < this.interactions.length; ++i)
-        {
-            if (this.interactions[i].target === target)
-            {
-                return this.interactions[i];
-            }
-        }
-
-        // finally create a new one and add it as an active interaction
-        const interaction = new Interaction(target, this);
-
-        this.interactions.push(interaction);
-
-        return interaction;
     }
 
     /**
@@ -333,24 +288,28 @@ export default class InteractionManager
     }
 
     /**
+     * Gets or creates a pointer of ID/Type
+     *
      * @private
-     * @param {MouseEvent|PointerEvent|Touch} data - The contact data.
+     * @param {MouseEvent|PointerEvent|Touch} data - The event data of the contact.
+     * @return {Pointer} The pointer to use.
      */
-    _handleInteraction(data)
+    _getPointer(data)
     {
-        const worldCoords = this.convertClientToWorld(data.clientX, data.clientY, tempCoords);
-        const hitObject = this.hitTest(worldCoords.x, worldCoords.y);
+        let pointerId = 0;
 
-        if (hitObject)
+        if (typeof data.pointerId === 'number') pointerId = data.pointerId;
+        else if (typeof data.identifier === 'number') pointerId = data.identifier;
+
+        for (let i = 0; i < this.pointers.length; ++i)
         {
-            const interaction = this.getInteraction(hitObject);
-
-            interaction.addContact(data, worldCoords.x, worldCoords.y);
-
-            return interaction;
+            if (this.pointers[i].id === pointerId)
+            {
+                return this.pointers[i];
+            }
         }
 
-        return null;
+        return new Pointer(pointerId);
     }
 }
 

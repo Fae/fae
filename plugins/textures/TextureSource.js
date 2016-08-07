@@ -176,7 +176,7 @@ export default class TextureSource
         const w = this.wrapMode;
 
         debug.ASSERT(s === c.LINEAR || s === c.NEAREST, `Invalid scaleMode: ${s} (${typeof s}).`);
-        debug.ASSERT(w === c.CLAMP_TO_EDGE || w === c.REPEAT || w === c.MIRRORED_REPEAT, `Invalid warpMode: ${w} (${typeof w}).`);
+        debug.ASSERT(w === c.CLAMP_TO_EDGE || w === c.REPEAT || w === c.MIRRORED_REPEAT, `Invalid warpMode: ${w} (${typeof w}).`); // eslint-disable-line max-len
         debug.ASSERT(typeof this.mipmap === 'boolean', `Invalid mipmap value: ${this.mipmap} (${typeof this.mipmap}).`);
         // @endif
     }

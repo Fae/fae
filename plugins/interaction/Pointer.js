@@ -1,3 +1,7 @@
+// @ifdef DEBUG
+import { debug } from '@fae/core';
+// @endif
+
 /**
  * @class
  */
@@ -5,9 +9,9 @@ export default class Pointer
 {
     /**
      * @param {number} id - The id of the pointer.
-     * @param {Pointer.TYPE} type - The device type that generated this event.
+     * @param {InteractionManager} manager - The interaction manager this pointer belongs to.
      */
-    constructor(id)
+    constructor(id, manager)
     {
         /**
          * The ID of this pointer.
@@ -16,6 +20,14 @@ export default class Pointer
          * @member {number}
          */
         this.id = id;
+
+        /**
+         * The interaction manager this pointer belongs to.
+         *
+         * @readonly
+         * @member {InteractionManager}
+         */
+        this.manager = manager;
 
         /**
          * The type of this pointer.
@@ -109,6 +121,30 @@ export default class Pointer
         this.worldY = 0;
 
         /**
+         * The delta X of the scroll when doing a scroll event.
+         *
+         * @readonly
+         * @member {number}
+         */
+        this.scrollDeltaX = 0;
+
+        /**
+         * The delta Y of the scroll when doing a scroll event.
+         *
+         * @readonly
+         * @member {number}
+         */
+        this.scrollDeltaY = 0;
+
+        /**
+         * The delta Z of the scroll when doing a scroll event.
+         *
+         * @readonly
+         * @member {number}
+         */
+        this.scrollDeltaZ = 0;
+
+        /**
          * Is this pointer down pressed down?
          *
          * @readonly
@@ -125,55 +161,196 @@ export default class Pointer
         this.isHovering = false;
     }
 
-    start()
+    /**
+     * Called on a start event.
+     *
+     * @param {MouseEvent|PointerEvent|Touch} data - The contact data.
+     * @param {InteractableObject} target - The object this interaction hits.
+     * @param {number} worldX - The world X coord of the interaction.
+     * @param {number} worldY - The world Y coord of the interaction.
+     */
+    start(data, target, worldX, worldY)
     {
+        // @ifdef DEBUG
+        debug.ASSERT(!this.isDown, 'Start called for pointer without ending first.');
+        // @endif
 
+        this.isDown = true;
+        this.isHovering = false;
+        this.target = target;
+
+        this._set(data, worldX, worldY);
+
+        this.manager.onDown.dispatch(target, this);
     }
 
-    end()
+    /**
+     * Called on an end event.
+     *
+     * @param {MouseEvent|PointerEvent|Touch} data - The contact data.
+     * @param {InteractableObject} target - The object this interaction hits.
+     * @param {number} worldX - The world X coord of the interaction.
+     * @param {number} worldY - The world Y coord of the interaction.
+     */
+    end(data, target, worldX, worldY)
     {
+        // @ifdef DEBUG
+        debug.ASSERT(this.isDown, 'End called for pointer without starting first.');
+        debug.ASSERT(!this.isHovering, 'Hovering is true on pointer end.');
+        // @endif
 
+        this.isDown = false;
+
+        this._set(data, worldX, worldY);
+
+        // click!
+        if (this.target === target)
+        {
+            this.manager.onClick.dispatch(this.target, this);
+        }
+
+        this.target = target;
+        this.manager.onUp.dispatch(target, this);
     }
 
-    move()
+    /**
+     * Called on a move event.
+     *
+     * @param {MouseEvent|PointerEvent|Touch} data - The contact data.
+     * @param {InteractableObject} target - The object this interaction hits.
+     * @param {number} worldX - The world X coord of the interaction.
+     * @param {number} worldY - The world Y coord of the interaction.
+     */
+    move(data, target, worldX, worldY)
     {
+        this._set(data, worldX, worldY, this.isDown || this.isHovering);
 
+        // not down, need to consider hovering
+        if (!this.isDown)
+        {
+            // target has changed, so hover state has changed
+            if (this.target !== target)
+            {
+                if (this.isHovering)
+                {
+                    this.manager.onHoverEnd.dispatch(this.target, this);
+                }
+                else
+                {
+                    this.isHovering = true;
+                    this.target = target;
+                    this.manager.onHoverStart.dispatch(target, this);
+                }
+            }
+        }
+
+        // TODO: Drag-and-drop, if you move mouse fast enough target changes. May
+        // cause issues when people try to do dragging.
+
+        this.target = target;
+
+        this.manager.onMove.dispatch(target, this);
     }
 
-    cancel()
+    /**
+     * Called on a cancel event.
+     *
+     * @param {MouseEvent|PointerEvent|Touch} data - The contact data.
+     * @param {InteractableObject} target - The object this interaction hits.
+     * @param {number} worldX - The world X coord of the interaction.
+     * @param {number} worldY - The world Y coord of the interaction.
+     */
+    cancel(data, target, worldX, worldY)
     {
+        const wasHovering = this.isHovering;
 
+        this.isDown = false;
+        this.isHovering = false;
+
+        this._set(data, worldX, worldY);
+
+        if (wasHovering)
+        {
+            this.manager.OnHoverEnd.dispatch(target, this);
+        }
+
+        this.target = null;
+
+        this.manager.onCancel.dispatch(null, this);
     }
 
-    scroll()
+    /**
+     * Called on a scroll event.
+     *
+     * @param {MouseEvent|PointerEvent|Touch} data - The contact data.
+     * @param {InteractableObject} target - The object this interaction hits.
+     * @param {number} worldX - The world X coord of the interaction.
+     * @param {number} worldY - The world Y coord of the interaction.
+     */
+    scroll(data, target, worldX, worldY)
     {
+        this._set(data, worldX, worldY);
 
+        this.scrollDeltaX = data.deltaX;
+        this.scrollDeltaY = data.deltaY;
+        this.scrollDeltaZ = data.deltaZ;
+
+        this.target = target;
+
+        this.manager.onScroll.dispatch(target, this);
     }
 
     /**
      * Sets the members based on a DOM event.
      *
      * @param {PointerEvent|MouseEvent|Touch} data - The event data to set from.
+     * @param {number} worldX - The world X coord of this event.
+     * @param {number} worldY - The world Y coord of this event.
+     * @param {boolean} calcDelta - Should we calculate the delta movement?
      */
-    setupFromEventData(data, worldX, worldY)
+    _set(data, worldX, worldY, calcDelta = false)
     {
+        // set type
         if (data.pointerType)
+        {
             this.type = data.pointerType;
+        }
         else if (event.type && event.type[0] === 'm')
+        {
             this.type = Pointer.TYPE.MOUSE;
+        }
         else
+        {
             this.type = Pointer.TYPE.TOUCH;
+        }
 
+        // set pressure
+        if (typeof data.pressure === 'number')
+        {
+            this.pressure = data.pressure;
+        }
+        else if (typeof data.force === 'number')
+        {
+            this.pressure = data.force;
+        }
+        else
+        {
+            this.pressure = 1.0;
+        }
+
+        // set size
         this.width = data.width || (typeof data.radiusX === 'number' ? data.radiusX * 2 : 1);
         this.height = data.height || (typeof data.radiusY === 'number' ? data.radiusY * 2 : 1);
-        this.pressure = typeof data.pressure === 'number' ? data.pressure : (typeof data.force === 'number' ? data.force : 1.0);
 
-        this.deltaX = this.empty ? 0 : (worldX - this.worldX);
-        this.deltaY = this.empty ? 0 : (worldY - this.worldY);
+        // calculate delta (maybe)
+        this.deltaX = calcDelta ? (worldX - this.worldX) : 0;
+        this.deltaY = calcDelta ? (worldY - this.worldY) : 0;
 
+        // set client x/y coords
         this.clientX = data.clientX;
         this.clientY = data.clientY;
 
+        // set world x/y coords
         this.worldX = worldX;
         this.worldY = worldY;
     }
