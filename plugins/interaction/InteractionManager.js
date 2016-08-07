@@ -64,6 +64,16 @@ export default class InteractionManager
         this.onUp = new Signal();
 
         /**
+         * Dispatched when a pointer ends an interaction (mouseup, pointerup, touchend)
+         * but is outside of the current target.
+         *
+         * The callback looks like {@link InteractionManager.OnInteractionCallback}
+         *
+         * @member {Signal}
+         */
+        this.onUpOutside = new Signal();
+
+        /**
          * Dispatched when a pointer moves (mousemove, pointermove, touchmove).
          *
          * The callback looks like {@link InteractionManager.OnInteractionCallback}
@@ -106,7 +116,7 @@ export default class InteractionManager
          *
          * @member {Signal}
          */
-        this.OnHoverStart = new Signal();
+        this.onHoverStart = new Signal();
 
         /**
          * Dispatched when a hover begins on an object.
@@ -115,7 +125,7 @@ export default class InteractionManager
          *
          * @member {Signal}
          */
-        this.OnHoverEnd = new Signal();
+        this.onHoverEnd = new Signal();
 
         // bound events use internally if needed
         this._boundHandleEvent = this.handleEvent.bind(this);
@@ -309,7 +319,11 @@ export default class InteractionManager
             }
         }
 
-        return new Pointer(pointerId);
+        const pointer = new Pointer(pointerId, this);
+
+        this.pointers.push(pointer);
+
+        return pointer;
     }
 }
 

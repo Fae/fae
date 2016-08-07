@@ -203,7 +203,7 @@ export default class Sprite extends SceneObject
      */
     hitTest(x, y)
     {
-        if (this.bounds.contains(x, y))
+        if (this.getBounds().contains(x, y))
         {
             return this;
         }

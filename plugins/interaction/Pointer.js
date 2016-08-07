@@ -38,12 +38,28 @@ export default class Pointer
         this.type = Pointer.TYPE.UNKNOWN;
 
         /**
-         * The target of this pointer.
+         * The target of this pointer when it was pressed down.
          *
          * @readonly
          * @member {InteractableObject}
          */
         this.target = null;
+
+        /**
+         * The target of this pointer when it hovered over an object.
+         *
+         * @readonly
+         * @member {InteractableObject}
+         */
+        this.hoverTarget = null;
+
+        /**
+         * The target of this pointer when scroll events happened.
+         *
+         * @readonly
+         * @member {InteractableObject}
+         */
+        this.scrollTarget = null;
 
         /**
          * The width of the interaction of the pointer with the screen.
@@ -176,12 +192,14 @@ export default class Pointer
         // @endif
 
         this.isDown = true;
-        this.isHovering = false;
         this.target = target;
 
         this._set(data, worldX, worldY);
 
-        this.manager.onDown.dispatch(target, this);
+        if (this.target)
+        {
+            this.manager.onDown.dispatch(this.target, this);
+        }
     }
 
     /**
@@ -194,23 +212,33 @@ export default class Pointer
      */
     end(data, target, worldX, worldY)
     {
-        // @ifdef DEBUG
-        debug.ASSERT(this.isDown, 'End called for pointer without starting first.');
-        debug.ASSERT(!this.isHovering, 'Hovering is true on pointer end.');
-        // @endif
+        // ignore end events when we haven't even started yet
+        if (!this.isDown) return;
 
         this.isDown = false;
 
         this._set(data, worldX, worldY);
 
         // click!
-        if (this.target === target)
+        if (this.target)
         {
-            this.manager.onClick.dispatch(this.target, this);
+            if (this.target === target)
+            {
+                this.manager.onClick.dispatch(this.target, this);
+            }
+
+            if (!target)
+            {
+                this.manager.onUpOutside.dispatch(this.target, this);
+            }
         }
 
         this.target = target;
-        this.manager.onUp.dispatch(target, this);
+
+        if (this.target)
+        {
+            this.manager.onUp.dispatch(this.target, this);
+        }
     }
 
     /**
@@ -225,31 +253,33 @@ export default class Pointer
     {
         this._set(data, worldX, worldY, this.isDown || this.isHovering);
 
-        // not down, need to consider hovering
-        if (!this.isDown)
+        // target has changed, so hover state has changed
+        if (this.hoverTarget !== target)
         {
-            // target has changed, so hover state has changed
-            if (this.target !== target)
+            if (this.isHovering && this.hoverTarget)
             {
-                if (this.isHovering)
-                {
-                    this.manager.onHoverEnd.dispatch(this.target, this);
-                }
-                else
-                {
-                    this.isHovering = true;
-                    this.target = target;
-                    this.manager.onHoverStart.dispatch(target, this);
-                }
+                this.isHovering = false;
+                this.manager.onHoverEnd.dispatch(this.hoverTarget, this);
+                this.hoverTarget = null;
+            }
+
+            if (target)
+            {
+                this.isHovering = true;
+                this.hoverTarget = target;
+                this.manager.onHoverStart.dispatch(this.hoverTarget, this);
             }
         }
 
         // TODO: Drag-and-drop, if you move mouse fast enough target changes. May
         // cause issues when people try to do dragging.
 
-        this.target = target;
+        this.hoverTarget = target;
 
-        this.manager.onMove.dispatch(target, this);
+        if (this.hoverTarget)
+        {
+            this.manager.onMove.dispatch(this.hoverTarget, this);
+        }
     }
 
     /**
@@ -262,6 +292,7 @@ export default class Pointer
      */
     cancel(data, target, worldX, worldY)
     {
+        const wasDown = this.isDown;
         const wasHovering = this.isHovering;
 
         this.isDown = false;
@@ -269,14 +300,21 @@ export default class Pointer
 
         this._set(data, worldX, worldY);
 
-        if (wasHovering)
+        this.manager.onCancel.dispatch(this.target || this.hoverTarget, this);
+
+        if (wasDown && this.target)
         {
-            this.manager.OnHoverEnd.dispatch(target, this);
+            this.manager.onUpOutside.dispatch(this.target, this);
+        }
+
+        if (wasHovering && this.hoverTarget)
+        {
+            this.manager.onHoverEnd.dispatch(this.hoverTarget, this);
         }
 
         this.target = null;
-
-        this.manager.onCancel.dispatch(null, this);
+        this.hoverTarget = null;
+        this.scrollTarget = null;
     }
 
     /**
@@ -295,9 +333,12 @@ export default class Pointer
         this.scrollDeltaY = data.deltaY;
         this.scrollDeltaZ = data.deltaZ;
 
-        this.target = target;
+        this.scrollTarget = target;
 
-        this.manager.onScroll.dispatch(target, this);
+        if (target)
+        {
+            this.manager.onScroll.dispatch(this.scrollTarget, this);
+        }
     }
 
     /**
