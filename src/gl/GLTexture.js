@@ -186,6 +186,7 @@ export default class GLTexture
         if (location > -1 && location !== lastBoundTextureId)
         {
             gl.activeTexture(gl.TEXTURE0 + location);
+            lastBoundTextureId = location;
         }
 
         gl.bindTexture(gl.TEXTURE_2D, this.texture);

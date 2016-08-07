@@ -66,33 +66,41 @@ describe('math/Rectangle.js', function ()
 
     describe('#clone', function ()
     {
+        it('Clones');
     });
 
     describe('#copy', function ()
     {
+        it('Copies');
     });
 
     describe('#contains', function ()
     {
+        it('Contains');
     });
 
     describe('#union', function ()
     {
+        it('Unions');
     });
 
     describe('#intersection', function ()
     {
+        it('intersects');
     });
 
     describe('#inflate', function ()
     {
+        it('Inflates');
     });
 
     describe('#fit', function ()
     {
+        it('Fits');
     });
 
     describe('#equals', function ()
     {
+        it('Equals');
     });
 });

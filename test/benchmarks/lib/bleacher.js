@@ -129,7 +129,6 @@
                         elm.classList.add('slow');
                     }
                 });
-
             })
             .run({ async: true });
         },

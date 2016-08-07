@@ -90,7 +90,6 @@ describe('util/Buffer.js', function ()
         expect(b).to.have.deep.property('bytes.buffer', _buff);
         expect(b).to.have.deep.property('float32View.buffer', _buff);
         expect(b).to.have.deep.property('uint32View.buffer', _buff);
-
     }
 });
 

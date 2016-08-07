@@ -27,7 +27,7 @@
     "build": "set NODE_ENV=production && npm run hash && webpack -p --config ./build/webpack.config.js --output-filename fae.min.js --progress",
     "dev": "npm run hash && webpack -d --config ./build/webpack.config.js --output-filename fae.js --progress --colors",
     "watch": "npm run dev -- --watch",
-    "lint": "eslint src/ && eslint plugins/",
+    "lint": "eslint src/ plugins/ test/",
     "start": "npm run build",
     "test": "npm run lint && npm run dev && npm run test-dev -- --single-run",
     "test-ci": "npm run test-dev -- --single-run",

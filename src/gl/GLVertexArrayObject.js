@@ -1,3 +1,4 @@
+/* eslint max-params: [2, 6] */
 import Device from 'ismobilejs';
 
 /**
