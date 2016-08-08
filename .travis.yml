@@ -54,6 +54,17 @@ deploy:
     acl: public_read
     region: us-west-2
     local_dir: dist
+    upload-dir: nightly/HEAD
+    on:
+      branch: master
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: "fae-builds"
+    skip_cleanup: true
+    acl: public_read
+    region: us-west-2
+    local_dir: dist
     upload-dir: release/$TRAVIS_TAG
     on:
       tags: true
