@@ -43,7 +43,7 @@ deploy:
     acl: public_read
     region: us-west-2
     local_dir: dist
-    upload-dir: nightly/$TRAVIS_COMMIT
+    upload_dir: nightly/$TRAVIS_COMMIT
     on:
       branch: master
   - provider: s3
@@ -54,7 +54,7 @@ deploy:
     acl: public_read
     region: us-west-2
     local_dir: dist
-    upload-dir: nightly/HEAD
+    upload_dir: nightly/HEAD
     on:
       branch: master
   - provider: s3
