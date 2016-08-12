@@ -23,13 +23,8 @@ install:
   - npm install
 
 script:
-  - npm run lint
+  - npm test
   - npm run build
-  - npm run dev
-  - npm run test-ci
-
-after_script:
-  - sh ./build/print_logs.sh
 
 addons:
   sauce_connect: true
@@ -65,7 +60,7 @@ deploy:
     acl: public_read
     region: us-west-2
     local_dir: dist
-    upload-dir: release/$TRAVIS_TAG
+    upload_dir: release/$TRAVIS_TAG
     on:
       tags: true
 
