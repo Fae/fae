@@ -9,9 +9,9 @@ export default class Pointer
 {
     /**
      * @param {number} id - The id of the pointer.
-     * @param {InteractionManager} manager - The interaction manager this pointer belongs to.
+     * @param {InteractionSystem} system - The interaction system this pointer belongs to.
      */
-    constructor(id, manager)
+    constructor(id, system)
     {
         /**
          * The ID of this pointer.
@@ -22,12 +22,12 @@ export default class Pointer
         this.id = id;
 
         /**
-         * The interaction manager this pointer belongs to.
+         * The interaction system this pointer belongs to.
          *
          * @readonly
-         * @member {InteractionManager}
+         * @member {InteractionSystem}
          */
-        this.manager = manager;
+        this.manager = system;
 
         /**
          * The type of this pointer.

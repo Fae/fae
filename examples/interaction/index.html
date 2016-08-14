@@ -8,11 +8,24 @@
         <script>
             const view = document.getElementById('view');
             const renderer = new Fae.render.Renderer(view);
-            const interaction = new Fae.interaction.InteractionManager(view);
+            const interaction = new Fae.interaction.InteractionSystem(view);
+
+            renderer.addSystem(new Fae.sprite.SpriteRenderSystem(renderer));
+            renderer.addSystem(interaction);
+
+            class Card extends Fae.sprite.Sprite.with(Fae.interaction.InteractionComponent) {
+                _updateBounds()
+                {
+                    this._bounds.clear();
+
+                    if (!this.visible) return;
+
+                    this._bounds.addQuad(this.vertexData);
+                }
+            }
+
             const img = new Image();
             let sprite = null;
-
-            interaction.bindEvents();
 
             img.src = '../basic/spade_A.png';
             img.addEventListener('load', function ()
@@ -24,11 +37,13 @@
             interaction.onHoverStart.add(function (obj, pointer) {
                 obj.transform.scaleX *= 1.5;
                 obj.transform.scaleY *= 1.5;
+                obj.transform.update();
             });
 
             interaction.onHoverEnd.add(function (obj, pointer) {
                 obj.transform.scaleX /= 1.5;
                 obj.transform.scaleY /= 1.5;
+                obj.transform.update();
             });
 
             interaction.onDown.add(flip);
@@ -38,22 +53,24 @@
             function flip(obj)
             {
                 obj.transform.scaleY *= -1.0;
+                obj.transform.update();
             }
 
             function setup() {
-                sprite = new Fae.sprite.Sprite(new Fae.textures.Texture(img));
+                sprite = new Card(new Fae.textures.Texture(img));
                 sprite.anchorX = sprite.anchorY = 0.5;
                 sprite.transform.x = view.width / 2;
                 sprite.transform.y = view.height / 2;
 
-                interaction.add(sprite);
+                sprite.transform.update();
+
+                renderer.addEntity(sprite);
             }
 
             function render() {
                 requestAnimationFrame(render);
 
-                sprite.update();
-                renderer.render(sprite);
+                renderer.render();
             }
         </script>
     </body>

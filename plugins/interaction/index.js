@@ -1,1 +1,3 @@
-export { default as InteractionManager } from './InteractionManager';
+export { default as InteractionComponent } from './InteractionComponent';
+export { default as InteractionSystem } from './InteractionSystem';
+export { default as Pointer } from './Pointer';

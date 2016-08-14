@@ -1,16 +1,14 @@
 import Signal from 'mini-signals';
 import Pointer from './Pointer';
-
-// @ifdef DEBUG
-import { debug } from '@fae/core';
-// @endif
+import InteractionComponent from './InteractionComponent';
+import { ecs/* @ifdef DEBUG */, debug/* @endif */ } from '@fae/core';
 
 const tempCoords = { x: 0, y: 0 };
 
 /**
  * @class
  */
-export default class InteractionManager
+export default class InteractionSystem extends ecs.System
 {
     /**
      * @param {HTMLCanvasElement} dom - The element to handle interactions on.
@@ -18,10 +16,15 @@ export default class InteractionManager
      */
     constructor(dom)
     {
+        super();
+
+        // never call update on this system.
+        this.frequency = Number.MAX_SAFE_INTEGER;
+
         // @ifdef DEBUG
         const name = dom && dom.nodeName && dom.nodeName.toLowerCase();
 
-        debug.ASSERT(name && name === 'canvas', 'InteractionManager requires a canvas to manage.');
+        debug.ASSERT(name && name === 'canvas', 'InteractionSystem requires a canvas to manage.');
         // @endif
 
         /**
@@ -30,13 +33,6 @@ export default class InteractionManager
          * @member {Pointer[]}
          */
         this.pointers = [];
-
-        /**
-         * The objects that can be interacted with.
-         *
-         * @member {InteractableObject[]}
-         */
-        this.objects = [];
 
         /**
          * The DOM element to consider interactions relative to.
@@ -48,7 +44,7 @@ export default class InteractionManager
         /**
          * Dispatched when a pointer starts an interaction (mousedown, pointerdown, touchstart).
          *
-         * The callback looks like {@link InteractionManager.OnInteractionCallback}
+         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
          *
          * @member {Signal}
          */
@@ -57,7 +53,7 @@ export default class InteractionManager
         /**
          * Dispatched when a pointer ends an interaction (mouseup, pointerup, touchend).
          *
-         * The callback looks like {@link InteractionManager.OnInteractionCallback}
+         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
          *
          * @member {Signal}
          */
@@ -67,7 +63,7 @@ export default class InteractionManager
          * Dispatched when a pointer ends an interaction (mouseup, pointerup, touchend)
          * but is outside of the current target.
          *
-         * The callback looks like {@link InteractionManager.OnInteractionCallback}
+         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
          *
          * @member {Signal}
          */
@@ -76,7 +72,7 @@ export default class InteractionManager
         /**
          * Dispatched when a pointer moves (mousemove, pointermove, touchmove).
          *
-         * The callback looks like {@link InteractionManager.OnInteractionCallback}
+         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
          *
          * @member {Signal}
          */
@@ -85,7 +81,7 @@ export default class InteractionManager
         /**
          * Dispatched when a pointer cancels interaction (mouseout, pointerout, touchcancel).
          *
-         * The callback looks like {@link InteractionManager.OnInteractionCallback}
+         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
          *
          * @member {Signal}
          */
@@ -94,7 +90,7 @@ export default class InteractionManager
         /**
          * Dispatched when a pointer has a scroll interaction (wheel).
          *
-         * The callback looks like {@link InteractionManager.OnInteractionCallback}
+         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
          *
          * @member {Signal}
          */
@@ -103,7 +99,7 @@ export default class InteractionManager
         /**
          * Dispatched when a click occurs on an object.
          *
-         * The callback looks like {@link InteractionManager.OnInteractionCallback}
+         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
          *
          * @member {Signal}
          */
@@ -112,7 +108,7 @@ export default class InteractionManager
         /**
          * Dispatched when a hover begins on an object.
          *
-         * The callback looks like {@link InteractionManager.OnInteractionCallback}
+         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
          *
          * @member {Signal}
          */
@@ -121,7 +117,7 @@ export default class InteractionManager
         /**
          * Dispatched when a hover begins on an object.
          *
-         * The callback looks like {@link InteractionManager.OnInteractionCallback}
+         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
          *
          * @member {Signal}
          */
@@ -130,10 +126,14 @@ export default class InteractionManager
         // bound events use internally if needed
         this._boundHandleEvent = this.handleEvent.bind(this);
 
+        // @ifdef DEBUG
+        this._eventsBound = false;
+        // @endif
+
         /**
          * When an interaction occurs the interaction object is passed to the callback.
          *
-         * @memberof InteractionManager
+         * @memberof InteractionSystem
          * @callback OnInteractionCallback
          * @param {InteractableObject} target - The target of the interaction.
          * @param {Pointer} pointer - The pointer the interaction happened on.
@@ -141,11 +141,14 @@ export default class InteractionManager
     }
 
     /**
-     * @param {InteractableObject} obj - The object to test for hits when input is received.
+     * Return true if the entity is eligible to the system, false otherwise.
+     *
+     * @param {Entity} entity - The entity to test.
+     * @return {boolean} True if entity should be included.
      */
-    add(obj)
+    test(entity)
     {
-        this.objects.push(obj);
+        return entity.hasComponent(InteractionComponent);
     }
 
     /**
@@ -178,9 +181,9 @@ export default class InteractionManager
      */
     hitTest(x, y)
     {
-        for (let i = 0; i < this.objects.length; ++i)
+        for (let i = 0; i < this.entities.length; ++i)
         {
-            const pass = this.objects[i].hitTest(x, y);
+            const pass = this.entities[i].hitTest(x, y);
 
             if (pass) return pass;
         }
@@ -195,9 +198,13 @@ export default class InteractionManager
      *
      * @param {HTMLElement} view - The element to use as the root view.
      */
-    bindEvents(view = this.domElement)
+    bindEvents()
     {
-        this.domElement = view;
+        // @ifdef DEBUG
+        debug.ASSERT(!this._eventsBound, 'bindEvents called again after events were already bound.');
+
+        this._eventsBound = true;
+        // @endif
 
         if (window.PointerEvent)
         {
@@ -228,6 +235,12 @@ export default class InteractionManager
      */
     unbindEvents()
     {
+        // @ifdef DEBUG
+        debug.ASSERT(this._eventsBound, 'unbindEvents called when events were not bound.');
+
+        this._eventsBound = false;
+        // @endif
+
         if (window.PointerEvent)
         {
             this.domElement.removeEventListener('pointerdown', this._boundHandleEvent);
@@ -282,15 +295,34 @@ export default class InteractionManager
     }
 
     /**
+     * Called when the system is added to the renderer.
+     *
+     */
+    initialize()
+    {
+        super.initialize();
+
+        this.bindEvents();
+    }
+
+    /**
+     * Disposes of the system, called when removed from the renderer.
+     *
+     */
+    dispose()
+    {
+        super.dispose();
+
+        this.unbindEvents();
+    }
+
+    /**
      * Destroys this interaction manager.
      *
      */
     destroy()
     {
-        this.unbindEvents();
-
         this.interactions = null;
-        this.objects = null;
         this.domElement = null;
 
         this.onInteraction.detachAll();

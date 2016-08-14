@@ -21,16 +21,6 @@ export default function BoundsComponent(Base)
              * @member {BoundingBox}
              */
             this._bounds = new BoundingBox();
-
-            /**
-             * Tracker for if the bounds are dirty. Each time the object
-             * is updated, the bounds are marked as dirty and recalculated
-             * next time they are requested.
-             *
-             * @private
-             * @member {boolean}
-             */
-            this._boundsDirty = true;
         }
 
         /**
@@ -40,10 +30,7 @@ export default function BoundsComponent(Base)
          */
         getBounds()
         {
-            if (this._boundsDirty)
-            {
-                this._updateBounds();
-            }
+            this._updateBounds();
 
             return this._bounds;
         }
@@ -56,7 +43,6 @@ export default function BoundsComponent(Base)
         _updateBounds()
         {
             this._bounds.clear();
-            this._boundsDirty = false;
         }
     };
 }

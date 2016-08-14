@@ -94,22 +94,6 @@ export default class Sprite extends ecs.Entity.with(
     }
 
     /**
-     * Called by the bounds component when someone tries to read the
-     * bounds but they are dirty.
-     *
-     * @protected
-     */
-    _updateBounds()
-    {
-        this._bounds.clear();
-        this._boundsDirty = false;
-
-        if (!this.visible) return;
-
-        this._bounds.addQuad(this.vertexData);
-    }
-
-    /**
      * Called when the underlying texture updates.
      *
      * @private
