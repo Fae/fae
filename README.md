@@ -1,5 +1,6 @@
 # Fae - 2D WebGL Renderer
 
+[![API Doc](https://doclets.io/Fae/fae/master.svg)](https://doclets.io/Fae/fae/master)
 [![Build Status](https://travis-ci.org/Fae/fae.svg?branch=master)](https://travis-ci.org/Fae/fae)
 [![Dependency Status](https://gemnasium.com/badges/github.com/Fae/fae.svg)](https://gemnasium.com/github.com/Fae/fae)
 <br/>

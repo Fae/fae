@@ -6,10 +6,10 @@
     <body>
         <canvas id="view" width="512" height="512" style="float:left"></canvas>
         <div style="float:left">
-            GPU max textures: <span id="max-textures"></span><br/>
-            Sprites per batch: <span id="batch-size"></span><br/>
-            Active sprites: <span id="num-sprites"></span><br/>
-            Number of Batches: <span id="num-batches"></span><br/>
+            <strong>Sprites to draw:</strong> <span id="num-sprites"></span><br/>
+            <strong>Draw calls made:</strong> <span id="num-batches"></span><br/>
+            <strong>Sprites per batch:</strong> <span id="batch-size"></span><br/>
+            <strong>GPU max textures:</strong> <span id="max-textures"></span><br/>
         </div>
 
         <script>
@@ -23,11 +23,10 @@
 
             const view = document.getElementById('view');
             const renderer = new Fae.render.Renderer(view);
-            const stage = new Fae.scene.Container();
 
-            const startCount = 10000;
+            const startCount = 4000;
             const maxCount = 50000;
-            const stepCount = 100;
+            const stepCount = 50;
             const gravity = 0.75;
 
             const minX = 0;
@@ -63,11 +62,70 @@
             // cut off extra textures if your GPU supports less than 12
             textures.length = Math.min(renderer.gl.getParameter(renderer.gl.MAX_TEXTURE_IMAGE_UNITS), textures.length);
 
+            // example component, assemblage, and system
+            const CardComponent = (base) => class extends base {
+                constructor() {
+                    super(...arguments);
+
+                    this.speedX = 0;
+                    this.speedY = 0;
+                }
+            };
+
+            class Card extends Fae.sprite.Sprite.with(CardComponent) {}
+
+            class CardMovementSystem extends Fae.ecs.System {
+                test(entity) {
+                    return entity.hasComponent(Fae.transform.TransformComponent);
+                }
+
+                updateAll(elapsed) {
+                    // update them all
+                    for (let i = 0; i < this.entities.length; ++i)
+                    {
+                        const card = this.entities[i];
+
+                        card.transform.x += card.speedX;
+                        card.transform.y += card.speedY;
+                        card.speedY += gravity;
+
+                        if (card.transform.x <= minX || card.transform.x >= maxX)
+                        {
+                            card.speedX *= -1
+                        }
+
+                        if (card.transform.y >= maxY)
+                        {
+                            card.speedY *= -gravity;
+
+                            // random boosts
+                            if (Math.random() > 0.5)
+                            {
+                                card.speedY -= Math.random() * 10;
+                            }
+                        }
+                        else if (card.transform.y <= minY)
+                        {
+                            card.transform.y = 1;
+                            card.speedY = 0;
+                        }
+
+                        card.transform.update();
+                    }
+                }
+            }
+
+            // add systems
+            renderer.addSystem(new Fae.sprite.SpriteRenderSystem(renderer));
+            renderer.addSystem(new CardMovementSystem());
+
+            // create initial cards
             for (let i = 0; i < startCount; ++i)
             {
                 createCard();
             }
 
+            // start!
             render();
             updateInfo();
 
@@ -87,46 +145,13 @@
                     updateInfo();
                 }
 
-                // update them all
-                for (let i = 0; i < stage.children.length; ++i)
-                {
-                    const card = stage.children[i];
-
-                    card.transform.x += card.speedX;
-                    card.transform.y += card.speedY;
-                    card.speedY += gravity;
-
-                    if (card.transform.x <= minX || card.transform.x >= maxX)
-                    {
-                        card.speedX *= -1
-                    }
-
-                    if (card.transform.y >= maxY)
-                    {
-                        card.speedY *= -gravity;
-
-                        // random boosts
-                        if (Math.random() > 0.5)
-                        {
-                            card.speedY -= Math.random() * 10;
-                        }
-                    }
-                    else if (card.transform.y <= minY)
-                    {
-                        card.transform.y = 1;
-                        card.speedY = 0;
-                    }
-                }
-
-                stage.update();
-
-                renderer.render(stage);
+                renderer.render();
                 stats.end();
             }
 
             function createCard()
             {
-                const card = new Fae.sprite.Sprite(textures[count % textures.length]);
+                const card = new Card(textures[count % textures.length]);
 
                 card.speedX = Math.random() * 10;
                 card.speedY = (Math.random() * 10) - 5;
@@ -140,17 +165,19 @@
 
                 count++;
 
-                stage.addChild(card);
+                renderer.addEntity(card);
 
                 return card;
             }
 
             function updateInfo()
             {
-                maxTextures.textContent = renderer.currentRenderer._maxTextures;
-                batchSize.textContent = renderer.currentRenderer.size;
+                const spriteRenderer = renderer.systems[0].spriteRenderer;
+
+                maxTextures.textContent = spriteRenderer._maxTextures;
+                batchSize.textContent = spriteRenderer.size;
                 numSprites.textContent = count;
-                numBatches.textContent = renderer.currentRenderer.vertexBuffers.length;
+                numBatches.textContent = spriteRenderer.vertexCount + 1;
             }
         </script>
     </body>

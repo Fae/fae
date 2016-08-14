@@ -4,7 +4,7 @@
   "description": "Adds support for high-level texture management.",
   "author": "Chad Engler <chad@pantherdev.com>",
   "license": "MIT",
-  "main": "./index.js",
+  "main": "src/index.js",
   "homepage": "https://github.com/englercj/fae#readme",
   "repository": {
     "type": "git",
@@ -14,13 +14,12 @@
     "url": "https://github.com/englercj/fae/issues"
   },
   "files": [
-    "index.js",
-    "Texture.js",
-    "TextureSource.js",
-    "TextureUVs.js"
+    "src/"
   ],
   "dependencies": {
     "@fae/core": "^1.0.0",
-    "mini-signals": "^1.1.1"
+    "@fae/shapes": "^1.0.0",
+    "mini-signals": "^1.1.1",
+    "bit-twiddle": "^1.0.2"
   }
 }

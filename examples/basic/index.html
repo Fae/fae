@@ -7,6 +7,11 @@
 
         <script>
             let renderer = new Fae.render.Renderer(document.getElementById('view'));
+
+            // add the sprite render system
+            renderer.addSystem(new Fae.sprite.SpriteRenderSystem(renderer));
+
+            // load an image and create a sprite
             let img = new Image();
             let sprite = null;
 
@@ -14,8 +19,10 @@
             img.addEventListener('load', function ()
             {
                 sprite = new Fae.sprite.Sprite(new Fae.textures.Texture(img));
-                sprite.update();
-                renderer.render(sprite);
+
+                renderer.addEntity(sprite);
+
+                renderer.render();
             });
         </script>
     </body>

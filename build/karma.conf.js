@@ -19,26 +19,19 @@ module.exports = function conf(config)
             startConnect: true,
         },
 
-        browserStack: {
-            project: 'Fae',
-            name: 'Unit Tests',
-            startTunnel: true,
-            timeout: 600,
-        },
-
         files: [
             // our code
             'dist/fae.js',
 
             // fixtures
             {
-                pattern: 'test/fixtures/**/*.js',
+                pattern: 'plugins/*/test/fixtures/**/*.js',
                 included: true,
             },
 
             // tests
             {
-                pattern: `test/unit/**/*.test.js`,
+                pattern: `plugins/*/test/**/*.test.js`,
                 served: true,
                 included: true,
                 watched: true,

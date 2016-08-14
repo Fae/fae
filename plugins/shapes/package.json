@@ -1,0 +1,22 @@
+{
+  "name": "@fae/shapes",
+  "version": "1.0.0",
+  "description": "Adds support for shapes.",
+  "author": "Chad Engler <chad@pantherdev.com>",
+  "license": "MIT",
+  "main": "src/index.js",
+  "homepage": "https://github.com/englercj/fae#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/englercj/fae.git"
+  },
+  "bugs": {
+    "url": "https://github.com/englercj/fae/issues"
+  },
+  "files": [
+    "src/"
+  ],
+  "dependencies": {
+    "@fae/core": "^1.0.0"
+  }
+}

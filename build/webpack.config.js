@@ -7,7 +7,6 @@ const pkg       = require('../package.json');
 
 const EntryGeneratorPlugin = require('./EntryGeneratorPlugin');
 
-const srcBase = path.join(__dirname, '..', 'src');
 const pluginbase = path.join(__dirname, '..', 'plugins');
 const pluginList = process.env.FAE_PLUGINS ? process.env.FAE_PLUGINS.split(',') : fs.readdirSync(pluginbase);
 
@@ -19,13 +18,18 @@ if (process.env.NODE_ENV !== 'production')
     config.DEBUG = true;
 }
 
+// core is always required
+if (pluginList.indexOf('core') === -1)
+{
+    pluginList.push('core');
+}
+
 // configure aliases for plugins
-const aliases = {
-    '@fae/core': srcBase,
-};
+const aliases = {};
 
 for (let i = 0; i < pluginList.length; ++i)
 {
+    // TODO: install a plugin if it doesn't exist in plugins folder (3rd-party plugin)
     aliases[`@fae/${pluginList[i]}`] = path.join(pluginbase, pluginList[i]);
 }
 

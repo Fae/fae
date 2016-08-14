@@ -4,7 +4,7 @@
   "description": "Adds support for sprites.",
   "author": "Chad Engler <chad@pantherdev.com>",
   "license": "MIT",
-  "main": "./index.js",
+  "main": "src/index.js",
   "homepage": "https://github.com/englercj/fae#readme",
   "repository": {
     "type": "git",
@@ -14,15 +14,14 @@
     "url": "https://github.com/englercj/fae/issues"
   },
   "files": [
-    "Sprite.js",
-    "SpriteRenderer.js",
-    "index.js",
+    "src/",
     "shader/"
   ],
   "dependencies": {
     "@fae/core": "^1.0.0",
-    "@fae/scene": "^1.0.0",
     "@fae/textures": "^1.0.0",
-    "ismobilejs": "0.4.0"
+    "@fae/transform": "^1.0.0",
+    "ismobilejs": "^0.4.0",
+    "bit-twiddle": "^1.0.2"
   }
 }

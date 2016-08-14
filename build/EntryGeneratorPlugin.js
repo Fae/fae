@@ -97,6 +97,9 @@ class EntryGeneratorWebpackPlugin
                 for (let i = 0; i < pluginData.length; ++i)
                 {
                     const data = pluginData[i];
+
+                    if (data.name === 'core') continue;
+
                     const pkg = data.pkg;
                     const namespace = pkg.fae && pkg.fae.namespace ? pkg.fae.namespace : pkg.name.replace('@fae/', '');
 
