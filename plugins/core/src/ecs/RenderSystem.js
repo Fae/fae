@@ -1,5 +1,9 @@
 import System from './System';
 
+// TODO: Sorting on add is incorrect, means z-index can never change
+// after being added. Need to add a signal to transform about when
+// z-index changes; listen for that and sort on change.
+
 /**
  * @class
  */
