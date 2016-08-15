@@ -109,15 +109,14 @@
                             card.transform.y = 1;
                             card.speedY = 0;
                         }
-
-                        card.transform.update();
                     }
                 }
             }
 
             // add systems
-            renderer.addSystem(new Fae.sprite.SpriteRenderSystem(renderer));
             renderer.addSystem(new CardMovementSystem());
+            renderer.addSystem(new Fae.transform.TransformUpdateSystem());
+            renderer.addSystem(new Fae.sprite.SpriteRenderSystem(renderer));
 
             // create initial cards
             for (let i = 0; i < startCount; ++i)
@@ -172,7 +171,7 @@
 
             function updateInfo()
             {
-                const spriteRenderer = renderer.systems[0].spriteRenderer;
+                const spriteRenderer = renderer.systems[renderer.systems.length - 1].spriteRenderer;
 
                 maxTextures.textContent = spriteRenderer._maxTextures;
                 batchSize.textContent = spriteRenderer.size;

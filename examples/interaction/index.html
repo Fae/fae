@@ -10,8 +10,9 @@
             const renderer = new Fae.render.Renderer(view);
             const interaction = new Fae.interaction.InteractionSystem(view);
 
-            renderer.addSystem(new Fae.sprite.SpriteRenderSystem(renderer));
             renderer.addSystem(interaction);
+            renderer.addSystem(new Fae.transform.TransformUpdateSystem());
+            renderer.addSystem(new Fae.sprite.SpriteRenderSystem(renderer));
 
             class Card extends Fae.sprite.Sprite.with(Fae.interaction.InteractionComponent) {
                 _updateBounds() {
@@ -69,13 +70,11 @@
             interaction.onHoverStart.add(function (obj, pointer) {
                 obj.transform.scaleX *= 1.5;
                 obj.transform.scaleY *= 1.5;
-                obj.transform.update();
             });
 
             interaction.onHoverEnd.add(function (obj, pointer) {
                 obj.transform.scaleX /= 1.5;
                 obj.transform.scaleY /= 1.5;
-                obj.transform.update();
             });
 
             interaction.onDown.add(flip);
@@ -85,7 +84,6 @@
             function flip(obj)
             {
                 obj.transform.scaleY *= -1.0;
-                obj.transform.update();
             }
 
             function setup() {
@@ -93,8 +91,6 @@
                 sprite.anchorX = sprite.anchorY = 0.5;
                 sprite.transform.x = view.width / 2;
                 sprite.transform.y = view.height / 2;
-
-                sprite.transform.update();
 
                 renderer.addEntity(sprite);
             }

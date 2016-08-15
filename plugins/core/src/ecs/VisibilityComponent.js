@@ -1,3 +1,5 @@
+// TODO: World Alpha needs updates...
+
 export default function VisibilityComponent(Base)
 {
     /**
