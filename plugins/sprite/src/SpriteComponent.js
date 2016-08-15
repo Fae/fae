@@ -1,13 +1,11 @@
 import { util } from '@fae/core';
-import { TextureComponent } from '@fae/textures';
 
 export default function SpriteComponent(Base)
 {
     /**
      * @class SpriteComponent
-     * @mixes TextureComponent
      */
-    return class extends TextureComponent(Base)
+    return class extends Base
     {
         /**
          *

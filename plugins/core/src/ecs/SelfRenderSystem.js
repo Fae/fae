@@ -1,22 +1,11 @@
-import ECS from '@fae/ecs';
+import RenderSystem from './RenderSystem';
 import SelfRenderComponent from './SelfRenderComponent';
-import VisibilityComponent from './VisibilityComponent';
 
 /**
  * @class
  */
-export default class SelfRenderSystem extends ECS.System
+export default class SelfRenderSystem extends RenderSystem
 {
-    /**
-     * @param {Renderer} renderer - The renderer to use.
-     */
-    constructor(renderer)
-    {
-        super();
-
-        this.renderer = renderer;
-    }
-
     /**
      * Returns true if the entity is eligible to the system, false otherwise.
      *
@@ -25,22 +14,21 @@ export default class SelfRenderSystem extends ECS.System
      */
     test(entity)
     {
-        return entity.hasComponents(
-            SelfRenderComponent,
-            VisibilityComponent
-        );
+        return entity.hasComponent(SelfRenderComponent);
     }
 
     /**
-     * Called for each entity to update.
+     * Apply update to each entity of this system.
      *
-     * @param {Entity} entity - The entity to update.
+     * @param {number} elapsed - The time elapsed since last update call.
      */
-    update(entity)
+    updateAll(elapsed)
     {
-        if (entity.visible)
+        for (let i = 0; i < this.entities.length; ++i)
         {
-            entity.render(this.renderer);
+            const entity = this.entities[i];
+
+            entity.render(this.renderer, elapsed);
         }
     }
 }

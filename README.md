@@ -59,6 +59,7 @@ time.
 
 ### Todo:
 
+- Auto register systems; maybe plugin init func?
 - Custom Shaders
 - Filters
 - Masks

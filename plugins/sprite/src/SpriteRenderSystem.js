@@ -1,20 +1,26 @@
 import { ecs } from '@fae/core';
 import { TransformComponent } from '@fae/transform';
+import { TextureComponent } from '@fae/textures';
 import SpriteRenderer from './SpriteRenderer';
 import SpriteComponent from './SpriteComponent';
 
 /**
  * @class
  */
-export default class SpriteRenderSystem extends ecs.System
+export default class SpriteRenderSystem extends ecs.RenderSystem
 {
     /**
      * @param {Renderer} renderer - The renderer to use.
      */
     constructor(renderer)
     {
-        super();
+        super(renderer);
 
+        /**
+         * The sprite renderer instance to use to draw/batch sprites.
+         *
+         * @member {SpriteRenderer}
+         */
         this.spriteRenderer = new SpriteRenderer(renderer);
     }
 
@@ -29,7 +35,8 @@ export default class SpriteRenderSystem extends ecs.System
         return entity.hasComponents(
             ecs.VisibilityComponent,    // whether or not to render
             TransformComponent,         // where to render
-            SpriteComponent             // what to render
+            TextureComponent,           // what to render
+            SpriteComponent             // how to render
         );
     }
 
@@ -42,10 +49,11 @@ export default class SpriteRenderSystem extends ecs.System
         for (let i = 0; i < this.entities.length; ++i)
         {
             const sprite = this.entities[i];
+            const clean = !sprite._vertsDirty && sprite._cachedTransformUpdateId === sprite.transform._worldUpdateId;
 
-            if (sprite._texture.ready
-                && (sprite._vertsDirty || sprite._cachedTransformUpdateId !== sprite.transform._worldUpdateId)
-            )
+            if (!sprite.visible) continue;
+
+            if (sprite._texture.ready && !clean)
             {
                 calculateVertices(sprite);
                 sprite._cachedTransformUpdateId = sprite.transform._worldUpdateId;

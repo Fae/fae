@@ -1,6 +1,6 @@
 import { ecs } from '@fae/core';
-import { Texture } from '@fae/textures';
 import { TransformComponent } from '@fae/transform';
+import { Texture, TextureComponent } from '@fae/textures';
 import SpriteComponent from './SpriteComponent';
 
 /**
@@ -16,7 +16,8 @@ import SpriteComponent from './SpriteComponent';
 export default class Sprite extends ecs.Entity.with(
     ecs.VisibilityComponent,    // whether or not to render
     TransformComponent,         // where to render
-    SpriteComponent             // what to render
+    TextureComponent,           // what to render
+    SpriteComponent             // how to render
 )
 {
     /**

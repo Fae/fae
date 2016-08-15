@@ -1,11 +1,25 @@
 import { ecs } from '@fae/core';
 import TransformComponent from './TransformComponent';
 
+// TODO: Transforms can have parents, but it is possible here to have
+// a child's update() called first before the parent updates.
+// Need to sort by parents in some efficient way.
+
 /**
  * @class
  */
 export default class TransformUpdateSystem extends ecs.System
 {
+    /**
+     *
+     */
+    constructor()
+    {
+        super();
+
+        this.priority = ecs.System.PRIORITY.PLUGIN;
+    }
+
     /**
      * Returns true if the entity is eligible to the system, false otherwise.
      *

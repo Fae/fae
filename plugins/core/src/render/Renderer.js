@@ -121,6 +121,19 @@ export default class Renderer extends ECS
     }
 
     /**
+     * Add a system to the renderer.
+     *
+     * @param {System} system - system to add
+     */
+    addSystem(system)
+    {
+        super.addSystem(system);
+
+        // sort by priority
+        this.systems.sort(compareSystemsPriority);
+    }
+
+    /**
      * Renders a drawable object to the render target.
      *
      * @param {RenderTarget} target - The target to render to, defaults to the screen.
@@ -237,4 +250,9 @@ export default class Renderer extends ECS
         this._initContext();
         this.onContextRestored.dispatch();
     }
+}
+
+function compareSystemsPriority(a, b)
+{
+    return b.priority - a.priority;
 }

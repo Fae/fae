@@ -24,6 +24,14 @@ export default class Transform
         this.z = 0;
 
         /**
+         * The parent transform to update against.
+         *
+         * @member {Transform}
+         * @default null
+         */
+        this.parent = null;
+
+        /**
          * The global matrix transform, it is written to the passed in output buffer.
          *
          * @private
@@ -321,9 +329,8 @@ export default class Transform
     /**
      * Updates the world transform based on the passed transform.
      *
-     * @param {Transform} parent - The parent transform to update with.
      */
-    update(parent)
+    update()
     {
         this.dirty = true;
 
@@ -355,12 +362,12 @@ export default class Transform
         debug.ASSERT(this._lt.valid(), 'Invalid local transform, property is set incorrectly somewhere...');
         // @endif
 
-        if (parent)
+        if (this.parent)
         {
-            const pt = parent._wt;
-
-            if (this._cachedWorldUpdateId !== parent._worldUpdateId)
+            if (this._cachedWorldUpdateId !== this.parent._worldUpdateId)
             {
+                const pt = this.parent._wt;
+
                 // multiply the parent matrix with the objects transform.
                 wt.a = (lt.a * pt.a) + (lt.b * pt.c);
                 wt.b = (lt.a * pt.b) + (lt.b * pt.d);
@@ -369,7 +376,7 @@ export default class Transform
                 wt.tx = (lt.tx * pt.a) + (lt.ty * pt.c) + pt.tx;
                 wt.ty = (lt.tx * pt.b) + (lt.ty * pt.d) + pt.ty;
 
-                this._cachedWorldUpdateId = parent._worldUpdateId;
+                this._cachedWorldUpdateId = this.parent._worldUpdateId;
                 this._worldUpdateId++;
             }
         }
