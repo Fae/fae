@@ -60,13 +60,11 @@ time.
 ### Todo:
 
 - Auto register systems; maybe plugin init func?
-- Custom Shaders
-- Filters
-- Masks
+- Custom Shader support in `SpriteRenderer`
+- Filters (FilteredQuadRenderer?)
 - DevicePixelRatio
-- Move math shapes to plugin (Rectangle, BoundingBox, Polygon)
 - Move `Color` to a plugin
-- Compressed textures
+- Compressed texture support in GLTexture and textures plugin
 
 ### Plugins to Make
 
@@ -79,6 +77,10 @@ time.
 - Interactions
 - Spine, Dragon Bones, etc
 - Lights
+- Flash animation import
+- Tiling sprites
+- UI Library
+- Tweening
 
 <a name="contributing"></a>
 ## Contributing
