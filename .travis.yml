@@ -40,9 +40,7 @@ deploy:
     local_dir: dist
     upload_dir: nightly/$TRAVIS_COMMIT
     storage_class: STANDARD_IA
-    edge:
-      source: englercj/dpl
-      branch: feature/s3-storage-class
+    edge: true
     on:
       branch: master
   - provider: s3
