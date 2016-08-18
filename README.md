@@ -32,7 +32,49 @@ enables it to be useful to end users as well as a standalone framework.
 <a name="download"></a>
 ## Download
 
-Coming Soon.
+All builds are hosted on Amazon S3 and include these files:
+
+- `fae.js` - Development build. Unminified and includes debug asserts and other checks that
+    negatively affect performance.
+- `fae.js.map` - Development source-map file that maps compiled `fae.js` file back into source
+    code.
+- `fae.min.js` - Production build. Minified and all debugging code is stripped out for maximum
+    performance.
+
+### Stable Release
+
+You can download the builds for any particular release at:
+
+```
+http://fae-builds.s3-website-us-west-2.amazonaws.com/release/<version>/fae.js
+http://fae-builds.s3-website-us-west-2.amazonaws.com/release/<version>/fae.js.map
+http://fae-builds.s3-website-us-west-2.amazonaws.com/release/<version>/fae.min.js
+```
+
+Replace `<version` with the version of the library you want. For example, to get `v1.0.0`:
+
+http://fae-builds.s3-website-us-west-2.amazonaws.com/release/v1.0.0/fae.js
+http://fae-builds.s3-website-us-west-2.amazonaws.com/release/v1.0.0/fae.js.map
+http://fae-builds.s3-website-us-west-2.amazonaws.com/release/v1.0.0/fae.min.js
+
+### Unstable Builds
+
+You can download the builds for any particular git-sha at:
+
+```
+http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/<git-sha>/fae.js
+http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/<git-sha>/fae.js.map
+http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/<git-sha>/fae.min.js
+```
+
+Replace `<git-sha>` with `HEAD` to get the latest development build (from the `master` branch) or
+any particular sha you want the build for.
+
+For example:
+
+http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/HEAD/fae.js
+http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/HEAD/fae.js.map
+http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/HEAD/fae.min.js
 
 <a name="get-started"></a>
 ## Getting Started
@@ -68,6 +110,7 @@ time.
 
 ### Plugins to Make
 
+- Debug
 - Mesh
 - Animated sprites
 - Text/BitmapText
