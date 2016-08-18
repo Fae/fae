@@ -291,11 +291,14 @@ export default class Pointer
 
         this._set(data, worldX, worldY);
 
-        this.target.onCancel.dispatch(this.target || this.hoverTarget, this);
-
-        if (wasDown && this.target)
+        if (this.target)
         {
-            this.target.onUpOutside.dispatch(this, this.target);
+            this.target.onCancel.dispatch(this.target || this.hoverTarget, this);
+
+            if (wasDown)
+            {
+                this.target.onUpOutside.dispatch(this, this.target);
+            }
         }
 
         if (wasHovering && this.hoverTarget)
