@@ -1,6 +1,6 @@
 {
   "name": "fae",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A next-gen 2D renderer for the web.",
   "author": "Chad Engler <chad@pantherdev.com>",
   "license": "MIT",

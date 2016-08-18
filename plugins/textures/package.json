@@ -1,6 +1,6 @@
 {
   "name": "@fae/textures",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Adds support for high-level texture management.",
   "author": "Chad Engler <chad@pantherdev.com>",
   "license": "MIT",

@@ -1,5 +1,7 @@
 # Fae - 2D WebGL Renderer
 
+## Warning: In heavy development, API subject to break before v1.0.0 is released.
+
 [![API Doc](https://doclets.io/Fae/fae/master.svg)](https://doclets.io/Fae/fae/master)
 [![Build Status](https://travis-ci.org/Fae/fae.svg?branch=master)](https://travis-ci.org/Fae/fae)
 [![Dependency Status](https://gemnasium.com/badges/github.com/Fae/fae.svg)](https://gemnasium.com/github.com/Fae/fae)
@@ -8,7 +10,6 @@
 <br/>
 <!-- [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)]() -->
 [![PayPal](https://img.shields.io/badge/paypal-donate-yellow.svg)][paypal-donate]
-
 
 Fae is originally based on [pixi.js](https://github.com/pixijs/pixi.js) but with a focus on WebGL
 and a few core design differences that result in a familiar but slightly different API.
