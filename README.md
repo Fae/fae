@@ -130,6 +130,16 @@ time.
 - UI Library
 - Tweening
 
+### Guides/Tutorials to write:
+
+- Intro to the ECS architecture Fae uses
+- General Performance Guidelines
+ * How batching happens and how you can take advantage of it.
+ * How to write efficient systems
+- Rendering looks weird on my old XYZ Mobile Device
+ * Description of the options that may fix issues on old mobile
+ * Shader precision, batch sizes, multi-texture sizes, VAO usage, etc.
+
 <a name="contributing"></a>
 ## Contributing
 
