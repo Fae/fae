@@ -59,7 +59,7 @@ export default class SpriteRenderer extends render.ObjectRenderer
          * there is a shader for each number of textures that can be rendererd.
          * These shaders will also be generated on the fly as required.
          *
-         * @member {Shader}
+         * @member {Shader[]}
          */
         this.shaders = null;
 
@@ -367,11 +367,16 @@ export default class SpriteRenderer extends render.ObjectRenderer
         this._onBeforeRenderBinding.detach();
         this._onBeforeRenderBinding = null;
 
+        // destroy vaos
+        for (let i = 0; i < this.vaos.length; ++i)
+        {
+            this.vaos[i].destroy();
+        }
+
         // destroy vertex buffers
-        for (let i = 0; i < this.vertexCount; ++i)
+        for (let i = 0; i < this.vertexBuffers.length; ++i)
         {
             this.vertexBuffers[i].destroy();
-            this.vaos[i].destroy();
         }
 
         // destroy index buffer
