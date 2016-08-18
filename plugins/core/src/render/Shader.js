@@ -80,7 +80,7 @@ function checkPrecision(source)
  * @property {string} HIGH - The high precision header.
  */
 Shader.PRECISION = {
-    DEFAULT:    'mediump',
+    DEFAULT:    'highp',
     LOW:        'lowp',
     MEDIUM:     'mediump',
     HIGH:       'highp',
