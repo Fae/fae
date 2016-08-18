@@ -67,21 +67,7 @@
                 render();
             });
 
-            interaction.onHoverStart.add(function (obj, pointer) {
-                obj.transform.scaleX *= 1.5;
-                obj.transform.scaleY *= 1.5;
-            });
-
-            interaction.onHoverEnd.add(function (obj, pointer) {
-                obj.transform.scaleX /= 1.5;
-                obj.transform.scaleY /= 1.5;
-            });
-
-            interaction.onDown.add(flip);
-            interaction.onUp.add(flip);
-            interaction.onUpOutside.add(flip);
-
-            function flip(obj)
+            function flip(pointer, obj)
             {
                 obj.transform.scaleY *= -1.0;
             }
@@ -91,6 +77,20 @@
                 sprite.anchorX = sprite.anchorY = 0.5;
                 sprite.transform.x = view.width / 2;
                 sprite.transform.y = view.height / 2;
+
+                sprite.onHoverStart.add(function (pointer) {
+                    sprite.transform.scaleX *= 1.5;
+                    sprite.transform.scaleY *= 1.5;
+                });
+
+                sprite.onHoverEnd.add(function (pointer) {
+                    sprite.transform.scaleX /= 1.5;
+                    sprite.transform.scaleY /= 1.5;
+                });
+
+                sprite.onDown.add(flip);
+                sprite.onUp.add(flip);
+                sprite.onUpOutside.add(flip);
 
                 renderer.addEntity(sprite);
             }

@@ -41,103 +41,12 @@ export default class InteractionSystem extends ecs.System
          */
         this.domElement = dom;
 
-        /**
-         * Dispatched when a pointer starts an interaction (mousedown, pointerdown, touchstart).
-         *
-         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
-         *
-         * @member {Signal}
-         */
-        this.onDown = new Signal();
-
-        /**
-         * Dispatched when a pointer ends an interaction (mouseup, pointerup, touchend).
-         *
-         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
-         *
-         * @member {Signal}
-         */
-        this.onUp = new Signal();
-
-        /**
-         * Dispatched when a pointer ends an interaction (mouseup, pointerup, touchend)
-         * but is outside of the current target.
-         *
-         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
-         *
-         * @member {Signal}
-         */
-        this.onUpOutside = new Signal();
-
-        /**
-         * Dispatched when a pointer moves (mousemove, pointermove, touchmove).
-         *
-         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
-         *
-         * @member {Signal}
-         */
-        this.onMove = new Signal();
-
-        /**
-         * Dispatched when a pointer cancels interaction (mouseout, pointerout, touchcancel).
-         *
-         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
-         *
-         * @member {Signal}
-         */
-        this.onCancel = new Signal();
-
-        /**
-         * Dispatched when a pointer has a scroll interaction (wheel).
-         *
-         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
-         *
-         * @member {Signal}
-         */
-        this.onScroll = new Signal();
-
-        /**
-         * Dispatched when a click occurs on an object.
-         *
-         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
-         *
-         * @member {Signal}
-         */
-        this.onClick = new Signal();
-
-        /**
-         * Dispatched when a hover begins on an object.
-         *
-         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
-         *
-         * @member {Signal}
-         */
-        this.onHoverStart = new Signal();
-
-        /**
-         * Dispatched when a hover begins on an object.
-         *
-         * The callback looks like {@link InteractionSystem.OnInteractionCallback}
-         *
-         * @member {Signal}
-         */
-        this.onHoverEnd = new Signal();
-
         // bound events use internally if needed
         this._boundHandleEvent = this.handleEvent.bind(this);
 
         // @ifdef DEBUG
         this._eventsBound = false;
         // @endif
-
-        /**
-         * When an interaction occurs the interaction object is passed to the callback.
-         *
-         * @memberof InteractionSystem
-         * @callback OnInteractionCallback
-         * @param {InteractableObject} target - The target of the interaction.
-         * @param {Pointer} pointer - The pointer the interaction happened on.
-         */
     }
 
     /**
@@ -351,7 +260,7 @@ export default class InteractionSystem extends ecs.System
             }
         }
 
-        const pointer = new Pointer(pointerId, this);
+        const pointer = new Pointer(pointerId);
 
         this.pointers.push(pointer);
 

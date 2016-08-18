@@ -9,9 +9,8 @@ export default class Pointer
 {
     /**
      * @param {number} id - The id of the pointer.
-     * @param {InteractionSystem} system - The interaction system this pointer belongs to.
      */
-    constructor(id, system)
+    constructor(id)
     {
         /**
          * The ID of this pointer.
@@ -20,14 +19,6 @@ export default class Pointer
          * @member {number}
          */
         this.id = id;
-
-        /**
-         * The interaction system this pointer belongs to.
-         *
-         * @readonly
-         * @member {InteractionSystem}
-         */
-        this.manager = system;
 
         /**
          * The type of this pointer.
@@ -196,9 +187,9 @@ export default class Pointer
 
         this._set(data, worldX, worldY);
 
-        if (this.target)
+        if (target)
         {
-            this.manager.onDown.dispatch(this.target, this);
+            target.onDown.dispatch(this, target);
         }
     }
 
@@ -224,20 +215,20 @@ export default class Pointer
         {
             if (this.target === target)
             {
-                this.manager.onClick.dispatch(this.target, this);
+                this.target.onClick.dispatch(this, this.target);
             }
 
             if (!target)
             {
-                this.manager.onUpOutside.dispatch(this.target, this);
+                this.target.onUpOutside.dispatch(this, this.target);
             }
         }
 
         this.target = target;
 
-        if (this.target)
+        if (target)
         {
-            this.manager.onUp.dispatch(this.target, this);
+            target.onUp.dispatch(this, target);
         }
     }
 
@@ -259,7 +250,7 @@ export default class Pointer
             if (this.isHovering && this.hoverTarget)
             {
                 this.isHovering = false;
-                this.manager.onHoverEnd.dispatch(this.hoverTarget, this);
+                this.hoverTarget.onHoverEnd.dispatch(this, this.hoverTarget);
                 this.hoverTarget = null;
             }
 
@@ -267,7 +258,7 @@ export default class Pointer
             {
                 this.isHovering = true;
                 this.hoverTarget = target;
-                this.manager.onHoverStart.dispatch(this.hoverTarget, this);
+                target.onHoverStart.dispatch(this, target);
             }
         }
 
@@ -276,9 +267,9 @@ export default class Pointer
 
         this.hoverTarget = target;
 
-        if (this.hoverTarget)
+        if (target)
         {
-            this.manager.onMove.dispatch(this.hoverTarget, this);
+            target.onMove.dispatch(this, target);
         }
     }
 
@@ -300,16 +291,16 @@ export default class Pointer
 
         this._set(data, worldX, worldY);
 
-        this.manager.onCancel.dispatch(this.target || this.hoverTarget, this);
+        this.target.onCancel.dispatch(this.target || this.hoverTarget, this);
 
         if (wasDown && this.target)
         {
-            this.manager.onUpOutside.dispatch(this.target, this);
+            this.target.onUpOutside.dispatch(this, this.target);
         }
 
         if (wasHovering && this.hoverTarget)
         {
-            this.manager.onHoverEnd.dispatch(this.hoverTarget, this);
+            this.hoverTarget.onHoverEnd.dispatch(this, this.hoverTarget);
         }
 
         this.target = null;
@@ -337,7 +328,7 @@ export default class Pointer
 
         if (target)
         {
-            this.manager.onScroll.dispatch(this.scrollTarget, this);
+            target.onScroll.dispatch(this, target);
         }
     }
 
