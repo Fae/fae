@@ -16,7 +16,7 @@ and a few core design differences that result in a familiar but slightly differe
 
 Fae is meant to be a highly modular rendering framework. The primary target use-case for Fae is
 to be easily intregrable into larger application frameworks. However, the plugin library for Fae
-enables it to be useful to end users as well as a standalone framework.
+enables it to be useful to end users as well when used as a standalone framework.
 
 **Website**: Coming Soon<br />
 **Discord**: https://discord.gg/qghcMmr<br />
@@ -33,7 +33,10 @@ enables it to be useful to end users as well as a standalone framework.
 <a name="download"></a>
 ## Download
 
-All builds are hosted on Amazon S3 and include these files:
+pre-built versions of the library are hosted on Amazon S3. These are "full builds" meaning they
+include all the official, open-source, plugins.
+
+Each build of Fae includes these files:
 
 - `fae.js` - Development build. Unminified and includes debug asserts and other checks that
     negatively affect performance.
@@ -41,6 +44,8 @@ All builds are hosted on Amazon S3 and include these files:
     code.
 - `fae.min.js` - Production build. Minified and all debugging code is stripped out for maximum
     performance.
+
+Below is information on how to download each build type.
 
 ### Stable Release
 
