@@ -8,14 +8,19 @@ const fragTemplate = require('./shader/multi-texture.frag');
 /**
  * @class
  */
-export default class SpriteRenderer extends render.ObjectRenderer
+export default class SpriteRenderer
 {
     /**
      * @param {Renderer} renderer - The renderer this manager works for.
      */
     constructor(renderer)
     {
-        super(renderer);
+        /**
+         * The renderer this manager works for.
+         *
+         * @member {Renderer}
+         */
+        this.renderer = renderer;
 
         /**
          * Number of values sent in the vertex buffer.
@@ -82,6 +87,7 @@ export default class SpriteRenderer extends render.ObjectRenderer
                 size: 0,
                 start: 0,
                 blend: null,
+                shader: null,
             };
         }
 
@@ -99,7 +105,9 @@ export default class SpriteRenderer extends render.ObjectRenderer
         this.currentBlendMode = null;
 
         this._maxTextures = 0;
-        this._onBeforeRenderBinding = this.renderer.onBeforeRender.add(this.onBeforeRender, this);
+
+        this._onBeforeRenderBinding = renderer.onBeforeRender.add(this.onBeforeRender, this);
+        this._onContextChangeBinding = renderer.onContextChange.add(this.onContextChange, this);
 
         this.onContextChange();
     }
@@ -197,6 +205,7 @@ export default class SpriteRenderer extends render.ObjectRenderer
         currentGroup.textures.length = 0;
         currentGroup.start = 0;
         currentGroup.blend = blendMode;
+        currentGroup.shader = null;
 
         this.tick++;
 
@@ -208,7 +217,8 @@ export default class SpriteRenderer extends render.ObjectRenderer
 
             nextTexture = sprite._texture.source;
 
-            if (!blendMode.equals(sprite.blendMode))
+            // a couple things should break the batch
+            if (sprite.shader || !blendMode.equals(sprite.blendMode))
             {
                 blendMode = sprite.blendMode;
 
@@ -236,6 +246,7 @@ export default class SpriteRenderer extends render.ObjectRenderer
                         currentGroup.textures.length = 0;
                         currentGroup.blend = blendMode;
                         currentGroup.start = i;
+                        currentGroup.shader = sprite.shader;
                     }
 
                     // TODO: I don't like this, change this to not add properties to texture
@@ -311,7 +322,16 @@ export default class SpriteRenderer extends render.ObjectRenderer
 
             if (!groupTextureCount) continue;
 
-            let shader = this.shaders[groupTextureCount - 1];
+            let shader = null;
+
+            if (group.shader)
+            {
+                shader = group.shader;
+            }
+            else
+            {
+                shader = this.shaders[groupTextureCount - 1];
+            }
 
             if (!shader)
             {
@@ -363,9 +383,12 @@ export default class SpriteRenderer extends render.ObjectRenderer
      */
     destroy()
     {
-        // detach event
+        // detach events
         this._onBeforeRenderBinding.detach();
         this._onBeforeRenderBinding = null;
+
+        this._onContextChangeBinding.detach();
+        this._onContextChangeBinding = null;
 
         // destroy vaos
         for (let i = 0; i < this.vaos.length; ++i)
@@ -385,8 +408,8 @@ export default class SpriteRenderer extends render.ObjectRenderer
             this.indexBuffer.destroy();
         }
 
-        // call parent destroy
-        super.destroy();
+        // remove renderer ref
+        this.renderer = null;
 
         // destroy shaders
         for (let i = 0; i < this.shaders.length; ++i)

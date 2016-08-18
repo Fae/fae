@@ -40,6 +40,15 @@ export default function SpriteComponent(Base)
             this.vertexData = new Float32Array(8);
 
             /**
+             * Custom shader to use for drawing instead of the built-in batched shader.
+             * Warning: Setting this property will break the batch of sprites as it
+             * will need to be drawn in isolation.
+             *
+             * @member {Shader|GLShader}
+             */
+            this.shader = null;
+
+            /**
              * The X coord of the attachment point of the texture.
              *
              * @private

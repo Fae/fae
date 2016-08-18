@@ -108,7 +108,6 @@ time.
 ### Todo:
 
 - Auto register systems; maybe plugin init func?
-- Custom Shader support in `SpriteRenderer`
 - Filters (FilteredQuadRenderer?)
 - DevicePixelRatio
 - Move `Color` to a plugin

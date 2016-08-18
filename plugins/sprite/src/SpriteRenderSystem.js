@@ -46,6 +46,8 @@ export default class SpriteRenderSystem extends ecs.RenderSystem
      */
     updateAll()
     {
+        this.spriteRenderer.start();
+
         for (let i = 0; i < this.entities.length; ++i)
         {
             const sprite = this.entities[i];
@@ -63,7 +65,7 @@ export default class SpriteRenderSystem extends ecs.RenderSystem
             this.spriteRenderer.render(sprite);
         }
 
-        this.spriteRenderer.flush();
+        this.spriteRenderer.stop();
     }
 }
 
