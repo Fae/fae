@@ -8,7 +8,7 @@
 <br/>
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/faejs.svg)](https://saucelabs.com/u/faejs)
 <br/>
-<!-- [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)]() -->
+<!-- [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)][patreon-donate] -->
 [![PayPal](https://img.shields.io/badge/paypal-donate-yellow.svg)][paypal-donate]
 
 Fae is originally based on [pixi.js](https://github.com/pixijs/pixi.js) but with a focus on WebGL
@@ -149,5 +149,6 @@ Main points:
 [github-issues]: https://github.com/Fae/fae/issues
 [code-of-conduct]: https://github.com/Fae/fae/blob/master/CODE_OF_CONDUCT.md
 [paypal-donate]: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=CAP4H5ZVLHMMW&lc=US&item_name=Fae&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
+[patreon-donate]: https://www.patreon.com/user?u=2430663
 
 [![Analytics](https://ga-beacon.appspot.com/UA-27838577-5/Fae/fae)](https://github.com/igrigorik/ga-beacon)
