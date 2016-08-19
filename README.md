@@ -44,7 +44,7 @@ and a few other core design differences that result in a familiar but slightly d
 <a name="download"></a>
 ## Download
 
-pre-built versions of the library are hosted on Amazon S3. These are "full builds" meaning they
+Pre-built versions of the library are hosted on Amazon S3. These are "full builds" meaning they
 include all the official, open-source, plugins.
 
 Each build of Fae includes these files:
@@ -68,11 +68,11 @@ http://fae-builds.s3-website-us-west-2.amazonaws.com/release/<version>/fae.js.ma
 http://fae-builds.s3-website-us-west-2.amazonaws.com/release/<version>/fae.min.js
 ```
 
-Replace `<version` with the version of the library you want. For example, to get `v1.0.0`:
+Replace `<version>` with the version of the library you want. For example, to get `v1.0.0`:
 
-http://fae-builds.s3-website-us-west-2.amazonaws.com/release/v1.0.0/fae.js
-http://fae-builds.s3-website-us-west-2.amazonaws.com/release/v1.0.0/fae.js.map
-http://fae-builds.s3-website-us-west-2.amazonaws.com/release/v1.0.0/fae.min.js
+- http://fae-builds.s3-website-us-west-2.amazonaws.com/release/v1.0.0/fae.js
+- http://fae-builds.s3-website-us-west-2.amazonaws.com/release/v1.0.0/fae.js.map
+- http://fae-builds.s3-website-us-west-2.amazonaws.com/release/v1.0.0/fae.min.js
 
 ### Unstable Builds
 
@@ -89,9 +89,9 @@ any particular sha you want the build for.
 
 For example:
 
-http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/HEAD/fae.js
-http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/HEAD/fae.js.map
-http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/HEAD/fae.min.js
+- http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/HEAD/fae.js
+- http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/HEAD/fae.js.map
+- http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/HEAD/fae.min.js
 
 <a name="get-started"></a>
 ## Getting Started
