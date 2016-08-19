@@ -2,7 +2,7 @@
 
 ## Warning: In heavy development, API subject to break before v1.0.0 is released.
 
-[![API Doc](https://doclets.io/Fae/fae/master.svg)](https://doclets.io/Fae/fae/master)
+<!-- [![API Doc](https://doclets.io/Fae/fae/master.svg)](https://doclets.io/Fae/fae/master) -->
 [![Build Status](https://travis-ci.org/Fae/fae.svg?branch=master)](https://travis-ci.org/Fae/fae)
 [![Dependency Status](https://gemnasium.com/badges/github.com/Fae/fae.svg)](https://gemnasium.com/github.com/Fae/fae)
 <br/>
@@ -14,6 +14,12 @@
 Fae is meant to be a highly modular rendering framework. The primary target use-case for Fae is
 to be easily intregrable into larger application frameworks. However, the plugin library for Fae
 enables it to be useful to end users as well when used as a standalone framework.
+
+Get Involved:
+
+**Website**: Coming Soon<br />
+**Discord**: https://discord.gg/qghcMmr<br />
+**Docs/Guides**: Coming Soon<br />
 
 Fae contains some code that is originally based on [pixi.js](https://github.com/pixijs/pixi.js).
 However, Fae takes a different approach to rendering and object than pixi. Some notable differences
