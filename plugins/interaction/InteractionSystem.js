@@ -1,4 +1,3 @@
-import Signal from 'mini-signals';
 import Pointer from './Pointer';
 import InteractionComponent from './InteractionComponent';
 import { ecs/* @ifdef DEBUG */, debug/* @endif */ } from '@fae/core';
