@@ -93,6 +93,9 @@ For example:
 - http://fae-builds.s3-website-us-west-2.amazonaws.com/unstable/master/fae.js.map
 - http://fae-builds.s3-website-us-west-2.amazonaws.com/unstable/master/fae.min.js
 
+Note that only builds that succeed will have files on S3. If the build fails there will
+be no built files, so not every git-sha in the history may work.
+
 <a name="get-started"></a>
 ## Getting Started
 
