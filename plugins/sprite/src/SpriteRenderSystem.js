@@ -15,7 +15,7 @@ export default class SpriteRenderSystem extends ecs.RenderSystem
      * @param {number} frequency - How often to run the update loop. `1` means every
      *  time, `2` is every other time, etc.
      */
-    constructor(renderer, priority = ecs.System.PRIORITY.RENDER, frequency = 1)
+    constructor(renderer, priority = SpriteRenderSystem.defaultPriority, frequency = 1)
     {
         super(renderer, priority, frequency);
 
@@ -133,3 +133,11 @@ function calculateVertices(sprite)
     vertexData[6] = (a * w1) + (c * h0) + tx;
     vertexData[7] = (d * h0) + (b * w1) + ty;
 }
+
+/**
+ * @static
+ * @constant
+ * @member {number}
+ * @default 1000
+ */
+SpriteRenderSystem.defaultPriority = ecs.System.PRIORITY.RENDER;
