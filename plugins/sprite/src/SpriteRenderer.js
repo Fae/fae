@@ -120,22 +120,19 @@ export default class SpriteRenderer
     {
         const gl = this.renderer.gl;
 
-        // step 1: first check max textures the GPU can handle.
+        this._destroyGlObjects();
+
+        // check max textures the GPU can handle.
         this._maxTextures = Math.min(gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS), SpriteRenderer.MAX_TEXTURE_COUNT);
 
-        // step 2: check the maximum number of if statements the shader can have too..
+        // check the maximum number of if statements shaders are allowed *up to* the max textures.
         this._maxTextures = util.getMaxIfStatmentsInShader(gl, this._maxTextures);
 
         this.shaders = new Array(this._maxTextures);
         this.shaders[0] = generateMultiTextureShader(gl, 1);
         this.shaders[1] = generateMultiTextureShader(gl, 2);
 
-        // create a couple of buffers
-        if (this.indexBuffer)
-        {
-            this.indexBuffer.destroy();
-        }
-
+        // create new index buffer
         this.indexBuffer = glutil.GLBuffer.createIndexBuffer(gl, this.indices, gl.STATIC_DRAW);
 
         // we use the second shader as the first one depending on your browser may omit aTextureId
@@ -143,6 +140,7 @@ export default class SpriteRenderer
         const attribs = this.shaders[1].attributes;
         const maxVaos = this.vertexBuffers.length || this.startNumVaos;
 
+        // create initial vertex buffers and VAOs
         for (let i = 0; i < maxVaos; ++i)
         {
             this._createVao(gl, attribs);
@@ -390,35 +388,7 @@ export default class SpriteRenderer
         this._onContextChangeBinding.detach();
         this._onContextChangeBinding = null;
 
-        // destroy vaos
-        for (let i = 0; i < this.vaos.length; ++i)
-        {
-            this.vaos[i].destroy();
-        }
-
-        // destroy vertex buffers
-        for (let i = 0; i < this.vertexBuffers.length; ++i)
-        {
-            this.vertexBuffers[i].destroy();
-        }
-
-        // destroy index buffer
-        if (this.indexBuffer)
-        {
-            this.indexBuffer.destroy();
-        }
-
-        // remove renderer ref
-        this.renderer = null;
-
-        // destroy shaders
-        for (let i = 0; i < this.shaders.length; ++i)
-        {
-            if (this.shaders[i])
-            {
-                this.shaders[i].destroy();
-            }
-        }
+        this._destroyGlObjects();
 
         // destroy buffers.
         for (let i = 0; i < this.buffers.length; ++i)
@@ -436,6 +406,8 @@ export default class SpriteRenderer
         this.vertexBuffers = null;
         this.vaos = null;
         this.indexBuffer = null;
+
+        super.destroy();
     }
 
     /**
@@ -460,6 +432,45 @@ export default class SpriteRenderer
                 .addAttribute(vbuffer, attribs.aColor, gl.UNSIGNED_BYTE, true, this.vertByteSize, 3 * 4)
                 .addAttribute(vbuffer, attribs.aTextureId, gl.FLOAT, false, this.vertByteSize, 4 * 4)
         );
+    }
+
+    /**
+     * Destroys GL objects that can change between contexts.
+     *
+     * @private
+     */
+    _destroyGlObjects()
+    {
+        // destroy shaders
+        for (let i = 0; i < this.shaders.length; ++i)
+        {
+            if (this.shaders[i])
+            {
+                this.shaders[i].destroy();
+            }
+        }
+        this.shaders.length = 0;
+
+        // destroy vaos
+        for (let i = 0; i < this.vaos.length; ++i)
+        {
+            this.vaos[i].destroy();
+        }
+        this.vaos.length = 0;
+
+        // destroy vertex buffers
+        for (let i = 0; i < this.vertexBuffers.length; ++i)
+        {
+            this.vertexBuffers[i].destroy();
+        }
+        this.vertexBuffers.length = 0;
+
+        // destroy index buffer
+        if (this.indexBuffer)
+        {
+            this.indexBuffer.destroy();
+        }
+        this.indexBuffer = null;
     }
 }
 
