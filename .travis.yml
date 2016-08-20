@@ -38,11 +38,11 @@ deploy:
     acl: public_read
     region: us-west-2
     local_dir: dist
-    upload_dir: nightly/$TRAVIS_COMMIT
+    upload_dir: nightly/$TRAVIS_BRANCH/$TRAVIS_COMMIT
     storage_class: STANDARD_IA
     edge: true
     on:
-      branch: master
+      repo: Fae/fae
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: $AWS_SECRET_KEY
@@ -51,9 +51,9 @@ deploy:
     acl: public_read
     region: us-west-2
     local_dir: dist
-    upload_dir: nightly/HEAD
+    upload_dir: nightly/$TRAVIS_BRANCH/HEAD
     on:
-      branch: master
+      repo: Fae/fae
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: $AWS_SECRET_KEY
@@ -64,6 +64,7 @@ deploy:
     local_dir: dist
     upload_dir: release/$TRAVIS_TAG
     on:
+      repo: Fae/fae
       tags: true
 
 env:
