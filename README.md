@@ -33,6 +33,13 @@ in philosophy are:
 
 and a few other core design differences that result in a familiar but slightly different API.
 
+## API Issues
+
+- Currently update iterates systems, which each update all their entities.
+ * Unfortunately, for 2 competing render systems it means whichever runs last will *always* be on top, reguardless of z-index
+ * Maybe I can iterate entities and call update for each system??
+ * If I do it that way, may have to bring back `ObjectRenderer`...
+
 ## Contents
 
 - [Download Fae](#download)
