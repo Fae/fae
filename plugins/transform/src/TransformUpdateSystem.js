@@ -1,4 +1,4 @@
-import { ecs } from '@fae/core';
+import { ecs, render } from '@fae/core';
 import TransformComponent from './TransformComponent';
 
 // TODO: Transforms can have parents, but it is possible here to have
@@ -11,13 +11,14 @@ import TransformComponent from './TransformComponent';
 export default class TransformUpdateSystem extends ecs.System
 {
     /**
-     *
+     * @param {Renderer} renderer - The renderer to use.
+     * @param {number} priority - The priority of the system, higher means earlier.
+     * @param {number} frequency - How often to run the update loop. `1` means every
+     *  time, `2` is every other time, etc.
      */
-    constructor()
+    constructor(renderer, priority = ecs.System.PRIORITY.PLUGIN, frequency = 1)
     {
-        super();
-
-        this.priority = ecs.System.PRIORITY.PLUGIN;
+        super(renderer, priority, frequency);
     }
 
     /**
@@ -45,3 +46,5 @@ export default class TransformUpdateSystem extends ecs.System
         }
     }
 }
+
+render.Renderer.addDefaultSystem(TransformUpdateSystem);

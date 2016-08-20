@@ -3,7 +3,9 @@ import ECS from '@fae/ecs';
 import GLContext from '../gl/GLContext';
 import RenderTarget from './RenderTarget';
 import RenderState from './RenderState';
-import { uid } from '../util';
+import { uid, removeElements } from '../util';
+
+const defaultSystems = [];
 
 /**
  * The Renderer is just a container for the WebGLRenderingContext, the render state,
@@ -118,6 +120,42 @@ export default class Renderer extends ECS
 
         // initialize for a new context
         this._initContext();
+
+        // create and add the default systems
+        for (let i = 0; i < defaultSystems.length; ++i)
+        {
+            const system = new defaultSystems[i](this);
+
+            this.addSystem(system);
+        }
+    }
+
+    /**
+     * Adds a system that will be created automatically when a renderer instance is created.
+     *
+     * @param {System} System - The system class to add (**not** an instance, but the class
+     * itself)
+     */
+    static addDefaultSystem(System)
+    {
+        defaultSystems.push(System);
+    }
+
+    /**
+     * Removes a system so that it will no longer be created automatically when a renderer
+     * instance is created.
+     *
+     * @param {System} System - The system class to add (**not** an instance, but the class
+     * itself)
+     */
+    static removeDefaultSystem(System)
+    {
+        const idx = defaultSystems.indexOf(System);
+
+        if (idx !== -1)
+        {
+            removeElements(defaultSystems, idx, 1);
+        }
     }
 
     /**

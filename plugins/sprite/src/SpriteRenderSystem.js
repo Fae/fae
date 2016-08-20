@@ -1,4 +1,4 @@
-import { ecs } from '@fae/core';
+import { ecs, render } from '@fae/core';
 import { TransformComponent } from '@fae/transform';
 import { TextureComponent } from '@fae/textures';
 import SpriteRenderer from './SpriteRenderer';
@@ -11,10 +11,13 @@ export default class SpriteRenderSystem extends ecs.RenderSystem
 {
     /**
      * @param {Renderer} renderer - The renderer to use.
+     * @param {number} priority - The priority of the system, higher means earlier.
+     * @param {number} frequency - How often to run the update loop. `1` means every
+     *  time, `2` is every other time, etc.
      */
-    constructor(renderer)
+    constructor(renderer, priority = ecs.System.PRIORITY.RENDER, frequency = 1)
     {
-        super(renderer);
+        super(renderer, priority, frequency);
 
         /**
          * The sprite renderer instance to use to draw/batch sprites.
@@ -68,6 +71,8 @@ export default class SpriteRenderSystem extends ecs.RenderSystem
         this.spriteRenderer.stop();
     }
 }
+
+render.Renderer.addDefaultSystem(SpriteRenderSystem);
 
 /**
  * Updates the vertices of the entity.

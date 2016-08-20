@@ -113,10 +113,8 @@
                 }
             }
 
-            // add systems
+            // add custom systems
             renderer.addSystem(new CardMovementSystem());
-            renderer.addSystem(new Fae.transform.TransformUpdateSystem());
-            renderer.addSystem(new Fae.sprite.SpriteRenderSystem(renderer));
 
             // create initial cards
             for (let i = 0; i < startCount; ++i)
@@ -171,7 +169,7 @@
 
             function updateInfo()
             {
-                const spriteRenderer = renderer.systems[renderer.systems.length - 1].spriteRenderer;
+                const spriteRenderer = renderer.systems[renderer.systems.length - 2].spriteRenderer;
 
                 maxTextures.textContent = spriteRenderer._maxTextures;
                 batchSize.textContent = spriteRenderer.size;

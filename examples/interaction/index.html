@@ -8,11 +8,6 @@
         <script>
             const view = document.getElementById('view');
             const renderer = new Fae.render.Renderer(view);
-            const interaction = new Fae.interaction.InteractionSystem(view);
-
-            renderer.addSystem(interaction);
-            renderer.addSystem(new Fae.transform.TransformUpdateSystem());
-            renderer.addSystem(new Fae.sprite.SpriteRenderSystem(renderer));
 
             class Card extends Fae.sprite.Sprite.with(Fae.interaction.InteractionComponent) {
                 _updateBounds() {

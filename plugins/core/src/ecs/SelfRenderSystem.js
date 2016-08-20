@@ -1,3 +1,4 @@
+import Renderer from '../render/Renderer';
 import RenderSystem from './RenderSystem';
 import SelfRenderComponent from './SelfRenderComponent';
 

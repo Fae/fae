@@ -6,10 +6,21 @@ import ECS from '@fae/ecs';
 export default class System extends ECS.System {
     /**
      *
+     * @param {Renderer} renderer - The renderer this sytem belongs to.
+     * @param {number} priority - The priority of the system, higher means earlier.
+     * @param {number} frequency - How often to run the update loop. `1` means every
+     *  time, `2` is every other time, etc.
      */
-    constructor()
+    constructor(renderer, priority = System.PRIORITY.USER, frequency = 1)
     {
-        super();
+        super(frequency);
+
+        /**
+         * The renderer to use.
+         *
+         * @member {Renderer}
+         */
+        this.renderer = renderer;
 
         /**
          * The priority of the system. A higher number makes it run
@@ -17,11 +28,27 @@ export default class System extends ECS.System {
          *
          * @member {number}
          */
-        this.priority = System.PRIORITY.USER;
+        this.priority = priority;
+    }
+
+    /**
+     * Destroys the system.
+     *
+     */
+    destroy()
+    {
+        this.renderer = null;
     }
 }
 
 /**
+ * Some common priority ranges. Higher priority numbers run first.
+ * If you use these values directly it will run in the order:
+ *
+ * 1. USER
+ * 2. PLUGIN
+ * 3. RENDER
+ *
  * @static
  * @constant
  * @property {number} USER - The user range (9000+)

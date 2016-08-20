@@ -1,6 +1,6 @@
 import Pointer from './Pointer';
 import InteractionComponent from './InteractionComponent';
-import { ecs/* @ifdef DEBUG */, debug/* @endif */ } from '@fae/core';
+import { ecs, render/* @ifdef DEBUG */, debug/* @endif */ } from '@fae/core';
 
 const tempCoords = { x: 0, y: 0 };
 
@@ -10,21 +10,11 @@ const tempCoords = { x: 0, y: 0 };
 export default class InteractionSystem extends ecs.System
 {
     /**
-     * @param {HTMLCanvasElement} dom - The element to handle interactions on.
-     *  Usually this is same element you are rendering to.
+     * @param {Renderer} renderer - The renderer to handle interactions on.
      */
-    constructor(dom)
+    constructor(renderer)
     {
-        super();
-
-        // never call update on this system.
-        this.frequency = Number.MAX_SAFE_INTEGER;
-
-        // @ifdef DEBUG
-        const name = dom && dom.nodeName && dom.nodeName.toLowerCase();
-
-        debug.ASSERT(name && name === 'canvas', 'InteractionSystem requires a canvas to manage.');
-        // @endif
+        super(renderer, 0, Number.MAX_SAFE_INTEGER);
 
         /**
          * The currently active pointers.
@@ -34,13 +24,11 @@ export default class InteractionSystem extends ecs.System
         this.pointers = [];
 
         /**
-         * The DOM element to consider interactions relative to.
+         * Context-bound version of the handleEvent function.
          *
-         * @member {HTMLCanvasElement}
+         * @private
+         * @member {function}
          */
-        this.domElement = dom;
-
-        // bound events use internally if needed
         this._boundHandleEvent = this.handleEvent.bind(this);
 
         // @ifdef DEBUG
@@ -71,10 +59,11 @@ export default class InteractionSystem extends ecs.System
      */
     convertClientToWorld(x, y, out = { x: 0, y: 0 })
     {
-        const rect = this.domElement.getBoundingClientRect();
+        const dom = this.renderer.gl.canvas;
+        const rect = dom.getBoundingClientRect();
 
-        out.x = ((x - rect.left) * (this.domElement.width / rect.width));
-        out.y = ((y - rect.top) * (this.domElement.height / rect.height));
+        out.x = ((x - rect.left) * (dom.width / rect.width));
+        out.y = ((y - rect.top) * (dom.height / rect.height));
 
         return out;
     }
@@ -114,27 +103,29 @@ export default class InteractionSystem extends ecs.System
         this._eventsBound = true;
         // @endif
 
+        const dom = this.renderer.gl.canvas;
+
         if (window.PointerEvent)
         {
-            this.domElement.addEventListener('pointerdown', this._boundHandleEvent);
-            this.domElement.addEventListener('pointermove', this._boundHandleEvent);
-            this.domElement.addEventListener('pointerout', this._boundHandleEvent);
+            dom.addEventListener('pointerdown', this._boundHandleEvent);
+            dom.addEventListener('pointermove', this._boundHandleEvent);
+            dom.addEventListener('pointerout', this._boundHandleEvent);
             window.addEventListener('pointerup', this._boundHandleEvent);
         }
         else
         {
-            this.domElement.addEventListener('mousedown', this._boundHandleEvent);
-            this.domElement.addEventListener('mousemove', this._boundHandleEvent);
-            this.domElement.addEventListener('mouseout', this._boundHandleEvent);
+            dom.addEventListener('mousedown', this._boundHandleEvent);
+            dom.addEventListener('mousemove', this._boundHandleEvent);
+            dom.addEventListener('mouseout', this._boundHandleEvent);
             window.addEventListener('mouseup', this._boundHandleEvent);
 
-            this.domElement.addEventListener('touchstart', this._boundHandleEvent);
-            this.domElement.addEventListener('touchmove', this._boundHandleEvent);
-            this.domElement.addEventListener('touchcancel', this._boundHandleEvent);
+            dom.addEventListener('touchstart', this._boundHandleEvent);
+            dom.addEventListener('touchmove', this._boundHandleEvent);
+            dom.addEventListener('touchcancel', this._boundHandleEvent);
             window.addEventListener('touchend', this._boundHandleEvent);
         }
 
-        this.domElement.addEventListener('wheel', this._boundHandleEvent);
+        dom.addEventListener('wheel', this._boundHandleEvent);
     }
 
     /**
@@ -149,27 +140,29 @@ export default class InteractionSystem extends ecs.System
         this._eventsBound = false;
         // @endif
 
+        const dom = this.renderer.gl.canvas;
+
         if (window.PointerEvent)
         {
-            this.domElement.removeEventListener('pointerdown', this._boundHandleEvent);
-            this.domElement.removeEventListener('pointermove', this._boundHandleEvent);
-            this.domElement.removeEventListener('pointerout', this._boundHandleEvent);
+            dom.removeEventListener('pointerdown', this._boundHandleEvent);
+            dom.removeEventListener('pointermove', this._boundHandleEvent);
+            dom.removeEventListener('pointerout', this._boundHandleEvent);
             window.removeEventListener('pointerup', this._boundHandleEvent);
         }
         else
         {
-            this.domElement.removeEventListener('mousedown', this._boundHandleEvent);
-            this.domElement.removeEventListener('mousemove', this._boundHandleEvent);
-            this.domElement.removeEventListener('mouseout', this._boundHandleEvent);
+            dom.removeEventListener('mousedown', this._boundHandleEvent);
+            dom.removeEventListener('mousemove', this._boundHandleEvent);
+            dom.removeEventListener('mouseout', this._boundHandleEvent);
             window.removeEventListener('mouseup', this._boundHandleEvent);
 
-            this.domElement.removeEventListener('touchstart', this._boundHandleEvent);
-            this.domElement.removeEventListener('touchmove', this._boundHandleEvent);
-            this.domElement.removeEventListener('touchcancel', this._boundHandleEvent);
+            dom.removeEventListener('touchstart', this._boundHandleEvent);
+            dom.removeEventListener('touchmove', this._boundHandleEvent);
+            dom.removeEventListener('touchcancel', this._boundHandleEvent);
             window.removeEventListener('touchend', this._boundHandleEvent);
         }
 
-        this.domElement.removeEventListener('wheel', this._boundHandleEvent);
+        dom.removeEventListener('wheel', this._boundHandleEvent);
     }
 
     /**
@@ -230,8 +223,9 @@ export default class InteractionSystem extends ecs.System
      */
     destroy()
     {
+        super.destroy();
+
         this.interactions = null;
-        this.domElement = null;
 
         this.onInteraction.detachAll();
         this.onInteraction = null;
@@ -266,6 +260,8 @@ export default class InteractionSystem extends ecs.System
         return pointer;
     }
 }
+
+render.Renderer.addDefaultSystem(InteractionSystem);
 
 /**
  * The interface for an object that can be added to the interaction manager.
