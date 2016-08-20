@@ -121,7 +121,6 @@ time.
 
 ### Todo:
 
-- Auto register systems; maybe plugin init func?
 - Filters (FilteredQuadRenderer?)
 - DevicePixelRatio
 - Move `Color` to a plugin
