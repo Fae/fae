@@ -5,17 +5,16 @@
   "author": "Chad Engler <chad@pantherdev.com>",
   "license": "MIT",
   "main": "src/index.js",
-  "homepage": "https://github.com/englercj/fae#readme",
+  "homepage": "https://github.com/Fae/fae#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/englercj/fae.git"
+    "url": "git+https://github.com/Fae/fae.git"
   },
   "bugs": {
-    "url": "https://github.com/englercj/fae/issues"
+    "url": "https://github.com/Fae/fae/issues"
   },
   "files": [
-    "src/",
-    "shader/"
+    "src/"
   ],
   "dependencies": {
     "@fae/core": "^1.0.0",
