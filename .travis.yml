@@ -38,7 +38,7 @@ deploy:
     acl: public_read
     region: us-west-2
     local_dir: dist
-    upload_dir: nightly/$TRAVIS_BRANCH/$TRAVIS_COMMIT
+    upload_dir: unstable/$TRAVIS_COMMIT
     storage_class: STANDARD_IA
     edge: true
     on:
@@ -51,7 +51,7 @@ deploy:
     acl: public_read
     region: us-west-2
     local_dir: dist
-    upload_dir: nightly/$TRAVIS_BRANCH/HEAD
+    upload_dir: unstable/$TRAVIS_BRANCH
     on:
       repo: Fae/fae
   - provider: s3

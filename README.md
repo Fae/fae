@@ -76,22 +76,22 @@ Replace `<version>` with the version of the library you want. For example, to ge
 
 ### Unstable Builds
 
-You can download the builds for any particular git-sha at:
+You can download the builds for any particular branch or git-sha at:
 
 ```
-http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/<git-sha>/fae.js
-http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/<git-sha>/fae.js.map
-http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/<git-sha>/fae.min.js
+http://fae-builds.s3-website-us-west-2.amazonaws.com/unstable/<branch-or-git-sha>/fae.js
+http://fae-builds.s3-website-us-west-2.amazonaws.com/unstable/<branch-or-git-sha>/fae.js.map
+http://fae-builds.s3-website-us-west-2.amazonaws.com/unstable/<branch-or-git-sha>/fae.min.js
 ```
 
-Replace `<git-sha>` with `HEAD` to get the latest development build (from the `master` branch) or
-any particular sha you want the build for.
+Replace `<branch-or-git-sha>` with a branch name (like `master`) to get the latest successful
+build of that branch or with the git-sha of a particular commit (like `1e532f70822f262452fb85b3669102bb05b443eb`).
 
 For example:
 
-- http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/HEAD/fae.js
-- http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/HEAD/fae.js.map
-- http://fae-builds.s3-website-us-west-2.amazonaws.com/nightly/HEAD/fae.min.js
+- http://fae-builds.s3-website-us-west-2.amazonaws.com/unstable/master/fae.js
+- http://fae-builds.s3-website-us-west-2.amazonaws.com/unstable/master/fae.js.map
+- http://fae-builds.s3-website-us-west-2.amazonaws.com/unstable/master/fae.min.js
 
 <a name="get-started"></a>
 ## Getting Started
