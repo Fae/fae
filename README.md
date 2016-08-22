@@ -126,6 +126,10 @@ time.
 <a name="roadmap"></a>
 ## Roadmap
 
+Issues are tagged with labels to help give a good view of the current state of the project.
+
+For example, to see what plugins need to be made you can look at the [New Plugin](https://github.com/Fae/fae/labels/New%20Plugin) label.
+
 ### Todo:
 
 - Filters (FilteredQuadRenderer?)
@@ -143,12 +147,12 @@ time.
 - Loader
 - Particle System
 - Interactions
-- Spine, Dragon Bones, etc
-- Lights
-- Flash animation import
 - Tiling sprites
-- UI Library
-- Tweening
+- Lights (premium?)
+- Flash animation import (premium?)
+- Spine, Dragon Bones, etc (premium?)
+- UI Library (premium?)
+- Tweening (premium?)
 
 ### Guides/Tutorials to write:
 
