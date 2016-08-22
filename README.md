@@ -130,30 +130,6 @@ Issues are tagged with labels to help give a good view of the current state of t
 
 For example, to see what plugins need to be made you can look at the [New Plugin](https://github.com/Fae/fae/labels/New%20Plugin) label.
 
-### Todo:
-
-- Filters (FilteredQuadRenderer?)
-- DevicePixelRatio
-- Move `Color` to a plugin
-- Compressed texture support in GLTexture and textures plugin
-
-### Plugins to Make
-
-- Debug
-- Mesh
-- Animated sprites
-- Text/BitmapText
-- Tiled Editor/Tile maps
-- Loader
-- Particle System
-- Interactions
-- Tiling sprites
-- Lights (premium?)
-- Flash animation import (premium?)
-- Spine, Dragon Bones, etc (premium?)
-- UI Library (premium?)
-- Tweening (premium?)
-
 ### Guides/Tutorials to write:
 
 - Intro to the ECS architecture Fae uses
