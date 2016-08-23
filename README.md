@@ -16,9 +16,7 @@
 **Discord**: https://discord.gg/qghcMmr<br />
 **Docs/Guides**: Coming Soon<br />
 **Contribute**: [How to Contribute](#contributing)<br/>
-**Support**: [![PayPal](https://img.shields.io/badge/paypal-donate-yellow.svg)][paypal-donate] <br/>
-
-<!-- [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)][patreon-donate] -->
+**Support**: [How to Support](#support)
 
 <a name="overview"></a>
 ## Overview
@@ -117,6 +115,8 @@ the Fae project cost a non-trivial amount of money. If you want to help support 
 development of Fae, please consider making a donation.
 
 There are a couple ways you can have an impact:
+
+<!-- [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)][patreon-donate] -->
 
 - A monthly contribution via Patreon (Coming Soon).
 - A donation via PayPal: [![PayPal](https://img.shields.io/badge/paypal-donate-yellow.svg)][paypal-donate]
