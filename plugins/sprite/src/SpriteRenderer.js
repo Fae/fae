@@ -5,6 +5,8 @@ import { render, glutil, util/* @ifdef DEBUG */, debug/* @endif */ } from '@fae/
 const vertSource = require('./shader/multi-texture.vert');
 const fragTemplate = require('./shader/multi-texture.frag');
 
+let TICK = 0;
+
 /**
  * @class
  */
@@ -72,7 +74,6 @@ export default class SpriteRenderer extends render.ObjectRenderer
         }
 
         this.currentIndex = 0;
-        this.tick = 0;
         this.groups = [];
 
         for (let k = 0; k < this.size; ++k)
@@ -160,7 +161,6 @@ export default class SpriteRenderer extends render.ObjectRenderer
      */
     start()
     {
-        this.tick %= 1000;
     }
 
     /**
@@ -200,7 +200,7 @@ export default class SpriteRenderer extends render.ObjectRenderer
         currentGroup.blend = blendMode;
         currentGroup.shader = null;
 
-        this.tick++;
+        TICK++;
 
         for (let i = 0; i < this.currentIndex; ++i)
         {
@@ -218,18 +218,18 @@ export default class SpriteRenderer extends render.ObjectRenderer
                 // force the batch to break!
                 currentTexture = null;
                 textureCount = this._maxTextures;
-                this.tick++;
+                TICK++;
             }
 
             if (currentTexture !== nextTexture)
             {
                 currentTexture = nextTexture;
 
-                if (nextTexture._enabled !== this.tick)
+                if (nextTexture._enabled !== TICK)
                 {
                     if (textureCount === this._maxTextures)
                     {
-                        this.tick++;
+                        TICK++;
 
                         textureCount = 0;
 
@@ -243,7 +243,7 @@ export default class SpriteRenderer extends render.ObjectRenderer
                     }
 
                     // TODO: I don't like this, change this to not add properties to texture
-                    nextTexture._enabled = this.tick;
+                    nextTexture._enabled = TICK;
                     nextTexture._id = textureCount;
 
                     const glTexture = nextTexture.getGlTexture(this.renderer);
