@@ -9,7 +9,7 @@
             const view = document.getElementById('view');
             const renderer = new Fae.render.Renderer(view);
 
-            class Card extends Fae.sprite.Sprite.with(Fae.interaction.InteractionComponent) {
+            class Card extends Fae.sprites.Sprite.with(Fae.interaction.InteractionComponent) {
                 _updateBounds() {
                     this._bounds.clear();
 

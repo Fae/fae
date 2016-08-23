@@ -72,7 +72,7 @@
                 }
             };
 
-            class Card extends Fae.sprite.Sprite.with(CardComponent) {}
+            class Card extends Fae.sprites.Sprite.with(CardComponent) {}
 
             class CardMovementSystem extends Fae.ecs.System {
                 test(entity) {
@@ -173,7 +173,7 @@
 
             function updateInfo()
             {
-                const spriteRenderer = renderer.systems.filter((v) => v instanceof Fae.sprite.SpriteRenderSystem)[0].spriteRenderer;
+                const spriteRenderer = renderer.systems.filter((v) => v instanceof Fae.sprites.SpriteRenderSystem)[0].spriteRenderer;
 
                 maxTextures.textContent = spriteRenderer._maxTextures;
                 batchSize.textContent = spriteRenderer.size;
