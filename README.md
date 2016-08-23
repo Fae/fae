@@ -11,37 +11,42 @@
 <!-- [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)][patreon-donate] -->
 [![PayPal](https://img.shields.io/badge/paypal-donate-yellow.svg)][paypal-donate]
 
-Fae is meant to be a highly modular rendering framework. The primary target use-case for Fae is
-to be easily intregrable into larger application frameworks. However, the plugin library for Fae
-enables it to be useful to end users as well when used as a standalone framework.
-
-Get Involved:
+<a name="get-involved"></a>
+## Get Involved:
 
 **Website**: Coming Soon<br />
 **Discord**: https://discord.gg/qghcMmr<br />
 **Docs/Guides**: Coming Soon<br />
+**Contribute**: [How to Contribute](#contributing)<br/>
+**Support**:
+<!-- [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)][patreon-donate] -->
+[![PayPal](https://img.shields.io/badge/paypal-donate-yellow.svg)][paypal-donate]
+<br/>
+
+
+<a name="overview"></a>
+## Overview
+
+Fae is meant to be a highly modular rendering framework. The primary target use-case for Fae is
+to be easily intregrable into larger application frameworks. However, the plugin library for Fae
+enables it to be useful to end users as well when used as a standalone framework.
 
 Fae contains some code that is originally based on [pixi.js](https://github.com/pixijs/pixi.js).
-However, Fae takes a different approach to rendering and object than pixi. Some notable differences
+However, Fae takes a different approach to rendering and modularity than pixi. Some notable differences
 in philosophy are:
 
-- More focus on WebGL
-- Flat structures (no scene tree)
-    * z-index ordering instead
-- Entity-Component-System (ECS) based
-    * Using our custom [@fae/ecs][ecs] lib.
+- Fae is focused on WebGL
+- Fae uses a flat entity structure with z-ordering instead of a heirarchal scene tree
+- Fae uses an assemblage-heavy Entity-Component-System (ECS) approach to composing objects
+ * Using our custom [@fae/ecs][ecs] lib.
 
 and a few other core design differences that result in a familiar but slightly different API.
 
-## API Issues
-
-- Currently update iterates systems, which each update all their entities.
- * Unfortunately, for 2 competing render systems it means whichever runs last will *always* be on top, reguardless of z-index
- * Maybe I can iterate entities and call update for each system??
- * If I do it that way, may have to bring back `ObjectRenderer`...
-
+<a name="contents"></a>
 ## Contents
 
+- [Get Involved](#get-involved)
+- [Overview](#overview)
 - [Download Fae](#download)
 - [Getting Started](#get-started)
 - [Support Fae](#support)
