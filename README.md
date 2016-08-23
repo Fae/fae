@@ -18,11 +18,7 @@
 **Discord**: https://discord.gg/qghcMmr<br />
 **Docs/Guides**: Coming Soon<br />
 **Contribute**: [How to Contribute](#contributing)<br/>
-**Support**:
-<!-- [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)][patreon-donate] -->
-[![PayPal](https://img.shields.io/badge/paypal-donate-yellow.svg)][paypal-donate]
-<br/>
-
+**Support**: <!-- [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)][patreon-donate] --> [![PayPal](https://img.shields.io/badge/paypal-donate-yellow.svg)][paypal-donate] <br/>
 
 <a name="overview"></a>
 ## Overview
