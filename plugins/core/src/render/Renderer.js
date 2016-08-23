@@ -387,7 +387,7 @@ function compareSystemsPriority(a, b)
 }
 
 // lower is placed first, and within renderPriority they are grouped
-// by the objectRendererHint
+// by the renderGroupHint
 function compareRenderPriority(a, b)
 {
     if (a.renderPriority === b.renderPriority)
