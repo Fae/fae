@@ -28,3 +28,4 @@ npm-debug.log
 entry-*.js
 node_modules/
 dist/
+docs/
