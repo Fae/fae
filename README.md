@@ -135,7 +135,9 @@ For example, to see what plugins need to be made you can look at the [New Plugin
 - Intro to the ECS architecture Fae uses
 - General Performance Guidelines
  * How batching happens and how you can take advantage of it.
- * How to write efficient systems
+ * How to write efficient systems.
+ * Using `renderPriority` and `renderGroupHint` to make batching better.
+ * Batching the addition of entities (skipping sort in `addEntity`).
 - Rendering looks weird on my old XYZ Mobile Device
  * Description of the options that may fix issues on old mobile
  * Shader precision, batch sizes, multi-texture sizes, VAO usage, etc.
