@@ -2,6 +2,8 @@
 import { debug } from '@fae/core';
 // @endif
 
+const EMPTY_ARRAY = [];
+
 /**
  * @class
  */
@@ -53,6 +55,58 @@ export default class Pointer
         this.scrollTarget = null;
 
         /**
+         * The unique identifier of the most recently pressed button.
+         *
+         * A value of `0` is also used for touch and "uninitialized" states.
+         * For example, during a hover nothing is pressed. In this case this
+         * value is `0`.
+         *
+         * @readonly
+         * @member {number}
+         */
+        this.button = 0;
+
+        /**
+         * The unique identifiers of all the actively pressed buttons.
+         *
+         * @readonly
+         * @member {number[]}
+         */
+        this.buttons = EMPTY_ARRAY;
+
+        /**
+         * A Boolean value indicating whether or not the alt key is pressed.
+         *
+         * @readonly
+         * @member {boolean}
+         */
+        this.altKey = false;
+
+        /**
+         * A Boolean value indicating whether or not the control key is pressed.
+         *
+         * @readonly
+         * @member {boolean}
+         */
+        this.ctrlKey = false;
+
+        /**
+         * A Boolean value indicating whether or not the meta key is pressed.
+         *
+         * @readonly
+         * @member {boolean}
+         */
+        this.metaKey = false;
+
+        /**
+         * A Boolean value indicating whether or not the shift key is pressed.
+         *
+         * @readonly
+         * @member {boolean}
+         */
+        this.shiftKey = false;
+
+        /**
          * The width of the interaction of the pointer with the screen.
          * For touch interactions, this is how much finger is on the screen.
          *
@@ -80,22 +134,6 @@ export default class Pointer
         this.pressure = 1.0;
 
         /**
-         * How much the pointer has moved since last time it was updated.
-         *
-         * @readonly
-         * @member {number}
-         */
-        this.deltaX = 0;
-
-        /**
-         * How much the pointer has moved since last time it was updated.
-         *
-         * @readonly
-         * @member {number}
-         */
-        this.deltaY = 0;
-
-        /**
          * The client-space coord of the pointer interaction.
          *
          * @readonly
@@ -110,6 +148,24 @@ export default class Pointer
          * @member {number}
          */
         this.clientY = 0;
+
+        /**
+         * How much the pointer has moved since last time it was updated,
+         * in world-space coords.
+         *
+         * @readonly
+         * @member {number}
+         */
+        this.deltaX = 0;
+
+        /**
+         * How much the pointer has moved since last time it was updated,
+         * in world-space coords.
+         *
+         * @readonly
+         * @member {number}
+         */
+        this.deltaY = 0;
 
         /**
          * The world-space coord of the pointer interaction.
@@ -184,6 +240,9 @@ export default class Pointer
 
         this.isDown = true;
         this.target = target;
+
+        this.button = data.button || 0;
+        this.buttons = data.buttons || EMPTY_ARRAY;
 
         this._set(data, worldX, worldY);
 
@@ -373,17 +432,27 @@ export default class Pointer
             this.pressure = 1.0;
         }
 
+        // set button state
+        this.button = data.button || 0;
+        this.buttons = data.buttons || EMPTY_ARRAY;
+
+        // set key states
+        this.altKey = data.altKey || false;
+        this.ctrlKey = data.ctrlKey || false;
+        this.metaKey = data.metaKey || false;
+        this.shiftKey = data.shiftKey || false;
+
         // set size
         this.width = data.width || (typeof data.radiusX === 'number' ? data.radiusX * 2 : 1);
         this.height = data.height || (typeof data.radiusY === 'number' ? data.radiusY * 2 : 1);
 
-        // calculate delta (maybe)
-        this.deltaX = calcDelta ? (worldX - this.worldX) : 0;
-        this.deltaY = calcDelta ? (worldY - this.worldY) : 0;
-
         // set client x/y coords
         this.clientX = data.clientX;
         this.clientY = data.clientY;
+
+        // calculate delta (maybe)
+        this.deltaX = calcDelta ? (worldX - this.worldX) : 0;
+        this.deltaY = calcDelta ? (worldY - this.worldY) : 0;
 
         // set world x/y coords
         this.worldX = worldX;
