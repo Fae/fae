@@ -76,44 +76,44 @@
 
             class CardMovementSystem extends Fae.ecs.System {
                 test(entity) {
-                    return entity.hasComponent(Fae.transform.TransformComponent);
+                    // While a card actually has many more components than this, the CardMovementSystem
+                    // only operates on CardComponent (speed) and TransformComponent (position) properties.
+                    // Therefore, anything with at least those components can be operated on by this system.
+                    return entity.hasComponents(
+                        Fae.transform.TransformComponent,
+                        CardComponent
+                    );
                 }
 
-                updateAll(elapsed) {
-                    // update them all
-                    for (let i = 0; i < this.entities.length; ++i)
+                update(card, elapsed) {
+                    card.transform.x += card.speedX;
+                    card.transform.y += card.speedY;
+                    card.speedY += gravity;
+
+                    if (card.transform.x <= minX || card.transform.x >= maxX)
                     {
-                        const card = this.entities[i];
+                        card.speedX *= -1
+                    }
 
-                        card.transform.x += card.speedX;
-                        card.transform.y += card.speedY;
-                        card.speedY += gravity;
+                    if (card.transform.y >= maxY)
+                    {
+                        card.speedY *= -gravity;
 
-                        if (card.transform.x <= minX || card.transform.x >= maxX)
+                        // random boosts
+                        if (Math.random() > 0.5)
                         {
-                            card.speedX *= -1
+                            card.speedY -= Math.random() * 10;
                         }
-
-                        if (card.transform.y >= maxY)
-                        {
-                            card.speedY *= -gravity;
-
-                            // random boosts
-                            if (Math.random() > 0.5)
-                            {
-                                card.speedY -= Math.random() * 10;
-                            }
-                        }
-                        else if (card.transform.y <= minY)
-                        {
-                            card.transform.y = 1;
-                            card.speedY = 0;
-                        }
+                    }
+                    else if (card.transform.y <= minY)
+                    {
+                        card.transform.y = 1;
+                        card.speedY = 0;
                     }
                 }
             }
 
-            // add custom systems
+            // add custom system
             renderer.addSystem(new CardMovementSystem());
 
             // create initial cards
@@ -121,6 +121,8 @@
             {
                 createCard();
             }
+            // createCard delays the sort so we don't do it on every entity add
+            renderer.sortEntities();
 
             // start!
             render();
@@ -139,6 +141,8 @@
                         createCard();
                     }
 
+                    // createCard delays the sort so we don't do it on every entity add
+                    renderer.sortEntities();
                     updateInfo();
                 }
 
@@ -162,14 +166,14 @@
 
                 count++;
 
-                renderer.addEntity(card);
+                renderer.addEntity(card, true);
 
                 return card;
             }
 
             function updateInfo()
             {
-                const spriteRenderer = renderer.systems[renderer.systems.length - 2].spriteRenderer;
+                const spriteRenderer = renderer.systems.filter((v) => v instanceof Fae.sprite.SpriteRenderSystem)[0].spriteRenderer;
 
                 maxTextures.textContent = spriteRenderer._maxTextures;
                 batchSize.textContent = spriteRenderer.size;

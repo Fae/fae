@@ -17,7 +17,7 @@
     "src/"
   ],
   "dependencies": {
-    "@fae/ecs": "^1.0.0",
+    "@fae/ecs": "^1.0.2",
     "@fae/shapes": "^1.0.0",
     "ismobilejs": "^0.4.0",
     "mini-signals": "^1.1.1"

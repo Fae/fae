@@ -70,7 +70,7 @@ export default function SpriteComponent(Base)
              * @private
              * @member {number}
              */
-            this._vertsDirty = true;
+            this._anchorDirty = true;
         }
 
         /**

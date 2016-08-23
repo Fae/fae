@@ -23,8 +23,12 @@ export default class System extends ECS.System {
         this.renderer = renderer;
 
         /**
-         * The priority of the system. A higher number makes it run
-         * earlier.
+         * The priority of the system. A lower number makes it run earlier.
+         *
+         * See {@link System.PRIORITY} for some common ranges. The default is {@link System.PRIORITY.USER}.
+         *
+         * If you change this value at all after adding the system to the renderer you will
+         * need to call {@link Renderer#sortSystems} for the change to affect the sort.
          *
          * @member {number}
          */
@@ -42,7 +46,10 @@ export default class System extends ECS.System {
 }
 
 /**
- * Some common priority ranges. Higher priority numbers run first.
+ * Some common priority ranges. Lower priority numbers run first.
+ * You can use any number you want for priority of your systems, these just serve as a guideline for
+ * what the core and official plugins will try to follow.
+ *
  * If you use these values directly it will run in the order:
  *
  * 1. USER
@@ -51,12 +58,12 @@ export default class System extends ECS.System {
  *
  * @static
  * @constant
- * @property {number} USER - The user range (9000+)
- * @property {number} PLUGIN - The plugin range (5000-8999)
- * @property {number} RENDER - The render range (1000-4999)
+ * @property {number} USER - The start of the user range (0-2999)
+ * @property {number} PLUGIN - The start of the plugin range (3000-5999)
+ * @property {number} RENDER - The start of the render range (6000+)
  */
 System.PRIORITY = {
-    USER:   9000,
-    PLUGIN: 5000,
-    RENDER: 1000,
+    USER:   0,
+    PLUGIN: 3000,
+    RENDER: 6000,
 };

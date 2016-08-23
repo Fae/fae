@@ -7,7 +7,7 @@ import SpriteComponent from './SpriteComponent';
 /**
  * @class
  */
-export default class SpriteRenderSystem extends ecs.RenderSystem
+export default class SpriteRenderSystem extends ecs.System
 {
     /**
      * @param {Renderer} renderer - The renderer to use.
@@ -44,31 +44,26 @@ export default class SpriteRenderSystem extends ecs.RenderSystem
     }
 
     /**
-     * Draw each sprite of this system.
+     * Render a sprite using the batching SpriteRenderer.
      *
+     * @param {Entity} sprite - The entity to render.
      */
-    updateAll()
+    update(sprite)
     {
-        this.spriteRenderer.start();
+        if (!sprite.visible) return;
 
-        for (let i = 0; i < this.entities.length; ++i)
+        this.renderer.setActiveObjectRenderer(this.spriteRenderer);
+
+        const clean = !sprite._anchorDirty && sprite._cachedTransformUpdateId === sprite.transform._worldUpdateId;
+
+        if (sprite._texture.ready && !clean)
         {
-            const sprite = this.entities[i];
-            const clean = !sprite._vertsDirty && sprite._cachedTransformUpdateId === sprite.transform._worldUpdateId;
-
-            if (!sprite.visible) continue;
-
-            if (sprite._texture.ready && !clean)
-            {
-                calculateVertices(sprite);
-                sprite._cachedTransformUpdateId = sprite.transform._worldUpdateId;
-                sprite._vertsDirty = false;
-            }
-
-            this.spriteRenderer.render(sprite);
+            calculateVertices(sprite);
+            sprite._cachedTransformUpdateId = sprite.transform._worldUpdateId;
+            sprite._anchorDirty = false;
         }
 
-        this.spriteRenderer.stop();
+        this.spriteRenderer.render(sprite);
     }
 }
 

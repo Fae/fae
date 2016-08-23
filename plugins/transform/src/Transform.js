@@ -16,14 +16,6 @@ export default class Transform
     constructor()
     {
         /**
-         * The z-index of the object to draw. Used to sort the objects drawing order.
-         *
-         * @member {number}
-         * @default 0
-         */
-        this.z = 0;
-
-        /**
          * The parent transform to update against.
          *
          * @member {Transform}

@@ -1,10 +1,10 @@
-import RenderSystem from './RenderSystem';
+import System from './System';
 import SelfRenderComponent from './SelfRenderComponent';
 
 /**
  * @class
  */
-export default class SelfRenderSystem extends RenderSystem
+export default class SelfRenderSystem extends System
 {
     /**
      * Returns true if the entity is eligible to the system, false otherwise.
@@ -18,17 +18,14 @@ export default class SelfRenderSystem extends RenderSystem
     }
 
     /**
-     * Apply update to each entity of this system.
+     * Tells the entity to render itself by calling the `render()` method with
+     * the renderer and elapsed time.
      *
+     * @param {Entity} entity - The entity to update.
      * @param {number} elapsed - The time elapsed since last update call.
      */
-    updateAll(elapsed)
+    update(entity, elapsed)
     {
-        for (let i = 0; i < this.entities.length; ++i)
-        {
-            const entity = this.entities[i];
-
-            entity.render(this.renderer, elapsed);
-        }
+        entity.render(this.renderer, elapsed);
     }
 }

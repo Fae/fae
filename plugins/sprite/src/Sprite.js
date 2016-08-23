@@ -2,6 +2,7 @@ import { ecs } from '@fae/core';
 import { TransformComponent } from '@fae/transform';
 import { Texture, TextureComponent } from '@fae/textures';
 import SpriteComponent from './SpriteComponent';
+import SpriteRenderer from './SpriteRenderer';
 
 /**
  * A Sprite is a textured SceneObject. It is implemented as a quad
@@ -27,6 +28,8 @@ export default class Sprite extends ecs.Entity.with(
     constructor(texture = Texture.EMPTY)
     {
         super();
+
+        this.objectRendererHint = SpriteRenderer;
 
         this._onTextureUpdateBinding = null;
 

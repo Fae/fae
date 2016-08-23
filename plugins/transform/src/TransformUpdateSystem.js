@@ -33,17 +33,13 @@ export default class TransformUpdateSystem extends ecs.System
     }
 
     /**
-     * Draw each sprite of this system.
+     * Update the entity's transform matrix.
      *
+     * @param {Entity} entity - The entity to update
      */
-    updateAll()
+    update(entity)
     {
-        for (let i = 0; i < this.entities.length; ++i)
-        {
-            const ent = this.entities[i];
-
-            ent.transform.update();
-        }
+        entity.transform.update();
     }
 }
 

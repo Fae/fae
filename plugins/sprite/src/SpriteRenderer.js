@@ -8,19 +8,14 @@ const fragTemplate = require('./shader/multi-texture.frag');
 /**
  * @class
  */
-export default class SpriteRenderer
+export default class SpriteRenderer extends render.ObjectRenderer
 {
     /**
      * @param {Renderer} renderer - The renderer this manager works for.
      */
     constructor(renderer)
     {
-        /**
-         * The renderer this manager works for.
-         *
-         * @member {Renderer}
-         */
-        this.renderer = renderer;
+        super(renderer);
 
         /**
          * Number of values sent in the vertex buffer.
@@ -66,7 +61,7 @@ export default class SpriteRenderer
          *
          * @member {Shader[]}
          */
-        this.shaders = null;
+        this.shaders = [];
 
         // create buffer views
         for (let i = 1; i <= this.size; i *= 2)
@@ -151,7 +146,7 @@ export default class SpriteRenderer
     }
 
     /**
-     * Called just before the renderer starts rendering.
+     * Called just before the renderer starts rendering each frame.
      *
      */
     onBeforeRender()
