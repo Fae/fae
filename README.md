@@ -8,8 +8,6 @@
 <br/>
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/faejs.svg)](https://saucelabs.com/u/faejs)
 <br/>
-<!-- [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)][patreon-donate] -->
-[![PayPal](https://img.shields.io/badge/paypal-donate-yellow.svg)][paypal-donate]
 
 <a name="get-involved"></a>
 ## Get Involved:
@@ -18,7 +16,9 @@
 **Discord**: https://discord.gg/qghcMmr<br />
 **Docs/Guides**: Coming Soon<br />
 **Contribute**: [How to Contribute](#contributing)<br/>
-**Support**: <!-- [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)][patreon-donate] --> [![PayPal](https://img.shields.io/badge/paypal-donate-yellow.svg)][paypal-donate] <br/>
+**Support**: [![PayPal](https://img.shields.io/badge/paypal-donate-yellow.svg)][paypal-donate] <br/>
+
+<!-- [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)][patreon-donate] -->
 
 <a name="overview"></a>
 ## Overview
