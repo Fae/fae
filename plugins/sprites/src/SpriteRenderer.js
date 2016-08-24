@@ -98,61 +98,13 @@ export default class SpriteRenderer extends render.ObjectRenderer
         this.indexBuffer = null;
 
         this.vao = null;
-        this.currentBlendMode = null;
 
         this._maxTextures = 0;
 
-        this._onBeforeRenderBinding = renderer.onBeforeRender.add(this.onBeforeRender, this);
-        this._onContextChangeBinding = renderer.onContextChange.add(this.onContextChange, this);
+        this._onBeforeRenderBinding = renderer.onBeforeRender.add(this._onBeforeRender, this);
+        this._onContextChangeBinding = renderer.onContextChange.add(this._onContextChange, this);
 
-        this.onContextChange();
-    }
-
-    /**
-     * Called by base Manager class when there is a WebGL context change.
-     *
-     */
-    onContextChange()
-    {
-        const gl = this.renderer.gl;
-
-        this._destroyGlObjects();
-
-        // check max textures the GPU can handle.
-        this._maxTextures = Math.min(gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS), SpriteRenderer.MAX_TEXTURE_COUNT);
-
-        // check the maximum number of if statements shaders are allowed *up to* the max textures.
-        this._maxTextures = util.getMaxIfStatmentsInShader(gl, this._maxTextures);
-
-        this.shaders = new Array(this._maxTextures);
-        this.shaders[0] = generateMultiTextureShader(gl, 1);
-        this.shaders[1] = generateMultiTextureShader(gl, 2);
-
-        // create new index buffer
-        this.indexBuffer = glutil.GLBuffer.createIndexBuffer(gl, this.indices, gl.STATIC_DRAW);
-
-        // we use the second shader as the first one depending on your browser may omit aTextureId
-        // as it is not used by the shader so is optimized out.
-        const attribs = this.shaders[1].attributes;
-        const maxVaos = this.vertexBuffers.length || this.startNumVaos;
-
-        // create initial vertex buffers and VAOs
-        for (let i = 0; i < maxVaos; ++i)
-        {
-            this._createVao(gl, attribs);
-        }
-
-        this.vao = this.vaos[0];
-        this.currentBlendMode = null;
-    }
-
-    /**
-     * Called just before the renderer starts rendering each frame.
-     *
-     */
-    onBeforeRender()
-    {
-        this.vertexCount = -1;
+        this._onContextChange();
     }
 
     /**
@@ -328,7 +280,7 @@ export default class SpriteRenderer extends render.ObjectRenderer
 
             if (!shader)
             {
-                shader = this.shaders[groupTextureCount - 1] = generateMultiTextureShader(gl, groupTextureCount);
+                shader = this.shaders[groupTextureCount - 1] = generateMultiTextureShader(this.renderer, groupTextureCount);
             }
 
             this.renderer.state.setShader(shader);
@@ -406,6 +358,54 @@ export default class SpriteRenderer extends render.ObjectRenderer
     }
 
     /**
+     * Called by base Manager class when there is a WebGL context change.
+     *
+     * @private
+     */
+    _onContextChange()
+    {
+        const gl = this.renderer.gl;
+
+        this._destroyGlObjects(true);
+
+        // check max textures the GPU can handle.
+        this._maxTextures = Math.min(gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS), SpriteRenderer.MAX_TEXTURE_COUNT);
+
+        // check the maximum number of if statements shaders are allowed *up to* the max textures.
+        this._maxTextures = util.getMaxIfStatmentsInShader(gl, this._maxTextures);
+
+        this.shaders.length = this._maxTextures;
+        this.shaders[0] = this.shaders[0] || generateMultiTextureShader(this.renderer, 1);
+        this.shaders[1] = this.shaders[1] || generateMultiTextureShader(this.renderer, 2);
+
+        // create new index buffer
+        this.indexBuffer = glutil.GLBuffer.createIndexBuffer(gl, this.indices, gl.STATIC_DRAW);
+
+        // we use the second shader as the first one depending on your browser may omit aTextureId
+        // as it is not used by the shader so is optimized out.
+        const attribs = this.shaders[1].attributes;
+        const maxVaos = this.vertexBuffers.length || this.startNumVaos;
+
+        // create initial vertex buffers and VAOs
+        for (let i = 0; i < maxVaos; ++i)
+        {
+            this._createVao(gl, attribs);
+        }
+
+        this.vao = this.vaos[0];
+    }
+
+    /**
+     * Called just before the renderer starts rendering each frame.
+     *
+     * @private
+     */
+    _onBeforeRender()
+    {
+        this.vertexCount = -1;
+    }
+
+    /**
      * Creates a new vertex buffer and VAO to manage it.
      *
      * @private
@@ -433,18 +433,22 @@ export default class SpriteRenderer extends render.ObjectRenderer
      * Destroys GL objects that can change between contexts.
      *
      * @private
+     * @param {boolean} [ctxRestore=false] - Should we treat this like a context restore?
      */
-    _destroyGlObjects()
+    _destroyGlObjects(ctxRestore)
     {
         // destroy shaders
-        for (let i = 0; i < this.shaders.length; ++i)
+        if (!ctxRestore)
         {
-            if (this.shaders[i])
+            for (let i = 0; i < this.shaders.length; ++i)
             {
-                this.shaders[i].destroy();
+                if (this.shaders[i])
+                {
+                    this.shaders[i].destroy();
+                }
             }
+            this.shaders.length = 0;
         }
-        this.shaders.length = 0;
 
         // destroy vaos
         for (let i = 0; i < this.vaos.length; ++i)
@@ -469,14 +473,14 @@ export default class SpriteRenderer extends render.ObjectRenderer
     }
 }
 
-function generateMultiTextureShader(gl, maxTextures)
+function generateMultiTextureShader(renderer, maxTextures)
 {
     let fragSource = fragTemplate;
 
     fragSource = fragSource.replace(/\{\{count\}\}/gi, maxTextures);
     fragSource = fragSource.replace(/\{\{texture_choice\}\}/gi, generateSampleSrc(maxTextures));
 
-    const shader = new render.Shader(gl, vertSource, fragSource);
+    const shader = new render.Shader(renderer, vertSource, fragSource);
 
     const sampleValues = [];
 

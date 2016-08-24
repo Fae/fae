@@ -10,13 +10,38 @@ export default class Shader extends GLShader
     /**
      * Constructs a new Shader.
      *
-     * @param {!WebGLRenderingContext} gl - The current WebGL rendering context
+     * @param {!Renderer} renderer - The Renderer to use for this shader.
      * @param {!string} vertexSrc - The vertex shader source as an array of strings.
      * @param {!string} fragmentSrc - The fragment shader source as an array of strings.
      */
-    constructor(gl, vertexSrc, fragmentSrc)
+    constructor(renderer, vertexSrc, fragmentSrc)
     {
-        super(gl, checkPrecision(vertexSrc), checkPrecision(fragmentSrc));
+        super(renderer.gl, checkPrecision(vertexSrc), checkPrecision(fragmentSrc));
+
+        /**
+         * Parent Renderer instance.
+         *
+         * @member {Renderer}
+         */
+        this.renderer = renderer;
+
+        /**
+         * Binding for when context is restored.
+         *
+         * @member {SignalBinding}
+         */
+        this._onContextChangeBinding = renderer.onContextChange.add(this.recompile, this);
+    }
+
+    /**
+     *
+     */
+    destroy()
+    {
+        this._onContextChangeBinding.detachAll();
+        this._onContextChangeBinding = null;
+
+        this.renderer = null;
     }
 }
 

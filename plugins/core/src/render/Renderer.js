@@ -1,6 +1,7 @@
 import Signal from 'mini-signals';
 import ECS from '@fae/ecs';
 import GLContext from '../gl/GLContext';
+import GLProgramCache from '../gl/GLProgramCache';
 import RenderTarget from './RenderTarget';
 import RenderState from './RenderState';
 import ObjectRenderer from './ObjectRenderer';
@@ -130,8 +131,8 @@ export default class Renderer extends ECS
         this._boundOnContextLost = this._onContextLost.bind(this);
         this._boundOnContextRestored = this._onContextRestored.bind(this);
 
-        this.gl.canvas.addEventListener('webglcontextlost', this._boundOnContextLost);
-        this.gl.canvas.addEventListener('webglcontextrestored', this._boundOnContextRestored);
+        this.gl.canvas.addEventListener('webglcontextlost', this._boundOnContextLost, false);
+        this.gl.canvas.addEventListener('webglcontextrestored', this._boundOnContextRestored, false);
 
         // initialize for a new context
         this._initContext();
@@ -295,8 +296,8 @@ export default class Renderer extends ECS
     destroy()
     {
         // unbind canvas events
-        this.gl.canvas.removeEventListener('webglcontextlost', this._boundOnContextLost);
-        this.gl.canvas.removeEventListener('webglcontextrestored', this._boundOnContextRestored);
+        this.gl.canvas.removeEventListener('webglcontextlost', this._boundOnContextLost, false);
+        this.gl.canvas.removeEventListener('webglcontextrestored', this._boundOnContextRestored, false);
 
         this._boundOnContextLost = null;
         this._boundOnContextRestored = null;
@@ -353,7 +354,7 @@ export default class Renderer extends ECS
 
         // this.resize(gl.canvas.width, gl.canvas.height);
 
-        this.onContextChange.dispatch(gl);
+        this.onContextChange.dispatch(this);
     }
 
     /**
@@ -365,7 +366,7 @@ export default class Renderer extends ECS
     _onContextLost(event)
     {
         event.preventDefault();
-        this.onContextLost.dispatch();
+        this.onContextLost.dispatch(this);
     }
 
     /**
@@ -375,8 +376,9 @@ export default class Renderer extends ECS
      */
     _onContextRestored()
     {
+        GLProgramCache.clear();
         this._initContext();
-        this.onContextRestored.dispatch();
+        this.onContextRestored.dispatch(this);
     }
 }
 

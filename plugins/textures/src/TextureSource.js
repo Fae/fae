@@ -167,6 +167,8 @@ export default class TextureSource
         this._boundOnSourceStop = this._onSourceStop.bind(this);
         this._boundVideoUpdateLoop = this._videoUpdateLoop.bind(this);
 
+        this._onContextChangeBindings = {};
+
         // run source setter
         this.source = source;
 
@@ -286,6 +288,8 @@ export default class TextureSource
             glTexture.premultiplyAlpha = true;
 
             this._glTextures[renderer.uid] = glTexture;
+
+            this._onContextChangeBindings[renderer.uid] = renderer.onContextChange.add(this._onContextChange, this);
 
             // wrap mode
             if (this.isPowerOfTwo)
@@ -437,6 +441,16 @@ export default class TextureSource
                 this._onSourceLoad();
             }
         }
+    }
+
+    /**
+     * Called when the context changes.
+     *
+     * @param {Renderer} renderer - The renderer that had it's context restored.
+     */
+    _onContextChange(renderer)
+    {
+        this._dispose(renderer.uid);
     }
 
     /**

@@ -128,7 +128,10 @@ export default class GLBuffer
      */
     destroy()
     {
-        this.gl.deleteBuffer(this.buffer);
+        if (this.gl.isBuffer(this.buffer))
+        {
+            this.gl.deleteBuffer(this.buffer);
+        }
 
         this.gl = null;
         this.buffer = null;

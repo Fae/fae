@@ -309,7 +309,10 @@ export default class GLTexture
      */
     destroy()
     {
-        this.gl.deleteTexture(this.texture);
+        if (this.gl.isTexture(this.texture))
+        {
+            this.gl.deleteTexture(this.texture);
+        }
 
         this.gl = null;
         this.texture = null;

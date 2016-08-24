@@ -1,4 +1,5 @@
 import { GL_SIZE_MAP, GL_SETTER, GL_ARRAY_SETTER, getUniformDefault } from './GLData';
+import GLProgramCache from './GLProgramCache';
 
 // @ifdef DEBUG
 import { ASSERT } from '../debug';
@@ -26,11 +27,25 @@ export default class GLShader
         this.gl = gl;
 
         /**
+         * The vertex shader source of the program.
+         *
+         * @member {string}
+         */
+        this.vertexSrc = vertexSrc;
+
+        /**
+         * The fragment shader source of the program.
+         *
+         * @member {string}
+         */
+        this.fragmentSrc = fragmentSrc;
+
+        /**
          * The shader program
          *
          * @member {WebGLProgram}
          */
-        this.program = GLShader.compileProgram(gl, vertexSrc, fragmentSrc);
+        this.program = null;
 
         /**
          * The attributes of the shader as an object containing the following properties
@@ -42,7 +57,7 @@ export default class GLShader
          * }
          * @member {Object}
          */
-        this.attributes = GLShader.extractAttributes(gl, this.program);
+        this.attributes = null;
 
         /**
          * The uniforms of the shader as an object containing the following properties
@@ -52,7 +67,10 @@ export default class GLShader
          * }
          * @member {Object}
          */
-        this.uniforms = GLShader.generateUniformAccessObject(gl, GLShader.extractUniforms(gl, this.program));
+        this.uniforms = null;
+
+        // initialize
+        this.recompile();
     }
 
     /**
@@ -62,10 +80,20 @@ export default class GLShader
      * @param {!WebGLRenderingContext} gl - The rendering context.
      * @param {string} vertexSrc - The vertex shader source as an array of strings.
      * @param {string} fragmentSrc - The fragment shader source as an array of strings.
+     * @param {boolean} [forceCompile=false] - When set to true this will always compile,
+     *  skipping the cache checks
      * @return {WebGLProgram} the shader program
      */
-    static compileProgram(gl, vertexSrc, fragmentSrc)
+    static compileProgram(gl, vertexSrc, fragmentSrc, forceCompile)
     {
+        const cacheKey = GLProgramCache.key(vertexSrc, fragmentSrc);
+        const cachedProgram = GLProgramCache.get(cacheKey);
+
+        if (!forceCompile && cachedProgram)
+        {
+            return cachedProgram;
+        }
+
         const glVertShader = GLShader.compileShader(gl, gl.VERTEX_SHADER, vertexSrc);
         const glFragShader = GLShader.compileShader(gl, gl.FRAGMENT_SHADER, fragmentSrc);
 
@@ -96,6 +124,11 @@ gl.getProgramInfoLog(): ${gl.getProgramInfoLog(program)}
         // clean up some shaders
         gl.deleteShader(glVertShader);
         gl.deleteShader(glFragShader);
+
+        if (program)
+        {
+            GLProgramCache.set(cacheKey, program);
+        }
 
         return program;
     }
@@ -249,6 +282,19 @@ gl.getShaderInfoLog(): ${gl.getShaderInfoLog(shader)}
         }
 
         return uniforms;
+    }
+
+    /**
+     * Recompiles the shader program.
+     *
+     * @param {boolean} [forceCompile=false] - When set to true this will always compile,
+     *  skipping the cache checks.
+     */
+    recompile(forceCompile)
+    {
+        this.program = GLShader.compileProgram(this.gl, this.vertexSrc, this.fragmentSrc, forceCompile);
+        this.attributes = GLShader.extractAttributes(this.gl, this.program);
+        this.uniforms = GLShader.generateUniformAccessObject(this.gl, GLShader.extractUniforms(this.gl, this.program));
     }
 
     /**
