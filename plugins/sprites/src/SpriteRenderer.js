@@ -108,14 +108,6 @@ export default class SpriteRenderer extends render.ObjectRenderer
     }
 
     /**
-     * Starts a new sprite batch.
-     *
-     */
-    start()
-    {
-    }
-
-    /**
      * Stops the sprite batch.
      *
      */
@@ -280,7 +272,8 @@ export default class SpriteRenderer extends render.ObjectRenderer
 
             if (!shader)
             {
-                shader = this.shaders[groupTextureCount - 1] = generateMultiTextureShader(this.renderer, groupTextureCount);
+                shader = generateMultiTextureShader(this.renderer, groupTextureCount);
+                this.shaders[groupTextureCount - 1] = shader;
             }
 
             this.renderer.state.setShader(shader);
