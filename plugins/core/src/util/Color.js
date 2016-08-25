@@ -25,28 +25,24 @@ export default class Color
      */
     constructor(r = 0, g = 0, b = 0, normalized = false)
     {
-        this._data = new ArrayBuffer(12);
-        this._value = new Float32Array(this._data);
-        this._components = new Uint8Array(this._data);
-
         this.normalized = normalized;
 
-        this.red = r;
-        this.green = g;
-        this.blue = b;
+        this._red = r;
+        this._green = g;
+        this._blue = b;
     }
 
     /**
-     * Creates a color from a value.
+     * Creates a color from a value in the form 0xRRGGBB.
      *
      * @param {number} num - The color value as a number.
      * @return {Color} The new color.
      */
-    static fromValue(num)
+    static fromRgb(num)
     {
         const c = new Color();
 
-        c.value = num;
+        c.rgb = num;
 
         return c;
     }
@@ -118,14 +114,6 @@ export default class Color
     }
 
     /**
-     * The maximum value of a component.
-     */
-    get max()
-    {
-        return this.normalized ? 1 : 255;
-    }
-
-    /**
      * Creates a random color.
      *
      * @return {Color} The new color.
@@ -140,13 +128,21 @@ export default class Color
     }
 
     /**
+     * The maximum value of a component.
+     */
+    get max()
+    {
+        return this.normalized ? 1 : 255;
+    }
+
+    /**
      * Value of the color as a number in 0xBBGGRR format.
      *
      * @member {number}
      */
     get bgr()
     {
-        return this.blue + (this.green << 8) + (this.red << 16);
+        return this._red + (this._green << 8) + (this._blue << 16);
     }
 
     /**
@@ -154,9 +150,9 @@ export default class Color
      *
      * @member {number}
      */
-    get value()
+    get rgb()
     {
-        return this._value[0];
+        return this.blue + (this.green << 8) + (this.red << 16);
     }
 
     /**
@@ -164,12 +160,17 @@ export default class Color
      *
      * @param {number} v - The value to set to.
      */
-    set value(v)
+    set rgb(v)
     {
         // @ifdef DEBUG
         ASSERT(v >= 0 && v <= 0xffffff, `Value out of range for color: 0x${v.toString(16)} (min: 0, max: 0xffffff).`);
         // @endif
-        this._value[0] = v;
+
+        const factor = this.normalized ? 255 : 1;
+
+        this._red = (v >> 16) / factor;
+        this._green = ((v & 0x00ff00) >> 8) / factor;
+        this._blue = ((v & 0x0000ff)) / factor;
     }
 
     /**
@@ -179,7 +180,7 @@ export default class Color
      */
     get red()
     {
-        return this._components[0];
+        return this._red;
     }
 
     /**
@@ -192,7 +193,7 @@ export default class Color
         // @ifdef DEBUG
         ASSERT(v >= 0 && v <= this.max, `Value out of range for RED component: ${v} (min: 0, max: ${this.max}).`);
         // @endif
-        this._components[0] = v;
+        this._red = v;
     }
 
     /**
@@ -202,7 +203,7 @@ export default class Color
      */
     get green()
     {
-        return this._components[1];
+        return this._green;
     }
 
     /**
@@ -215,7 +216,7 @@ export default class Color
         // @ifdef DEBUG
         ASSERT(v >= 0 && v <= this.max, `Value out of range for GREEN component: ${v} (min: 0, max: ${this.max}).`);
         // @endif
-        this._components[1] = v;
+        this._green = v;
     }
 
     /**
@@ -225,7 +226,7 @@ export default class Color
      */
     get blue()
     {
-        return this._components[2];
+        return this._blue;
     }
 
     /**
@@ -238,7 +239,7 @@ export default class Color
         // @ifdef DEBUG
         ASSERT(v >= 0 && v <= this.max, `Value out of range for BLUE component: ${v} (min: 0, max: ${this.max}).`);
         // @endif
-        this._components[2] = v;
+        this._blue = v;
     }
 
     /**
