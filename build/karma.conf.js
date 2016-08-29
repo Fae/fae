@@ -101,37 +101,42 @@ module.exports = function conf(config)
 
     if (process.env.TRAVIS)
     {
-        const buildLabel = `TRAVIS #${process.env.TRAVIS_BUILD_NUMBER} (${process.env.TRAVIS_BUILD_ID})`;
-
         config.logLevel = config.LOG_DEBUG;
 
-        config.reporters.push('saucelabs');
-        config.browsers = [
-            'SL_Chrome',
-            'SL_Firefox',
-            'SL_IE_11',
-            // 'SL_Safari_7',
-            // 'SL_Safari_8',
-            // 'SL_Safari_9', // Safar doesn't like Fae right now
-            // 'SL_Edge', // Edge seems to be having issues on saucelabs right now
-            // 'SL_iOS', // iOS doesn't like Fae right now
-        ];
+        if (process.env.TRAVIS_PULL_REQUEST)
+        {
+            config.browsers = ['Firefox'];
+        }
+        else
+        {
+            config.reporters.push('saucelabs');
+            config.browsers = [
+                'SL_Chrome',
+                'SL_Firefox',
+                'SL_IE_11',
+                // 'SL_Safari_7',
+                // 'SL_Safari_8',
+                // 'SL_Safari_9', // Safari doesn't like Fae right now
+                // 'SL_Edge', // Edge seems to be having issues on saucelabs right now
+                // 'SL_iOS', // iOS doesn't like Fae right now
+            ];
 
-        // Karma (with socket.io 1.x) buffers by 50 and 50 tests can take a long time on IEs;-)
-        config.browserNoActivityTimeout = 120000;
+            // Karma (with socket.io 1.x) buffers by 50 and 50 tests can take a long time on IEs;-)
+            config.browserNoActivityTimeout = 120000;
 
-        // config.browserStack.build = buildLabel;
-        // config.browserStack.startTunnel = false;
-        // config.browserStack.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
+            // config.browserStack.build = buildLabel;
+            // config.browserStack.startTunnel = false;
+            // config.browserStack.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
 
-        config.sauceLabs.build = buildLabel;
-        config.sauceLabs.startConnect = false;
-        config.sauceLabs.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
-        config.sauceLabs.recordScreenshots = true;
+            config.sauceLabs.build = `TRAVIS #${process.env.TRAVIS_BUILD_NUMBER} (${process.env.TRAVIS_BUILD_ID})`;
+            config.sauceLabs.startConnect = false;
+            config.sauceLabs.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
+            config.sauceLabs.recordScreenshots = true;
 
-        // Allocating a browser can take pretty long (eg. if we are out of capacity and need to wait
-        // for another build to finish) and so the `captureTimeout` typically kills
-        // an in-queue-pending request, which makes no sense.
-        config.captureTimeout = 0;
+            // Allocating a browser can take pretty long (eg. if we are out of capacity and need to wait
+            // for another build to finish) and so the `captureTimeout` typically kills
+            // an in-queue-pending request, which makes no sense.
+            config.captureTimeout = 0;
+        }
     }
 };
