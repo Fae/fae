@@ -409,7 +409,7 @@ export default class Pointer
         {
             this.type = data.pointerType;
         }
-        else if (event.type && event.type[0] === 'm')
+        else if (data.type && data.type[0] === 'm')
         {
             this.type = Pointer.TYPE.MOUSE;
         }
