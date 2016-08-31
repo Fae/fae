@@ -146,7 +146,7 @@ For example, to see what plugins need to be made you can look at the [New Plugin
 <a name="contributing"></a>
 ## Contributing
 
-The [Contributing Guide]() contains the full details on how to contribute
+The [Contributing Guide][contributing-guide] contains the full details on how to contribute
 changes to the project.
 
 Main points:
@@ -159,6 +159,7 @@ Main points:
 [ee3]: https://github.com/primus/eventemitter3
 [event-tests]: https://github.com/Hypercubed/EventsSpeedTests
 [github-issues]: https://github.com/Fae/fae/issues
+[contributing-guide]: https://github.com/Fae/fae/blob/master/.github/CONTRIBUTING.md
 [code-of-conduct]: https://github.com/Fae/fae/blob/master/CODE_OF_CONDUCT.md
 [paypal-donate]: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=CAP4H5ZVLHMMW&lc=US&item_name=Fae&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 [patreon-donate]: https://www.patreon.com/user?u=2430663
