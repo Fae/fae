@@ -13,6 +13,8 @@
         "new-cap": [2, { "newIsCap": true, "capIsNew": false, "properties": false }],
         "curly": [2, "multi-line"],
         "brace-style": [2, "allman"],
-        "no-magic-numbers": 0
+        "no-restricted-syntax": [2, "DebuggerStatement", "EmptyStatement", "WithStatement"],
+        "no-magic-numbers": 0,
+        "no-labels": 0
     }
 }
