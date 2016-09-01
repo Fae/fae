@@ -3,11 +3,11 @@ import Signal from 'mini-signals';
 /**
  * @class
  */
-export default class TextStyle
+export default class CanvasTextStyle
 {
     /**
      * @param {*} style - The style parameters. This object can contain any property of the
-     *  TextStyle class to override the default.
+     *  CanvasTextStyle class to override the default.
      */
     constructor(style = {})
     {
@@ -254,13 +254,13 @@ export default class TextStyle
     }
 
     /**
-     * Creates a new TextStyle with the same values as this one.
+     * Creates a new CanvasTextStyle with the same values as this one.
      *
-     * @return {TextStyle} The new style
+     * @return {CanvasTextStyle} The new style
      */
     clone()
     {
-        return new TextStyle(this);
+        return new CanvasTextStyle(this);
     }
 
     /**

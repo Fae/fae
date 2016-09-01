@@ -1,7 +1,7 @@
 {
-  "name": "@fae/text",
+  "name": "@fae/text-canvas",
   "version": "1.0.0",
-  "description": "Adds support for bitmap and canvas text",
+  "description": "Adds support for text drawn via the Canvas2d API",
   "author": "Chad Engler <chad@pantherdev.com>",
   "license": "MIT",
   "main": "src/index.js",

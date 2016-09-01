@@ -1,4 +1,6 @@
-import TextStyle from './TextStyle';
+import CanvasTextStyle from './CanvasTextStyle';
+
+// TODO: Add append methods
 
 const rgxNewline = /\r\n|\r|\n/;
 
@@ -22,7 +24,7 @@ export default class CanvasTextWriter
         /**
          * The text rendering style.
          *
-         * @member {TextStyle}
+         * @member {CanvasTextStyle}
          */
         this.style = null;
 
@@ -348,7 +350,7 @@ export default class CanvasTextWriter
     }
 }
 
-CanvasTextWriter.defaultStyle = new TextStyle();
+CanvasTextWriter.defaultStyle = new CanvasTextStyle();
 
 CanvasTextWriter.fontPropertiesCache = {};
 CanvasTextWriter.fontPropertiesCanvas = null;
