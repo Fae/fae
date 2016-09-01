@@ -51,7 +51,7 @@ export default class Entity extends ECS.Entity {
          *         // When added to the renderer all `MySprite` instances with the same
          *         // priority will now be grouped together, improving the SpriteRenderer's
          *         // ability to batch them!
-         *         this.objectRendererHint = SpriteRenderer;
+         *         this.renderGroupHint = SpriteRenderer;
          *     }
          * }
          * ```

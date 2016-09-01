@@ -29,7 +29,7 @@ export default class Sprite extends ecs.Entity.with(
     {
         super();
 
-        this.objectRendererHint = SpriteRenderer;
+        this.renderGroupHint = SpriteRenderer;
 
         this._onTextureUpdateBinding = null;
 
