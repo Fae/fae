@@ -1,11 +1,23 @@
 import System from './System';
 import SelfRenderComponent from './SelfRenderComponent';
+import Renderer from '../render/Renderer';
 
 /**
  * @class
  */
 export default class SelfRenderSystem extends System
 {
+    /**
+     * @param {Renderer} renderer - The renderer to use.
+     * @param {number} priority - The priority of the system, higher means earlier.
+     * @param {number} frequency - How often to run the update loop. `1` means every
+     *  time, `2` is every other time, etc.
+     */
+    constructor(renderer, priority = SelfRenderSystem.defaultPriority, frequency = 1)
+    {
+        super(renderer, priority, frequency);
+    }
+
     /**
      * Returns true if the entity is eligible to the system, false otherwise.
      *
@@ -29,3 +41,13 @@ export default class SelfRenderSystem extends System
         entity.render(this.renderer, elapsed);
     }
 }
+
+Renderer.addDefaultSystem(SelfRenderSystem);
+
+/**
+ * @static
+ * @constant
+ * @member {number}
+ * @default 1000
+ */
+SelfRenderSystem.defaultPriority = System.PRIORITY.RENDER;
