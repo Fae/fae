@@ -12,7 +12,7 @@
         "excludePattern": "(^|\\/|\\\\)_"
     },
     "plugins": [
-        "node_modules/jsdoc/plugins/markdown"
+        "plugins/markdown"
     ],
     "templates": {
         "cleverLinks": false,
@@ -31,9 +31,9 @@
     "opts": {
         "encoding": "utf8",
         "recurse": true,
-        "private": false,
+        "private": true,
         "lenient": true,
-        "destination": "./docs",
+        "destination": "./api-docs",
         "template": "./node_modules/jaguarjs-jsdoc"
     }
 }
