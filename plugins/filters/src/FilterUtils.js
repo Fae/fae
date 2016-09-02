@@ -52,8 +52,8 @@ export default {
         }
 
         // prepare render target
-        const w = state.sourceFrame.width;
-        const h = state.sourceFrame.height;
+        let w = state.sourceFrame.width;
+        let h = state.sourceFrame.height;
         const renderTarget = this._renderTargetPool.pop() || new render.RenderTarget(renderer.gl, w, h);
 
         w = bitTwiddle.nextPow2(w /* * resolution*/);
