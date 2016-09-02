@@ -71,11 +71,6 @@ familiar class-oriented thought processes and applications.
 
 Coming Soon!
 
-<a name="differences"></a>
-## Major Differences
-
-Coming Soon!
-
 <a name="start"></a>
 ## Get Started
 
