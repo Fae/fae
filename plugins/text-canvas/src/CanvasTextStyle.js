@@ -236,7 +236,7 @@ export default class CanvasTextStyle
         {
             if (k.charAt(0) !== '_') continue;
 
-            Object.defineProperty(k.replace('_', ''), {
+            Object.defineProperties(Object(k.replace('_', '')), {
                 get()
                 {
                     return this[k];
