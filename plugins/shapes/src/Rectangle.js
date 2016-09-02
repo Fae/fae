@@ -286,7 +286,7 @@ export default class Rectangle
      *     ----------
      * ```
      *
-     * After a call to `pad(5, 5)` becomes something like:
+     * After a call to `inflate(5, 5)` becomes something like:
      *
      * ```
      *    ---------------
@@ -316,8 +316,7 @@ export default class Rectangle
     /**
      * Manipulates this rectangle so that becomes the same size as the passed rectangle.
      * The big difference between this method and just copying the values of the other
-     * rectangle is that this ensures that this rectangle never goes below x/y of 0
-     * and width/height of 0.
+     * rectangle is that this ensures that the width/height never goes below 0.
      *
      * @param {Rectangle} rectangle - The rectangle to grow to encompass.
      * @return {Rectangle} returns itself.

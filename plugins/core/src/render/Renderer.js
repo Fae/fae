@@ -108,7 +108,7 @@ export default class Renderer extends ECS
         this.emptyRenderer = new ObjectRenderer(this);
 
         /**
-         * The currently activer object renderer.
+         * The currently active object renderer.
          *
          * @member {ObjectRenderer}
          */
