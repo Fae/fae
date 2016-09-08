@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <script src="../../dist/fae.js"></script>
+    </head>
+    <body>
+        <canvas id="view" width="512" height="512"></canvas>
+
+        <script id="noise-frag" type="application/x-fragment-shader">
+            precision highp float;
+
+            varying vec2 vTextureCoord;
+            varying vec4 vColor;
+
+            uniform float noise;
+            uniform sampler2D uSampler;
+
+            float rand(vec2 co)
+            {
+                return fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);
+            }
+
+            void main()
+            {
+                vec4 color = texture2D(uSampler, vTextureCoord);
+
+                float diff = (rand(gl_FragCoord.xy) - 0.5) * noise;
+
+                color.r += diff;
+                color.g += diff;
+                color.b += diff;
+
+                gl_FragColor = color;
+            }
+        </script>
+
+        <script>
+            const fragSrc = document.getElementById('noise-frag').textContent;
+            let renderer = new Fae.render.Renderer(document.getElementById('view'));
+
+            // custom sprite
+            class FilteredSprite extends Fae.sprites.Sprite.with(
+                Fae.filters.FilterComponent,
+                Fae.shapes.BoundsComponent
+            ) {
+                _updateBounds() {
+                    this._bounds.clear();
+
+                    if (!this.visible) return;
+
+                    const trim = sprite._texture.trim;
+                    const orig = sprite._texture.orig;
+
+                    if (!trim || (trim.width === orig.width && trim.height === orig.height)) {
+                        this._bounds.addQuad(this.vertexData);
+                    }
+                    else {
+                        const wt = sprite.transform.worldTransform;
+                        const a = wt.a;
+                        const b = wt.b;
+                        const c = wt.c;
+                        const d = wt.d;
+                        const tx = wt.tx;
+                        const ty = wt.ty;
+
+                        const w0 = (orig.width) * (1 - sprite._anchorX);
+                        const w1 = (orig.width) * -sprite._anchorX;
+
+                        const h0 = orig.height * (1 - sprite._anchorY);
+                        const h1 = orig.height * -sprite._anchorY;
+
+                        this._bounds.addQuad([
+                            (a * w1) + (c * h1) + tx,
+                            (d * h1) + (b * w1) + ty,
+
+                            (a * w0) + (c * h1) + tx,
+                            (d * h1) + (b * w0) + ty,
+
+                            (a * w0) + (c * h0) + tx,
+                            (d * h0) + (b * w0) + ty,
+
+                            (a * w1) + (c * h0) + tx,
+                            (d * h0) + (b * w1) + ty,
+                        ]);
+                    }
+                }
+            }
+
+            // load an image and create a sprite
+            let img = new Image();
+            let sprite = null;
+
+            img.src = 'spade_A.png';
+            img.addEventListener('load', function ()
+            {
+                sprite = new FilteredSprite(new Fae.textures.Texture(img));
+
+                sprite.filters.push(new Fae.filters.Filter(renderer, fragSrc));
+
+                renderer.addEntity(sprite);
+
+                render();
+            });
+
+            function render() {
+                requestAnimationFrame(render);
+                renderer.render();
+            }
+        </script>
+    </body>
+</html>

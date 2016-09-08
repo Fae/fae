@@ -1,78 +1,32 @@
 import { render } from '@fae/core';
-import { Rectangle } from '@fae/shapes';
 import bitTwiddle from 'bit-twiddle';
 
-/**
- * @class
- * @memberof filters
- */
-class FilterState
-{
-    /**
-     *
-     */
-    constructor()
-    {
-        this.renderTarget = null;
-        this.sourceFrame = new Rectangle();
-        this.destinationFrame = new Rectangle();
-        this.entity = null;
-        // this.resolution = 1;
-    }
-}
-
 export default {
-    getFilterState(entity, previousState, renderer /* , resolution*/)
+    initialRenderTarget: null,
+    activeRenderTarget: null,
+    tempRenderTarget: null,
+    setup(entity, renderer /* , resolution*/)
     {
+        this.initialRenderTarget = renderer.state.target;
+
+        if (!this.activeRenderTarget)
+        {
+            this.activeRenderTarget = new render.RenderTarget(renderer.gl, 1, 1);
+        }
+
+        if (!this.tempRenderTarget)
+        {
+            this.tempRenderTarget = new render.RenderTarget(renderer.gl, 1, 1);
+        }
+
         // prepare state
-        const state = this._statePool.pop() || new FilterState();
         const bounds = entity.filterArea || entity.getBounds();
+        const width = bitTwiddle.nextPow2(bounds.width);
+        const height = bitTwiddle.nextPow2(bounds.height);
 
-        state.entity = entity;
+        this.activeRenderTarget.resize(width, height);
+        this.tempRenderTarget.resize(width, height);
 
-        if (!previousState)
-        {
-            state.sourceFrame.copy(renderer.state.target.size);
-            state.destinationFrame.copy(renderer.state.target.size);
-        }
-        else
-        {
-            state.sourceFrame.copy(bounds);
-            // state.sourceFrame.x = ((bounds.x * resolution) | 0) / resolution;
-            // state.sourceFrame.y = ((bounds.y * resolution) | 0) / resolution;
-            // state.sourceFrame.width = ((bounds.width * resolution) | 0) / resolution;
-            // state.sourceFrame.height = ((bounds.height * resolution) | 0) / resolution;
-
-            state.sourceFrame.fit(renderer.state.target.size);
-
-            state.destinationFrame.x = state.destinationFrame.y = 0;
-            state.destinationFrame.width = state.sourceFrame.width;
-            state.destinationFrame.height = state.sourceFrame.height;
-
-            state.sourceFrame.inflate(entity.filterPadding, entity.filterPadding);
-        }
-
-        // prepare render target
-        let w = state.sourceFrame.width;
-        let h = state.sourceFrame.height;
-        const renderTarget = this._renderTargetPool.pop() || new render.RenderTarget(renderer.gl, w, h);
-
-        w = bitTwiddle.nextPow2(w /* * resolution*/);
-        h = bitTwiddle.nextPow2(h /* * resolution*/);
-
-        renderTarget.resize(w, h);
-        renderTarget.setFrame(state.destinationFrame, state.sourceFrame);
-
-        state.renderTarget = renderTarget;
-
-        return state;
+        renderer.state.setRenderTarget(this.activeRenderTarget);
     },
-    freeFilterState(state)
-    {
-        this._statePool.push(state);
-        this._renderTargetPool.push(state.renderTarget);
-    },
-    activeRenderStack: [],
-    _renderTargetPool: [],
-    _statePool: [],
 };

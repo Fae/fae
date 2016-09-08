@@ -198,13 +198,13 @@ export default class RenderTarget
         width = Math.floor(width);
         height = Math.floor(height);
 
-        if (this.size.width === width && this.size.height === height)
+        if (this.size.x === width && this.size.y === height)
         {
             return;
         }
 
-        this.size.width = width;
-        this.size.height = height;
+        this.size.x = width;
+        this.size.y = height;
 
         this.defaultFrame.width = width;
         this.defaultFrame.height = height;

@@ -37,20 +37,13 @@ export default class FilterPrepareSystem extends ecs.System
      */
     update(entity)
     {
+        if (entity.filters.length === 0) return;
+
         // stop obj renderer
         this.renderer.activeObjectRenderer.stop();
 
-        // setup the filter stack
-        let filterState = null;
-
-        FilterUtils.activeRenderStack.length = 0;
-
-        for (let i = 0; i < entity.filters.length; ++i)
-        {
-            filterState = FilterUtils.getFilterState(entity, filterState, this.renderer);
-
-            FilterUtils.activeRenderStack.push(filterState);
-        }
+        // reassign target and setup filter state
+        FilterUtils.setup(entity, this.renderer);
 
         // start obj renderer
         this.renderer.activeObjectRenderer.start();

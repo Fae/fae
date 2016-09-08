@@ -55,7 +55,7 @@ export default class SpriteRenderer extends render.ObjectRenderer
          *
          * @member {Uint16Array}
          */
-        this.indices = util.createIndicesForQuads(this.size);
+        this.indices = glutil.GLQuad.createIndices(this.size);
 
         /**
          * The default shaders that is used if a sprite doesn't have a more specific one.

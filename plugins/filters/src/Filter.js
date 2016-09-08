@@ -23,7 +23,7 @@ export default class Filter extends render.Shader
          * @member {boolean}
          * @default true
          */
-        this.enabled = true;
+        this.enable = true;
 
         /**
          * The string source of the vertex shader.
@@ -56,7 +56,7 @@ export default class Filter extends render.Shader
      */
     run(system, input, output, clear)
     {
-
+        system.drawFilter(this, input, output, clear);
     }
 }
 
