@@ -128,7 +128,7 @@ export default class Filter extends render.Shader
             else if (uniformData[k].type === 'mat3')
             {
                 // check if its a matrix object
-                if (values[k].a !== undefined)
+                if (typeof values[k].a !== 'undefined')
                 {
                     uniforms[k] = values[k].toArray(true);
                 }
@@ -140,7 +140,7 @@ export default class Filter extends render.Shader
             else if (uniformData[k].type === 'vec2')
             {
                 // check if its a vector object
-                if (values[k].x !== undefined)
+                if (typeof values[k].x !== 'undefined')
                 {
                     const val = uniforms[k] || new Float32Array(2);
 

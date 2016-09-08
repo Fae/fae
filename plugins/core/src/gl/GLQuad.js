@@ -81,7 +81,6 @@ export default class GLQuad
          * @member {GLVertexArrayObject}
          */
         this.vao = new GLVertexArrayObject(gl);
-
     }
 
     /**
