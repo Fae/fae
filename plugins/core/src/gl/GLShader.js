@@ -243,7 +243,7 @@ gl.getShaderInfoLog(): ${gl.getShaderInfoLog(shader)}
         // this is the object we will be sending back.
         // an object hierachy will be created for structs
         const uniforms = {
-            data: {},
+            __data: {},
         };
 
         const uniformKeys = Object.keys(uniformData);
@@ -258,17 +258,16 @@ gl.getShaderInfoLog(): ${gl.getShaderInfoLog(shader)}
             const uniformGroup = getUniformGroup(nameTokens, uniforms);
             const uniform = uniformData[fullName];
 
-            uniformGroup.data[name] = uniform;
-
-            uniformGroup.gl = gl;
+            uniformGroup.__data[name] = uniform;
 
             Reflect.defineProperty(uniformGroup, name, {
-                get: () => uniformGroup.data[name].value,
+                enumerable: true,
+                get: () => uniform.value,
                 set: (value) =>
                 {
-                    uniformGroup.data[name].value = value;
+                    uniform.value = value;
 
-                    const loc = uniformGroup.data[name].location;
+                    const loc = uniform.location;
 
                     if (uniform.size === 1)
                     {
@@ -334,7 +333,7 @@ function getUniformGroup(nameTokens, uniform)
 
     for (let i = 0; i < nameTokens.length - 1; ++i)
     {
-        const o = cur[nameTokens[i]] || { data: {} };
+        const o = cur[nameTokens[i]] || { __data: {} };
 
         cur[nameTokens[i]] = o;
         cur = o;

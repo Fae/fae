@@ -64,7 +64,7 @@ export default class FilterRenderSystem extends ecs.System
         this.renderer.activeObjectRenderer.stop();
 
         // process the filters
-        this.quad.map(FilterUtils.activeRenderTarget, FilterUtils.activeRenderTarget).upload();
+        this.quad.map(FilterUtils.activeRenderTarget, FilterUtils.activeBounds).upload();
 
         if (entity.filters.length === 1)
         {
@@ -72,25 +72,29 @@ export default class FilterRenderSystem extends ecs.System
 
             if (filter.enable)
             {
-                this.quad.initVao(filter);
                 filter.run(this, FilterUtils.activeRenderTarget, FilterUtils.initialRenderTarget, false);
             }
         }
         else
         {
+            const activeFilters = [];
             let flip = FilterUtils.activeRenderTarget;
             let flop = FilterUtils.tempRenderTarget;
             let i = 0;
 
             for (i = 0; i < entity.filters.length - 1; ++i)
             {
-                const filter = entity.filters[i];
+                if (entity.filters[i].enable)
+                {
+                    activeFilters.push(entity.filters[i]);
+                }
+            }
 
-                if (!filter.enable) continue;
+            for (i = 0; i < activeFilters.length - 1; ++i)
+            {
+                const filter = activeFilters[i];
 
-                this.quad.initVao(filter);
                 filter.run(this, flip, flop, true);
-                this.quad.draw();
 
                 const t = flip;
 
@@ -98,7 +102,7 @@ export default class FilterRenderSystem extends ecs.System
                 flop = t;
             }
 
-            entity.filters[i].run(this, flip, FilterUtils.initialRenderTarget, false);
+            activeFilters[i].run(this, flip, FilterUtils.initialRenderTarget, false);
         }
 
         // start obj renderer
@@ -118,6 +122,8 @@ export default class FilterRenderSystem extends ecs.System
         const gl = this.renderer.gl;
         const state = this.renderer.state;
 
+        this.quad.initVao(filter);
+
         state.setRenderTarget(output);
 
         if (clear)
@@ -128,11 +134,54 @@ export default class FilterRenderSystem extends ecs.System
         }
 
         state.setShader(filter);
-        state.setBlendMode(filter.blendMode);
+
+        this._setAutomaticUniforms(filter);
+
+        filter.syncUniforms();
 
         input.framebuffer.texture.bind(0);
 
+        state.setBlendMode(filter.blendMode);
+
         this.quad.draw();
+    }
+
+    /**
+     * Sets some uniforms (if they exist) automatically for the user.
+     *
+     * @private
+     * @param {Filter} filter - The filter to setup.
+     */
+    _setAutomaticUniforms(filter)
+    {
+        if (filter.values.filterArea)
+        {
+            const area = filter.values.filterArea;
+
+            area[0] = FilterUtils.activeRenderTarget.size.x;
+            area[1] = FilterUtils.activeRenderTarget.size.y;
+            area[2] = FilterUtils.activeBounds.x;
+            area[3] = FilterUtils.activeBounds.y;
+        }
+
+        if (filter.values.filterClamp)
+        {
+            const clamp = filter.values.filterClamp;
+
+            clamp[0] = 0.5 / FilterUtils.activeRenderTarget.size.x;
+            clamp[1] = 0.5 / FilterUtils.activeRenderTarget.size.y;
+            clamp[2] = (FilterUtils.activeBounds.width - 0.5) / FilterUtils.activeRenderTarget.size.x;
+            clamp[3] = (FilterUtils.activeBounds.height - 0.5) / FilterUtils.activeRenderTarget.size.y;
+        }
+
+        // TODO: How do users set textures on a filter? Right now, the auto detection
+        // would accept a number. Maybe special handling at the `Shader` level to handle
+        // special types that are easier to work as objects?
+        // Maybe after shader inits, iterate through the uniform accessors and override
+        // ones of complex types (`sampler2D`, `mat3`, `vec2`, etc.)
+        //
+        // Pixi keeps filter props separate and copies them here, but I think this problem
+        // is on the shader level as well...
     }
 }
 

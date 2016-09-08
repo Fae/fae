@@ -1,0 +1,22 @@
+{
+  "name": "@fae/filters-pack",
+  "version": "1.0.0",
+  "description": "Pack of multiple pre-made filters.",
+  "author": "Chad Engler <chad@pantherdev.com>",
+  "license": "MIT",
+  "main": "src/index.js",
+  "homepage": "https://github.com/Fae/fae#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fae/fae.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Fae/fae/issues"
+  },
+  "files": [
+    "src/"
+  ],
+  "dependencies": {
+    "@fae/filters": "^1.0.0"
+  }
+}

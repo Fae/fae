@@ -68,6 +68,17 @@ export default class RenderTarget
     }
 
     /**
+     * The underlying framebuffer's texture.
+     *
+     * @readonly
+     * @member {GLTexture}
+     */
+    get texture()
+    {
+        return this.framebuffer.texture;
+    }
+
+    /**
      * The width of this render target. Proxy for `.size.x`.
      *
      * To set this, call `.resize(width, height)`
@@ -96,10 +107,13 @@ export default class RenderTarget
      * If you pass an array it must be in the format: `[red, green, blue, alpha]`.
      *
      * @param {Color|number[]|Float32Array} color - The color to clear with.
+     * @return {RenderTarget} Returns itself.
      */
     clear(color = this.clearColor)
     {
         this.framebuffer.clear(color.r, color.g, color.b, color.a);
+
+        return this;
     }
 
     /**
@@ -107,16 +121,20 @@ export default class RenderTarget
      *
      * @param {Rectangle} destinationFrame - The destination frame.
      * @param {Rectangle} sourceFrame - The source frame.
+     * @return {RenderTarget} Returns itself.
      */
     setFrame(destinationFrame = null, sourceFrame = null)
     {
         this.destinationFrame = destinationFrame || this.destinationFrame || this.defaultFrame;
         this.sourceFrame = sourceFrame || this.sourceFrame || destinationFrame;
+
+        return this;
     }
 
     /**
      * Binds the buffers and initialises the viewport.
      *
+     * @return {RenderTarget} Returns itself.
      */
     activate()
     {
@@ -153,6 +171,8 @@ export default class RenderTarget
             (this.destinationFrame.width/* * this.resolution*/) | 0,
             (this.destinationFrame.height/* * this.resolution*/) | 0
         );
+
+        return this;
     }
 
     /**
@@ -160,6 +180,7 @@ export default class RenderTarget
      *
      * @param {Rectangle} destinationFrame - The destination frame.
      * @param {Rectangle} sourceFrame - The source frame.
+     * @return {RenderTarget} Returns itself.
      */
     calculateProjection(destinationFrame, sourceFrame = null)
     {
@@ -185,6 +206,8 @@ export default class RenderTarget
             pm.tx = -1 - (sourceFrame.x * pm.a);
             pm.ty = 1 - (sourceFrame.y * pm.d);
         }
+
+        return this;
     }
 
     /**
@@ -192,6 +215,7 @@ export default class RenderTarget
      *
      * @param {number} width - the new width of the texture.
      * @param {number} height - the new height of the texture.
+     * @return {RenderTarget} Returns itself.
      */
     resize(width, height)
     {
@@ -200,7 +224,7 @@ export default class RenderTarget
 
         if (this.size.x === width && this.size.y === height)
         {
-            return;
+            return this;
         }
 
         this.size.x = width;
@@ -214,6 +238,8 @@ export default class RenderTarget
         const projectionFrame = this.size;
 
         this.calculateProjection(projectionFrame);
+
+        return this;
     }
 
     /**

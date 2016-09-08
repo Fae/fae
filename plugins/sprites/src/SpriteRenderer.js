@@ -14,7 +14,7 @@ let TICK = 0;
 export default class SpriteRenderer extends render.ObjectRenderer
 {
     /**
-     * @param {Renderer} renderer - The renderer this manager works for.
+     * @param {Renderer} renderer - The renderer this filter runs in.
      */
     constructor(renderer)
     {

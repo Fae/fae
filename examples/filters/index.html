@@ -5,37 +5,8 @@
     <body>
         <canvas id="view" width="512" height="512"></canvas>
 
-        <script id="noise-frag" type="application/x-fragment-shader">
-            precision highp float;
-
-            varying vec2 vTextureCoord;
-            varying vec4 vColor;
-
-            uniform float noise;
-            uniform sampler2D uSampler;
-
-            float rand(vec2 co)
-            {
-                return fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);
-            }
-
-            void main()
-            {
-                vec4 color = texture2D(uSampler, vTextureCoord);
-
-                float diff = (rand(gl_FragCoord.xy) - 0.5) * noise;
-
-                color.r += diff;
-                color.g += diff;
-                color.b += diff;
-
-                gl_FragColor = color;
-            }
-        </script>
-
         <script>
-            const fragSrc = document.getElementById('noise-frag').textContent;
-            let renderer = new Fae.render.Renderer(document.getElementById('view'));
+            const renderer = new Fae.render.Renderer(document.getElementById('view'));
 
             // custom sprite
             class FilteredSprite extends Fae.sprites.Sprite.with(
@@ -86,7 +57,7 @@
             }
 
             // load an image and create a sprite
-            let img = new Image();
+            const img = new Image();
             let sprite = null;
 
             img.src = 'spade_A.png';
@@ -94,15 +65,23 @@
             {
                 sprite = new FilteredSprite(new Fae.textures.Texture(img));
 
-                sprite.filters.push(new Fae.filters.Filter(renderer, fragSrc));
+                sprite.filters.push(new Fae.filters_pack.NoiseFilter(renderer));
 
                 renderer.addEntity(sprite);
 
                 render();
             });
 
+            let count = 0;
+
             function render() {
                 requestAnimationFrame(render);
+
+                if (count++ % 3 === 0)
+                {
+                    sprite.filters[0].values.uNoise = Math.random();
+                }
+
                 renderer.render();
             }
         </script>
