@@ -101,7 +101,7 @@ class EntryGeneratorWebpackPlugin
                     if (data.name === 'core') continue;
 
                     const pkg = data.pkg;
-                    const namespace = pkg.fae && pkg.fae.namespace ? pkg.fae.namespace : pkg.name.replace('@fae/', '');
+                    const namespace = pkg.fae && pkg.fae.namespace ? pkg.fae.namespace : pkg.name.replace('@fae/', '').replace('-', '_');
 
                     str += `import * as ${namespace} from '${data.pkg.name}';\n`;
                     str += `export { ${namespace} };\n\n`;
