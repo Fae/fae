@@ -13,7 +13,7 @@ Welcome to the Fae ecosystem. Fae might be a bit different than what most people
 in other libraries and frameworks, but the hope is to provide a solid foundation to build
 you applications and frameworks upon.
 
-At its core Fae is a collection of components, systems, and assemblages that empower users to
+At its core Fae is a collection of components, systems, and entities that empower users to
 build amazing 2D applications. Fae isn't just a library, or a framework, but instead an ecosystem
 of small modules that together can do almost anything.
 
@@ -101,4 +101,4 @@ make the community better and your time working with Fae easier to do so.
 [modularity]: https://en.wikipedia.org/wiki/Modularity
 [unix-phil]: https://en.wikipedia.org/wiki/Unix_philosophy
 [ecs]: https://en.wikipedia.org/wiki/Entity_component_system
-[esc-diff]: https://englercj.github.io/2016/08/24/composition-ecs/
+[ecs-diff]: https://englercj.github.io/2016/08/24/composition-ecs/
