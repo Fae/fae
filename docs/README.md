@@ -63,13 +63,24 @@ as follows:
 the parameter.
 - `Systems` are classes that perform actions on entities and their components.
 
-<!-- TODO: Talk about why we chose to represent components like this. Mention compat with
-familiar class-oriented thought processes and applications.
--->
+#### Components as Mixins
+
+Those familiar with ECS will probably be wondering why in our flavor of ECS are components
+mixins instead of data containers independent of the entity. For full details about why
+you can read [my blog article][ecs-diff] on the subject. The short version though is
+that people want to use an OOP interface when using libraries like this. So by implementing
+ECS with Entities as Assemblages only and Components as Mixins I feel that we get the best
+of both worlds. We get the ease of use of classes (for the end user) with the composability
+and modularization of ECS (for library developers).
 
 ### Reusability
 
-Coming Soon!
+If you have read the description of Fae's flavor of ECS and read the 2 *Core Value* sections
+above, you may have an idea where this is going. Since we strive to build small plugins
+that do one thing and do it well, it is pretty likely that code in that plugin is applicable
+elsewhere. For example, components can be reused over and over (with their associated systems)
+in new Entities as much as is imaginable. You don't have to extend the `Sprite` class to
+have the `SpriteRenderer` render your texture. You just need the right components and system!
 
 <a name="start"></a>
 ## Get Started
@@ -77,9 +88,16 @@ Coming Soon!
 If you are ready to get started with Fae, you can head over to the [Getting Started][start]
 guide.
 
+If you want to get started builing plugins for Fae or contributing to the core suite, please
+take a moment to read this document in its entirity as well as our [Contributing Guide][contributing]
+and [Code of Conduct][coc]. It may take a few minutes to read through it all, but it will
+make the community better and your time working with Fae easier to do so.
+
 <!-- Links -->
 
 [start]: GettingStarted.md
+[contributing]: ../.github/CONTRIBUTING.md
+[coc]: ../CODE_OF_CONDUCT.md
 [modularity]: https://en.wikipedia.org/wiki/Modularity
 [unix-phil]: https://en.wikipedia.org/wiki/Unix_philosophy
 [ecs]: https://en.wikipedia.org/wiki/Entity_component_system
