@@ -12,8 +12,11 @@ export default class CanvasTextWriter
 {
     /**
      * @param {HTMLCanvasElement} canvas - optional canvas to write to.
+     * @param {boolean} autoResize - When set the writer will automatically resize the
+     *  canvas as needed. It defaults to `true` if you do not pass in a canvas element
+     *  and `false` if you do pass in a canvas element.
      */
-    constructor(canvas = null)
+    constructor(canvas = null, autoSize = !canvas)
     {
         /**
          * The canvas element that everything is drawn to.
@@ -23,11 +26,11 @@ export default class CanvasTextWriter
         this.canvas = canvas || document.createElement('canvas');
 
         /**
-         * The text rendering style.
+         * Should we resize the canvas when drawing to it?
          *
-         * @member {CanvasTextStyle}
+         * @member {boolean}
          */
-        this.style = null;
+        this.autoSize = autoSize;
 
         /**
          * The canvas 2d context that everything is drawn with.
@@ -43,9 +46,8 @@ export default class CanvasTextWriter
      *
      * @param {string} text - The text to write.
      */
-    write(text)
+    write(text, style = CanvasTextWriter.defaultStyle)
     {
-        const style = this.style || CanvasTextWriter.defaultStyle;
         const ctx = this._textCtx;
         const outputText = style.wordWrap ? this._wordWrap(text) : text;
         const lines = outputText.split(rgxNewline);
@@ -81,16 +83,23 @@ export default class CanvasTextWriter
         const padd = (style.strokeThickness + style.padding) * 2;
 
         // calculate width necessary for canvas
-        const width = maxLineWidth + dsSize + padd;
+        if (this.autoSize)
+        {
+            const width = maxLineWidth + dsSize + padd;
 
-        this.canvas.width = Math.ceil(width /* * this.resolution */);
+            this.canvas.width = Math.ceil(width /* * this.resolution */);
+        }
 
         // calculate height necessary for canvas
         const fntLineHeight = dsSize + fontProperties.fontSize + padd;
         const lineHeight = style.lineHeight ? style.lineHeight + padd : fntLineHeight;
-        const height = Math.max(lineHeight, fntLineHeight) + ((lines.length - 1) * lineHeight);
 
-        this.canvas.height = Math.ceil(height /* * this.resolution*/);
+        if (this.autoSize)
+        {
+            const height = Math.max(lineHeight, fntLineHeight) + ((lines.length - 1) * lineHeight);
+
+            this.canvas.height = Math.ceil(height /* * this.resolution*/);
+        }
 
         // clear and prepare for new text
         // ctx.scale(this.resolution, this.resolution);
@@ -135,15 +144,6 @@ export default class CanvasTextWriter
         this.canvas = null;
 
         this.style = null;
-    }
-
-    /**
-     * Called whenever the underlying text style is updated.
-     *
-     */
-    _onTextStyleUpdate()
-    {
-        this._textDirty = true;
     }
 
     /**
@@ -315,6 +315,7 @@ export default class CanvasTextWriter
         const style = this.style;
         const letterSpacing = style.letterSpacing;
 
+        // normal font-based letter spacing
         if (letterSpacing === 0)
         {
             if (isStroke)
@@ -325,26 +326,27 @@ export default class CanvasTextWriter
             {
                 this._textCtx.fillText(text, x, y);
             }
-
-            return;
         }
-
-        const characters = text.split('');
-
-        for (let i = 0; i < characters.length; ++i)
+        else
         {
-            const char = characters[i];
+            // user-specified letter-spacing
+            const characters = text.split('');
 
-            if (isStroke)
+            for (let i = 0; i < characters.length; ++i)
             {
-                this._textCtx.strokeText(char, x, y);
-            }
-            else
-            {
-                this._textCtx.fillText(char, x, y);
-            }
+                const char = characters[i];
 
-            x += this._textCtx.measureText(char).width + letterSpacing;
+                if (isStroke)
+                {
+                    this._textCtx.strokeText(char, x, y);
+                }
+                else
+                {
+                    this._textCtx.fillText(char, x, y);
+                }
+
+                x += this._textCtx.measureText(char).width + letterSpacing;
+            }
         }
     }
 }

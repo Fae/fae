@@ -17,58 +17,58 @@ export default class CanvasTextStyle
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textAlign
          *
-         * @member {string} CanvasTextStyle#align
+         * @member {string}
          * @default 'left'
          */
-        this._align = 'left';
+        this.align = 'left';
 
         /**
          * Indicates if lines can be wrapped within words, it needs wordWrap to be set to true.
          *
-         * @member {boolean} CanvasTextStyle#breakWords
+         * @member {boolean}
          * @default false
          */
-        this._breakWords = false;
+        this.breakWords = false;
 
         /**
          * Blur radius of the drop shadow
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowBlur
          *
-         * @member {number} CanvasTextStyle#shadowBlur
+         * @member {number}
          * @default 0
          */
-        this._shadowBlur = 0;
+        this.shadowBlur = 0;
 
         /**
          * Fill style of the drop shadow e.g 'red', '#00FF00'.
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowColor
          *
-         * @member {string} CanvasTextStyle#shadowColor
+         * @member {string}
          * @default '#000000'
          */
-        this._shadowColor = '#000000';
+        this.shadowColor = '#000000';
 
         /**
          * X offset of the shadow of the drop shadow.
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowOffsetX
          *
-         * @member {number} CanvasTextStyle#shadowOffsetX
+         * @member {number}
          * @default 0
          */
-        this._shadowOffsetX = 0;
+        this.shadowOffsetX = 0;
 
         /**
          * Y offset of the shadow of the drop shadow.
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowOffsetY
          *
-         * @member {number} CanvasTextStyle#shadowOffsetY
+         * @member {number}
          * @default 0
          */
-        this._shadowOffsetY = 0;
+        this.shadowOffsetY = 0;
 
         /**
          * A canvas fillstyle that will be used on the text e.g 'red', '#00FF00'. Can be an array
@@ -76,77 +76,77 @@ export default class CanvasTextStyle
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
          *
-         * @member {string|string[]|CanvasGradient|CanvasPattern} CanvasTextStyle#fillStyle
+         * @member {string|string[]|CanvasGradient|CanvasPattern}
          * @default 'black'
          */
-        this._fillStyle = 'black';
+        this.fillStyle = 'black';
 
         /**
          * If fills styles are supplied, this can change the type/direction of the gradient.
          * True is vertical, false is horizontal.
          *
-         * @member {boolean} CanvasTextStyle#fillGradientVertical
+         * @member {boolean}
          * @default true
          */
-        this._fillGradientVertical = true;
+        this.fillGradientVertical = true;
 
         /**
          * The font family to use.
          *
-         * @member {string} CanvasTextStyle#fontFamily
+         * @member {string}
          * @default 'Arial'
          */
-        this._fontFamily = 'Arial';
+        this.fontFamily = 'Arial';
 
         /**
          * The font size (as a number it converts to px, but as a string, equivalents are
          * '26px','20pt','160%' or '1.6em')
          *
-         * @member {number|string} CanvasTextStyle#fontSize
+         * @member {number|string}
          * @default 26
          */
-        this._fontSize = 26;
+        this.fontSize = 26;
 
         /**
          * The font style ('normal', 'italic' or 'oblique')
          *
-         * @member {string} CanvasTextStyle#fontStyle
+         * @member {string}
          * @default 'normal'
          */
-        this._fontStyle = 'normal';
+        this.fontStyle = 'normal';
 
         /**
          * The font variant ('normal' or 'small-caps')
          *
-         * @member {string} CanvasTextStyle#fontVariant
+         * @member {string}
          * @default 'normal'
          */
-        this._fontVariant = 'normal';
+        this.fontVariant = 'normal';
 
         /**
          * The font weight ('normal', 'bold', 'bolder', 'lighter' and '100', '200',
          * '300', '400', '500', '600', '700', 800' or '900')
          *
-         * @member {string} CanvasTextStyle#fontWeight
+         * @member {string}
          * @default 'normal'
          */
-        this._fontWeight = 'normal';
+        this.fontWeight = 'normal';
 
         /**
          * The amount of spacing between letters.
          *
-         * @member {number} CanvasTextStyle#letterSpacing
+         * @member {number}
          * @default 0
          */
-        this._letterSpacing = 0;
+        this.letterSpacing = 0;
 
         /**
          * The line height, a number that represents the vertical space that a letter uses.
          *
-         * @member {number} CanvasTextStyle#lineHeight
+         * @member {number}
          * @default 0
          */
-        this._lineHeight = 0;
+        this.lineHeight = 0;
 
         /**
          * The lineJoin property sets the type of corner created, it can resolve spiked text issues.
@@ -154,10 +154,10 @@ export default class CanvasTextStyle
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineJoin
          *
-         * @member {string} CanvasTextStyle#lineJoin
+         * @member {string}
          * @default 'miter'
          */
-        this._lineJoin = 'miter';
+        this.lineJoin = 'miter';
 
         /**
          * The miter limit to use when using the 'miter' lineJoin mode. This can reduce or increase
@@ -165,39 +165,39 @@ export default class CanvasTextStyle
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/miterLimit
          *
-         * @member {number} CanvasTextStyle#miterLimit
+         * @member {number}
          * @default 10
          */
-        this._miterLimit = 10;
+        this.miterLimit = 10;
 
         /**
          * Occasionally some fonts are cropped on top or bottom. Adding some padding will prevent this
          * from happening by adding padding to the top and bottom of text height.
          *
-         * @member {number} CanvasTextStyle#padding
+         * @member {number}
          * @default 0
          */
-        this._padding = 0;
+        this.padding = 0;
 
         /**
          * A canvas fillstyle that will be used on the text stroke e.g 'blue', '#FCFF00'.
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle
          *
-         * @member {string} CanvasTextStyle#stroke
+         * @member {string}
          * @default 'black'
          */
-        this._stroke = 'black';
+        this.stroke = 'black';
 
         /**
          * A number that represents the thickness of the stroke. Default is 0 (no stroke).
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth
          *
-         * @member {number} CanvasTextStyle#strokeThickness
+         * @member {number}
          * @default 0
          */
-        this._strokeThickness = 0;
+        this.strokeThickness = 0;
 
         /**
          * The baseline of the text that is rendered.
@@ -205,56 +205,26 @@ export default class CanvasTextStyle
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textBaseline
          *
-         * @member {string} CanvasTextStyle#textBaseline
+         * @member {string}
          * @default 'alphabetic'
          */
-        this._textBaseline = 'alphabetic';
+        this.textBaseline = 'alphabetic';
 
         /**
          * Indicates if word wrap should be used.
          *
-         * @member {boolean} CanvasTextStyle#wordWrap
+         * @member {boolean}
          * @default false
          */
-        this._wordWrap = false;
+        this.wordWrap = false;
 
         /**
          * The width at which text will wrap, it needs wordWrap to be set to true.
          *
-         * @member {number} CanvasTextStyle#wordWrapWidth
+         * @member {number}
          * @default 100
          */
-        this._wordWrapWidth = 100;
-
-        /**
-         * Dispatched when any of the style properties are updated.
-         *
-         * @member {Signal}
-         */
-        this.onUpdate = new Signal();
-
-        // create the accessor properties descriptors
-        const props = {};
-
-        for (const k in this)
-        {
-            if (k.charAt(0) !== '_') continue;
-
-            props[k.replace('_', '')] = {
-                get()
-                {
-                    return this[k];
-                },
-                set(v)
-                {
-                    this[k] = v;
-                    this.onUpdate.dispatch();
-                },
-            };
-        }
-
-        // add accessor properties
-        Object.defineProperties(this, props);
+        this.wordWrapWidth = 100;
 
         // override properties based on params
         Object.assign(this, style);
@@ -325,6 +295,4 @@ export default class CanvasTextStyle
 
         return gradient;
     }
-
-    // TODO: Track changes for dirty
 }
