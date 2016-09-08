@@ -233,11 +233,14 @@ export default class CanvasTextStyle
          */
         this.onUpdate = new Signal();
 
+        // create the accessor properties descriptors
+        const props = {};
+
         for (const k in this)
         {
             if (k.charAt(0) !== '_') continue;
 
-            Object.defineProperty(k.replace('_', ''), {
+            props[k.replace('_', '')] = {
                 get()
                 {
                     return this[k];
@@ -247,10 +250,13 @@ export default class CanvasTextStyle
                     this[k] = v;
                     this.onUpdate.dispatch();
                 },
-            });
+            };
         }
 
-        // override!
+        // add accessor properties
+        Object.defineProperties(this, props);
+
+        // override properties based on params
         Object.assign(this, style);
     }
 

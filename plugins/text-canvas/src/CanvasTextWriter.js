@@ -131,8 +131,6 @@ export default class CanvasTextWriter
      */
     destroy()
     {
-        super();
-
         this._textCtx = null;
         this.canvas = null;
 
