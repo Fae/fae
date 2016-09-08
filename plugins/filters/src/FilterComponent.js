@@ -2,6 +2,7 @@ export default function FilterComponent(Base)
 {
     /**
      * @class FilterComponent
+     * @memberof filters
      */
     return class extends Base
     {

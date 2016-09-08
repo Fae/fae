@@ -43,7 +43,7 @@
     "chai": "^3.5.0",
     "eslint": "^3.3.1",
     "jaguarjs-jsdoc": "^1.0.0",
-    "jsdoc": "^3.4.0",
+    "jsdoc": "git+https://github.com/jsdoc3/jsdoc.git#master",
     "karma": "^1.2.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-firefox-launcher": "^1.0.0",

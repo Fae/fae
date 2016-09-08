@@ -1,3 +1,5 @@
+/** @namespace shapes */
+
 export { default as BoundingBox } from './BoundingBox';
 export { default as BoundsComponent } from './BoundsComponent';
 export { default as Polygon } from './Polygon';

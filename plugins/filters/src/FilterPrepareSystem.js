@@ -4,6 +4,7 @@ import FilterUtils from './FilterUtils';
 
 /**
  * @class
+ * @memberof filters
  */
 export default class FilterPrepareSystem extends ecs.System
 {

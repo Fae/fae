@@ -2,6 +2,7 @@
  * A helper class for managing a bitset of flags.
  *
  * @class
+ * @memberof util
  */
 export default class Flags
 {

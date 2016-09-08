@@ -4,6 +4,7 @@ import Renderer from '../render/Renderer';
 
 /**
  * @class
+ * @memberof ecs
  */
 export default class SelfRenderSystem extends System
 {

@@ -9,11 +9,12 @@ import { ASSERT } from '../debug';
  * Helper class to create a webGL Shader
  *
  * @class
+ * @memberof glutil
  */
 export default class GLShader
 {
     /**
-     * @param {!WebGLRenderingContext} gl - The rendering context.
+     * @param {WebGLRenderingContext} gl - The rendering context.
      * @param {string|string[]} vertexSrc - The vertex shader source as an array of strings.
      * @param {string|string[]} fragmentSrc - The fragment shader source as an array of strings.
      */
@@ -77,14 +78,14 @@ export default class GLShader
      * Compiles source into a program.
      *
      * @static
-     * @param {!WebGLRenderingContext} gl - The rendering context.
+     * @param {WebGLRenderingContext} gl - The rendering context.
      * @param {string} vertexSrc - The vertex shader source as an array of strings.
      * @param {string} fragmentSrc - The fragment shader source as an array of strings.
-     * @param {boolean} [forceCompile=false] - When set to true this will always compile,
+     * @param {boolean} forceCompile - When set to true this will always compile,
      *  skipping the cache checks
      * @return {WebGLProgram} the shader program
      */
-    static compileProgram(gl, vertexSrc, fragmentSrc, forceCompile)
+    static compileProgram(gl, vertexSrc, fragmentSrc, forceCompile = false)
     {
         const cacheKey = GLProgramCache.key(vertexSrc, fragmentSrc);
         const cachedProgram = GLProgramCache.get(cacheKey);
@@ -137,7 +138,7 @@ gl.getProgramInfoLog(): ${gl.getProgramInfoLog(program)}
      * Compiles source into a program.
      *
      * @static
-     * @param {!WebGLRenderingContext} gl - The rendering context.
+     * @param {WebGLRenderingContext} gl - The rendering context.
      * @param {number} type - The type, can be either gl.VERTEX_SHADER or gl.FRAGMENT_SHADER.
      * @param {string} source - The fragment shader source as an array of strings.
      * @return {WebGLShader} the shader
@@ -170,7 +171,7 @@ gl.getShaderInfoLog(): ${gl.getShaderInfoLog(shader)}
      * Extracts the attributes
      *
      * @static
-     * @param {!WebGLRenderingContext} gl - The rendering context.
+     * @param {WebGLRenderingContext} gl - The rendering context.
      * @param {WebGLProgram} program - The shader program to get the attributes from
      * @return {object} attributes
      */
@@ -203,7 +204,7 @@ gl.getShaderInfoLog(): ${gl.getShaderInfoLog(shader)}
      * Extracts the uniforms
      *
      * @static
-     * @param {!WebGLRenderingContext} gl - The rendering context.
+     * @param {WebGLRenderingContext} gl - The rendering context.
      * @param {WebGLProgram} program - The shader program to get the uniforms from
      * @return {object} uniforms
      */
@@ -233,8 +234,8 @@ gl.getShaderInfoLog(): ${gl.getShaderInfoLog(shader)}
      * Extracts the uniforms
      *
      * @static
-     * @param {!WebGLRenderingContext} gl - The rendering context.
-     * @param {!object} uniformData - The uniform data to create an access object for.
+     * @param {WebGLRenderingContext} gl - The rendering context.
+     * @param {object} uniformData - The uniform data to create an access object for.
      * @return {object} uniform access object.
      */
     static generateUniformAccessObject(gl, uniformData)
@@ -287,10 +288,10 @@ gl.getShaderInfoLog(): ${gl.getShaderInfoLog(shader)}
     /**
      * Recompiles the shader program.
      *
-     * @param {boolean} [forceCompile=false] - When set to true this will always compile,
+     * @param {boolean} forceCompile - When set to true this will always compile,
      *  skipping the cache checks.
      */
-    recompile(forceCompile)
+    recompile(forceCompile = false)
     {
         this.program = GLShader.compileProgram(this.gl, this.vertexSrc, this.fragmentSrc, forceCompile);
         this.attributes = GLShader.extractAttributes(this.gl, this.program);

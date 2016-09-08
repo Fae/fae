@@ -2,11 +2,12 @@ export default function TextureComponent(Base)
 {
     /**
      * @class TextureComponent
+     * @memberof textures
      */
     return class extends Base
     {
         /**
-         *
+         * @memberof TextureComponent
          */
         constructor()
         {

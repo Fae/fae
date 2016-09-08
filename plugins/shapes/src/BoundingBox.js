@@ -4,6 +4,7 @@ import Rectangle from './Rectangle';
  * BoundingBox is an axis-aligned bounding box for an owning object.
  *
  * @class
+ * @memberof shapes
  */
 export default class BoundingBox extends Rectangle
 {

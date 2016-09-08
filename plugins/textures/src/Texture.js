@@ -12,18 +12,19 @@ import { debug } from '@fae/core';
  * source to actually draw.
  *
  * @class
+ * @memberof textures
  */
 export default class Texture
 {
     /**
-     * @param {!TextureSource|CanvasImageSource|Texture} source - The source to wrap.
-     * @param {Rectangle} [frame] - The portion of the source to operate with.
-     * @param {Rectangle} [orig] - The original area of this frame, before it was put in an atlas (if it was).
-     * @param {Rectangle} [trim] - The trimmed area of this frame, after it was put in an atlas (if it was).
+     * @param {TextureSource|CanvasImageSource|Texture} source - The source to wrap.
+     * @param {Rectangle} frame - The portion of the source to operate with.
+     * @param {Rectangle} orig - The original area of this frame, before it was put in an atlas (if it was).
+     * @param {Rectangle} trim - The trimmed area of this frame, after it was put in an atlas (if it was).
      * @param {number} rotation - The rotation of the frame (in radians), after it was put in an atlas (if it was).
      *  This rotation is counteracted to draw an "unrotated" version of the frame.
      */
-    constructor(source, frame, orig, trim, rotation = 0)
+    constructor(source, frame = null, orig = null, trim = null, rotation = 0)
     {
         // massage source into a TextureSource instance.
         if (source instanceof Texture)
@@ -223,10 +224,10 @@ export default class Texture
     /**
      * Destroys this texture.
      *
-     * @param {object|boolean} options - A boolean will act as if all options are set to that value.
-     * @param {boolean} [options.destroySource=false] - Whether to destroy the texture source as well.
+     * @param {object|boolean} options - A boolean value will act as if all options are set to that value.
+     * @param {boolean} options.destroySource=false - Whether to destroy the texture source as well.
      */
-    destroy(options)
+    destroy(options = false)
     {
         const destroySource = typeof options === 'boolean' ? options : options && options.baseTexture;
 

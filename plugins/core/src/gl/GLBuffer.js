@@ -4,13 +4,14 @@ const EMPTY_ARRAY_BUFFER = new ArrayBuffer(0);
  * Helper class to create a WebGL buffer.
  *
  * @class
+ * @memberof glutil
  */
 export default class GLBuffer
 {
     /**
      * Creates a new GLBuffer.
      *
-     * @param {!WebGLRenderingContext} gl - The current WebGL rendering context
+     * @param {WebGLRenderingContext} gl - The current WebGL rendering context
      * @param {gl.ARRAY_BUFFER|gl.ELEMENT_ARRAY_BUFFER} type - Array type
      * @param {ArrayBuffer|SharedArrayBuffer|ArrayBufferView} data - an array of data
      * @param {gl.STATIC_DRAW|gl.DYNAMIC_DRAW|gl.STREAM_DRAW} drawType - Type of draw
@@ -63,7 +64,7 @@ export default class GLBuffer
      * Creates a new GLBuffer, using `gl.ARRAY_BUFFER` as the type.
      *
      * @static
-     * @param {!WebGLRenderingContext} gl - The current WebGL rendering context
+     * @param {WebGLRenderingContext} gl - The current WebGL rendering context
      * @param {ArrayBuffer|SharedArrayBuffer|ArrayBufferView} data - an array of data
      * @param {gl.STATIC_DRAW|gl.DYNAMIC_DRAW|gl.STREAM_DRAW} drawType - Type of draw
      * @return {GLBuffer} New buffer, using `gl.ARRAY_BUFFER` as the type
@@ -77,7 +78,7 @@ export default class GLBuffer
      * Creates a new GLBuffer, using `gl.ELEMENT_ARRAY_BUFFER` as the type.
      *
      * @static
-     * @param {!WebGLRenderingContext} gl - The current WebGL rendering context
+     * @param {WebGLRenderingContext} gl - The current WebGL rendering context
      * @param {ArrayBuffer|SharedArrayBuffer|ArrayBufferView} data - an array of data
      * @param {gl.STATIC_DRAW|gl.DYNAMIC_DRAW|gl.STREAM_DRAW} drawType - Type of draw
      * @return {GLBuffer} New buffer, using `gl.ELEMENT_ARRAY_BUFFER` as the type

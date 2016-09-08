@@ -2,11 +2,12 @@ import Flags from '../util/Flags';
 
 /**
  * @class
+ * @memberof render
  */
 export default class RenderState
 {
     /**
-     * @param {!Renderer} renderer - The renderer this object holds state for.
+     * @param {Renderer} renderer - The renderer this object holds state for.
      */
     constructor(renderer)
     {

@@ -7,6 +7,7 @@ import { debug, glutil } from '@fae/core';
  * WebGL API. It contains information necessary for managing that source.
  *
  * @class
+ * @memberof textures
  */
 export default class TextureSource
 {
@@ -204,11 +205,11 @@ export default class TextureSource
     /**
      * Updates the texture properties based on the source.
      *
-     * @param {Renderer} [renderer] - The renderer to update on. If not passed, all are updated.
+     * @param {Renderer} renderer - The renderer to update on. If not passed, all are updated.
      * @param {boolean} silent - Should we skip dispatching the update event?
      * @return {TextureSource} Returns itself.
      */
-    update(renderer, silent = false)
+    update(renderer = null, silent = false)
     {
         this.width = this.source.naturalWidth || this.source.videoWidth || this.source.width;
         this.height = this.source.naturalHeight || this.source.videoHeight || this.source.height;
@@ -240,9 +241,9 @@ export default class TextureSource
     /**
      * Disposes of all GLTexture instances and clears them from the GPU for all renderers.
      *
-     * @param {Renderer} [renderer] - The renderer to dispose on. If not passed, all are disposed.
+     * @param {Renderer} renderer - The renderer to dispose on. If not passed, all are disposed.
      */
-    dispose(renderer)
+    dispose(renderer = null)
     {
         if (renderer)
         {

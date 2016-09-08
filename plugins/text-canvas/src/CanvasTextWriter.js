@@ -6,13 +6,14 @@ const rgxNewline = /\r\n|\r|\n/;
 
 /**
  * @class
+ * @memberof text-canvas
  */
 export default class CanvasTextWriter
 {
     /**
-     * @param {HTMLCanvasElement} [canvas] - optional canvas to write to.
+     * @param {HTMLCanvasElement} canvas - optional canvas to write to.
      */
-    constructor(canvas)
+    constructor(canvas = null)
     {
         /**
          * The canvas element that everything is drawn to.

@@ -6,6 +6,7 @@ export default function InteractionComponent(Base)
     /**
      * @class InteractionComponent
      * @mixes BoundsComponent
+     * @memberof interaction
      */
     return class extends BoundsComponent(Base)
     {

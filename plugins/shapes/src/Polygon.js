@@ -4,6 +4,7 @@ import { math } from '@fae/core';
  * A simple class representing a polygon.
  *
  * @class
+ * @memberof shapes
  */
 export default class Polygon
 {

@@ -3,8 +3,9 @@ import FilterComponent from './FilterComponent';
 
 /**
  * @class
+ * @memberof filters
  */
-export default class FilterPrepareSystem extends ecs.System
+export default class FilterRenderSystem extends ecs.System
 {
     /**
      * @param {Renderer} renderer - The renderer to use.

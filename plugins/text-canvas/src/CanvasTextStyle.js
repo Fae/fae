@@ -2,6 +2,7 @@ import Signal from 'mini-signals';
 
 /**
  * @class
+ * @memberof text-canvas
  */
 export default class CanvasTextStyle
 {
@@ -16,7 +17,7 @@ export default class CanvasTextStyle
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textAlign
          *
-         * @member {string} align
+         * @member {string} CanvasTextStyle#align
          * @default 'left'
          */
         this._align = 'left';
@@ -24,7 +25,7 @@ export default class CanvasTextStyle
         /**
          * Indicates if lines can be wrapped within words, it needs wordWrap to be set to true.
          *
-         * @member {boolean} breakWords
+         * @member {boolean} CanvasTextStyle#breakWords
          * @default false
          */
         this._breakWords = false;
@@ -34,7 +35,7 @@ export default class CanvasTextStyle
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowBlur
          *
-         * @member {number} shadowBlur
+         * @member {number} CanvasTextStyle#shadowBlur
          * @default 0
          */
         this._shadowBlur = 0;
@@ -44,7 +45,7 @@ export default class CanvasTextStyle
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowColor
          *
-         * @member {string} shadowColor
+         * @member {string} CanvasTextStyle#shadowColor
          * @default '#000000'
          */
         this._shadowColor = '#000000';
@@ -54,7 +55,7 @@ export default class CanvasTextStyle
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowOffsetX
          *
-         * @member {number} shadowOffsetX
+         * @member {number} CanvasTextStyle#shadowOffsetX
          * @default 0
          */
         this._shadowOffsetX = 0;
@@ -64,7 +65,7 @@ export default class CanvasTextStyle
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowOffsetY
          *
-         * @member {number} shadowOffsetY
+         * @member {number} CanvasTextStyle#shadowOffsetY
          * @default 0
          */
         this._shadowOffsetY = 0;
@@ -75,7 +76,7 @@ export default class CanvasTextStyle
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
          *
-         * @member {string|string[]|CanvasGradient|CanvasPattern} fillStyle
+         * @member {string|string[]|CanvasGradient|CanvasPattern} CanvasTextStyle#fillStyle
          * @default 'black'
          */
         this._fillStyle = 'black';
@@ -84,7 +85,7 @@ export default class CanvasTextStyle
          * If fills styles are supplied, this can change the type/direction of the gradient.
          * True is vertical, false is horizontal.
          *
-         * @member {boolean} fillGradientVertical
+         * @member {boolean} CanvasTextStyle#fillGradientVertical
          * @default true
          */
         this._fillGradientVertical = true;
@@ -92,7 +93,7 @@ export default class CanvasTextStyle
         /**
          * The font family to use.
          *
-         * @member {string} fontFamily
+         * @member {string} CanvasTextStyle#fontFamily
          * @default 'Arial'
          */
         this._fontFamily = 'Arial';
@@ -101,7 +102,7 @@ export default class CanvasTextStyle
          * The font size (as a number it converts to px, but as a string, equivalents are
          * '26px','20pt','160%' or '1.6em')
          *
-         * @member {number|string} fontSize
+         * @member {number|string} CanvasTextStyle#fontSize
          * @default 26
          */
         this._fontSize = 26;
@@ -109,7 +110,7 @@ export default class CanvasTextStyle
         /**
          * The font style ('normal', 'italic' or 'oblique')
          *
-         * @member {string} fontStyle
+         * @member {string} CanvasTextStyle#fontStyle
          * @default 'normal'
          */
         this._fontStyle = 'normal';
@@ -117,7 +118,7 @@ export default class CanvasTextStyle
         /**
          * The font variant ('normal' or 'small-caps')
          *
-         * @member {string} fontVariant
+         * @member {string} CanvasTextStyle#fontVariant
          * @default 'normal'
          */
         this._fontVariant = 'normal';
@@ -126,7 +127,7 @@ export default class CanvasTextStyle
          * The font weight ('normal', 'bold', 'bolder', 'lighter' and '100', '200',
          * '300', '400', '500', '600', '700', 800' or '900')
          *
-         * @member {string} fontWeight
+         * @member {string} CanvasTextStyle#fontWeight
          * @default 'normal'
          */
         this._fontWeight = 'normal';
@@ -134,7 +135,7 @@ export default class CanvasTextStyle
         /**
          * The amount of spacing between letters.
          *
-         * @member {number} letterSpacing
+         * @member {number} CanvasTextStyle#letterSpacing
          * @default 0
          */
         this._letterSpacing = 0;
@@ -142,7 +143,7 @@ export default class CanvasTextStyle
         /**
          * The line height, a number that represents the vertical space that a letter uses.
          *
-         * @member {number} lineHeight
+         * @member {number} CanvasTextStyle#lineHeight
          * @default 0
          */
         this._lineHeight = 0;
@@ -153,7 +154,7 @@ export default class CanvasTextStyle
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineJoin
          *
-         * @member {string} lineJoin
+         * @member {string} CanvasTextStyle#lineJoin
          * @default 'miter'
          */
         this._lineJoin = 'miter';
@@ -164,7 +165,7 @@ export default class CanvasTextStyle
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/miterLimit
          *
-         * @member {number} miterLimit
+         * @member {number} CanvasTextStyle#miterLimit
          * @default 10
          */
         this._miterLimit = 10;
@@ -173,7 +174,7 @@ export default class CanvasTextStyle
          * Occasionally some fonts are cropped on top or bottom. Adding some padding will prevent this
          * from happening by adding padding to the top and bottom of text height.
          *
-         * @member {number} padding
+         * @member {number} CanvasTextStyle#padding
          * @default 0
          */
         this._padding = 0;
@@ -183,7 +184,7 @@ export default class CanvasTextStyle
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle
          *
-         * @member {string} stroke
+         * @member {string} CanvasTextStyle#stroke
          * @default 'black'
          */
         this._stroke = 'black';
@@ -193,7 +194,7 @@ export default class CanvasTextStyle
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth
          *
-         * @member {number} strokeThickness
+         * @member {number} CanvasTextStyle#strokeThickness
          * @default 0
          */
         this._strokeThickness = 0;
@@ -204,7 +205,7 @@ export default class CanvasTextStyle
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textBaseline
          *
-         * @member {string} textBaseline
+         * @member {string} CanvasTextStyle#textBaseline
          * @default 'alphabetic'
          */
         this._textBaseline = 'alphabetic';
@@ -212,7 +213,7 @@ export default class CanvasTextStyle
         /**
          * Indicates if word wrap should be used.
          *
-         * @member {boolean} wordWrap
+         * @member {boolean} CanvasTextStyle#wordWrap
          * @default false
          */
         this._wordWrap = false;
@@ -220,7 +221,7 @@ export default class CanvasTextStyle
         /**
          * The width at which text will wrap, it needs wordWrap to be set to true.
          *
-         * @member {number} wordWrapWidth
+         * @member {number} CanvasTextStyle#wordWrapWidth
          * @default 100
          */
         this._wordWrapWidth = 100;

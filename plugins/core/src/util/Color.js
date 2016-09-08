@@ -12,6 +12,7 @@ const rgxHexFullString = /^(?:#|0x)?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
  * [0...255].
  *
  * @class
+ * @memberof util
  */
 export default class Color
 {

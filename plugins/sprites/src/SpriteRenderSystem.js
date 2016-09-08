@@ -6,6 +6,7 @@ import SpriteComponent from './SpriteComponent';
 
 /**
  * @class
+ * @memberof sprites
  */
 export default class SpriteRenderSystem extends ecs.System
 {
@@ -72,6 +73,7 @@ render.Renderer.addDefaultSystem(SpriteRenderSystem);
 /**
  * Updates the vertices of the entity.
  *
+ * @ignore
  * @param {Entity} sprite - The sprite to update.
  */
 function calculateVertices(sprite)

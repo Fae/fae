@@ -2,6 +2,7 @@ import { render, util } from '@fae/core';
 
 /**
  * @class
+ * @memberof filters
  */
 export default class Filter extends render.Shader
 {

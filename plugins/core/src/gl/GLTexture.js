@@ -10,11 +10,12 @@ let lastBoundTextureId = 0;
  * Helper class to create a WebGL texture.
  *
  * @class
+ * @memberof glutil
  */
 export default class GLTexture
 {
     /**
-     * @param {!WebGLRenderingContext} gl - The current WebGL context.
+     * @param {WebGLRenderingContext} gl - The current WebGL context.
      * @param {number} width - The width of the texture.
      * @param {number} height - The height of the texture.
      * @param {number} format - The pixel format of the texture.
@@ -81,7 +82,7 @@ export default class GLTexture
 
     /**
      * @static
-     * @param {!WebGLRenderingContext} gl - The current WebGL context
+     * @param {WebGLRenderingContext} gl - The current WebGL context
      * @param {HTMLImageElement|ImageData} source - the source image of the texture
      * @param {boolean} premultiplyAlpha - If we want to use pre-multiplied alpha
      * @return {GLTexture} The new texture.
@@ -98,7 +99,7 @@ export default class GLTexture
 
     /**
      * @static
-     * @param {!WebGLRenderingContext} gl - The current WebGL context
+     * @param {WebGLRenderingContext} gl - The current WebGL context
      * @param {ArrayBuffer|SharedArrayBuffer|ArrayBufferView} data - the data to upload to the texture
      * @param {number} width - the new width of the texture
      * @param {number} height - the new height of the texture

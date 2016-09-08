@@ -6,11 +6,12 @@ import Device from 'ismobilejs';
  * Only works if WebGL extensions are enabled (they usually are)
  *
  * @class
+ * @memberof glutil
  */
 export default class GLVertexArrayObject
 {
     /**
-     * @param {!WebGLRenderingContext} gl - The current WebGL rendering context
+     * @param {WebGLRenderingContext} gl - The current WebGL rendering context
      * @param {object} state - ??
      */
     constructor(gl)
@@ -267,7 +268,8 @@ export default class GLVertexArrayObject
 GLVertexArrayObject.FORCE_NO_NATIVE = Device.tablet || Device.phone;
 
 /**
- * @param {!WebGLRenderingContext} gl - The current WebGL context
+ * @ignore
+ * @param {WebGLRenderingContext} gl - The current WebGL context
  * @param {object[]} attribs - attributes
  * @param {object} state - state
  */

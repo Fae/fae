@@ -2,6 +2,7 @@ import ECS from '@fae/ecs';
 
 /**
  * @class
+ * @memberof ecs
  */
 export default class System extends ECS.System {
     /**

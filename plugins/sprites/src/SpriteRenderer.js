@@ -9,6 +9,7 @@ let TICK = 0;
 
 /**
  * @class
+ * @memberof sprites
  */
 export default class SpriteRenderer extends render.ObjectRenderer
 {
@@ -402,7 +403,7 @@ export default class SpriteRenderer extends render.ObjectRenderer
      * Creates a new vertex buffer and VAO to manage it.
      *
      * @private
-     * @param {!WebGLRenderingContext} gl - The rendering context.
+     * @param {WebGLRenderingContext} gl - The rendering context.
      * @param {*} attribs - Attribute data for the shader.
      */
     _createVao(gl, attribs)
@@ -426,9 +427,9 @@ export default class SpriteRenderer extends render.ObjectRenderer
      * Destroys GL objects that can change between contexts.
      *
      * @private
-     * @param {boolean} [ctxRestore=false] - Should we treat this like a context restore?
+     * @param {boolean} ctxRestore - Should we treat this like a context restore?
      */
-    _destroyGlObjects(ctxRestore)
+    _destroyGlObjects(ctxRestore = false)
     {
         // destroy shaders
         if (!ctxRestore)

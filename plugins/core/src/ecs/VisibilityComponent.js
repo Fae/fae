@@ -4,6 +4,7 @@ export default function VisibilityComponent(Base)
 {
     /**
      * @class VisibilityComponent
+     * @memberof ecs
      */
     return class extends Base
     {

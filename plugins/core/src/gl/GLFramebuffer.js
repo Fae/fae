@@ -7,11 +7,12 @@ import GLTexture from './GLTexture';
  * use the static {@link GLFramebuffer#createRGBA} and {@link GLFramebuffer#createFloat32}
  *
  * @class
+ * @memberof glutil
  */
 export default class GLFramebuffer
 {
     /**
-     * @param {!WebGLRenderingContext} gl - The current WebGL rendering context
+     * @param {WebGLRenderingContext} gl - The current WebGL rendering context
      * @param {number} width - the width of the drawing area of the frame buffer
      * @param {number} height - the height of the drawing area of the frame buffer
      */

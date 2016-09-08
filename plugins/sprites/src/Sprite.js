@@ -13,6 +13,7 @@ import SpriteRenderer from './SpriteRenderer';
  * @mixes VisibilityComponent
  * @mixes TransformComponent
  * @mixes SpriteComponent
+ * @memberof sprites
  */
 export default class Sprite extends ecs.Entity.with(
     ecs.VisibilityComponent,    // whether or not to render
@@ -40,13 +41,11 @@ export default class Sprite extends ecs.Entity.with(
     /**
      * Destroys the sprite.
      *
-     * @param {object|boolean} options - A value of `true` will act as if all options are set.
-     * @param {boolean} [options.children=false] - If true all children will also be destroyed.
-     * `options` is passed through to those calls.
-     * @param {boolean} [options.texture=false] - If true the texture is also destroyed.
-     * @param {boolean} [options.baseTexture=false] - If true the texture's base texture is also destroyed.
+     * @param {object|boolean} options - A boolean value will act as if all options are set to that value.
+     * @param {boolean} options.texture=false - If true the texture is also destroyed.
+     * @param {boolean} options.baseTexture=false - If true the texture's base texture is also destroyed.
      */
-    destroy(options)
+    destroy(options = false)
     {
         super.destroy(options);
 

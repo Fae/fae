@@ -6,6 +6,7 @@ import { ASSERT } from '../debug';
  * Simple ArrayBuffer wrapper that manages offsets and views into that buffer.
  *
  * @class
+ * @memberof util
  */
 export default class Buffer
  {

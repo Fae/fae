@@ -3,6 +3,7 @@
  * as indicated by its top-left corner point (x, y) and by its width and its height.
  *
  * @class
+ * @memberof shapes
  */
 export default class Rectangle
 {

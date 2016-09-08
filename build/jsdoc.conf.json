@@ -4,15 +4,17 @@
     },
     "source": {
         "include": [
-            "./plugins/"
+            "./plugins"
         ],
         "exclude": [
+            "./plugins/**/test/**"
         ],
         "includePattern": ".+\\.js(doc)?$",
         "excludePattern": "(^|\\/|\\\\)_"
     },
     "plugins": [
-        "plugins/markdown"
+        "./node_modules/jsdoc/plugins/markdown",
+        "./build/jsdoc-fix"
     ],
     "templates": {
         "cleverLinks": false,

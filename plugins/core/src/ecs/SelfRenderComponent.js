@@ -2,6 +2,7 @@ export default function SelfRenderComponent(Base)
 {
     /**
      * @class SelfRenderComponent
+     * @memberof ecs
      */
     return class extends Base
     {

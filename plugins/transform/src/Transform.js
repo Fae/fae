@@ -5,7 +5,7 @@ import { math/* @ifdef DEBUG */, debug /* @endif */ } from '@fae/core';
  * This will be reworked in v4.1, please do not use it yet unless you know what are you doing!
  *
  * @class
- * @memberof PIXI
+ * @memberof transform
  */
 export default class Transform
 {

@@ -4,6 +4,7 @@ import bitTwiddle from 'bit-twiddle';
 
 /**
  * @class
+ * @memberof filters
  */
 class FilterState
 {
@@ -18,10 +19,10 @@ class FilterState
         this.entity = null;
         // this.resolution = 1;
     }
-};
+}
 
 export default {
-    getFilterState(entity, previousState, renderer, /*, resolution*/)
+    getFilterState(entity, previousState, renderer /* , resolution*/)
     {
         // prepare state
         const state = this._statePool.pop() || new FilterState();
@@ -52,8 +53,8 @@ export default {
         }
 
         // prepare render target
-        const w = state.sourceFrame.width;
-        const h = state.sourceFrame.height;
+        let w = state.sourceFrame.width;
+        let h = state.sourceFrame.height;
         const renderTarget = this._renderTargetPool.pop() || new render.RenderTarget(renderer.gl, w, h);
 
         w = bitTwiddle.nextPow2(w /* * resolution*/);

@@ -26,6 +26,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE. */
 
+/**
+ * @ignore
+ */
 const EPSILON = 0.000001;
 
 /**
@@ -36,6 +39,7 @@ const EPSILON = 0.000001;
  * ```
  *
  * @class
+ * @memberof math
  */
 export default class Vector2d
 {

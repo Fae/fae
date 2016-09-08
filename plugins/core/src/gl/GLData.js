@@ -3,7 +3,14 @@ import { ASSERT } from '../debug';
 // @endif
 
 /**
+ * @namespace GLData
+ * @memberof glutil
+ */
+
+/**
  * Map of WebGL types to their respective sizes.
+ *
+ * @memberof glutil.GLData
  */
 export const GL_SIZE_MAP = {
     [WebGLRenderingContext.FLOAT]:      1,
@@ -31,6 +38,8 @@ export const GL_SIZE_MAP = {
 /**
  * Map of WebGL types to setter functions to upload the values of that type.
  * This map is for single values of the types.
+ *
+ * @memberof glutil.GLData
  */
 export const GL_SETTER = {
     [WebGLRenderingContext.FLOAT]:      (gl, loc, value) => gl.uniform1f(loc, value),
@@ -58,6 +67,8 @@ export const GL_SETTER = {
 /**
  * Map of WebGL types to setter functions to upload the values of that type.
  * This map is for arrays of the types.
+ *
+ * @memberof glutil.GLData
  */
 export const GL_ARRAY_SETTER = {
     [WebGLRenderingContext.FLOAT]:      (gl, loc, value) => gl.uniform1fv(loc, value),
@@ -85,6 +96,7 @@ export const GL_ARRAY_SETTER = {
 /**
  * Maps a uniform data type and size to an instance of the default value.
  *
+ * @memberof glutil.GLData
  * @param {object} uniformData - The data to use to determine the default value.
  * @return {*} The default value.
  */

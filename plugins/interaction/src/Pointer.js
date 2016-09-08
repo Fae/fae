@@ -6,6 +6,7 @@ const EMPTY_ARRAY = [];
 
 /**
  * @class
+ * @memberof interaction
  */
 export default class Pointer
 {

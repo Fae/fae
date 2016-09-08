@@ -4,6 +4,7 @@ export default function SpriteComponent(Base)
 {
     /**
      * @class SpriteComponent
+     * @memberof sprites
      */
     return class extends Base
     {

@@ -4,15 +4,16 @@ import GLShader from '../gl/GLShader';
  * Shader wrapper.
  *
  * @class
+ * @memberof render
  */
 export default class Shader extends GLShader
 {
     /**
      * Constructs a new Shader.
      *
-     * @param {!Renderer} renderer - The Renderer to use for this shader.
-     * @param {!string} vertexSrc - The vertex shader source as an array of strings.
-     * @param {!string} fragmentSrc - The fragment shader source as an array of strings.
+     * @param {Renderer} renderer - The Renderer to use for this shader.
+     * @param {string} vertexSrc - The vertex shader source as an array of strings.
+     * @param {string} fragmentSrc - The fragment shader source as an array of strings.
      */
     constructor(renderer, vertexSrc, fragmentSrc)
     {
@@ -46,8 +47,27 @@ export default class Shader extends GLShader
 }
 
 /**
+ * Value that specifies float precision in shaders.
+ *
+ * @static
+ * @constant
+ * @type {object}
+ * @property {string} DEFAULT=MEDIUM - The default precision to use.
+ * @property {string} LOW - The low precision header.
+ * @property {string} MEDIUM - The medium precision header.
+ * @property {string} HIGH - The high precision header.
+ */
+Shader.PRECISION = {
+    DEFAULT:    'highp',
+    LOW:        'lowp',
+    MEDIUM:     'mediump',
+    HIGH:       'highp',
+};
+
+/**
  * Ensures that the source of the program has precision specified.
  *
+ * @ignore
  * @param {string} source - The source to check.
  * @return {string} The potentially modified source.
  */
@@ -91,22 +111,3 @@ function checkPrecision(source)
 
     return source;
 }
-
-/**
- * Value that specifies float precision in shaders.
- *
- * @static
- * @constant
- * @memberof Shader
- * @type {object}
- * @property {string} DEFAULT=MEDIUM - The default precision to use.
- * @property {string} LOW - The low precision header.
- * @property {string} MEDIUM - The medium precision header.
- * @property {string} HIGH - The high precision header.
- */
-Shader.PRECISION = {
-    DEFAULT:    'highp',
-    LOW:        'lowp',
-    MEDIUM:     'mediump',
-    HIGH:       'highp',
-};

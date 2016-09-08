@@ -10,15 +10,16 @@ import Color from '../util/Color';
  * A RenderTarget is a wrapper around framebuffer to be rendered to.
  *
  * @class
+ * @memberof render
  */
 export default class RenderTarget
 {
     /**
      * Creates a new render target.
      *
-     * @param {!WebGLContext} gl - The WebGL context to draw with.
-     * @param {!number} width - The width of the target.
-     * @param {!number} height - The height of the target.
+     * @param {WebGLContext} gl - The WebGL context to draw with.
+     * @param {number} width - The width of the target.
+     * @param {number} height - The height of the target.
      * @param {number} scaleMode - The mode to scale by.
      * @param {boolean} root - Whether this is the root render target or not.
      */

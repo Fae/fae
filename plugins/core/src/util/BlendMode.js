@@ -2,6 +2,7 @@
 
 /**
  * @class
+ * @memberof util
  */
 export default class BlendMode
 {
@@ -19,7 +20,7 @@ export default class BlendMode
     }
 
     /**
-     * @param {!WebGLRenderingContext} gl - The rendering context to set on.
+     * @param {WebGLRenderingContext} gl - The rendering context to set on.
      */
     enable(gl)
     {

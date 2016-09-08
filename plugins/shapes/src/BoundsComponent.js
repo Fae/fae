@@ -4,6 +4,7 @@ export default function BoundsComponent(Base)
 {
     /**
      * @class BoundsComponent
+     * @memberof shapes
      */
     return class extends Base
     {

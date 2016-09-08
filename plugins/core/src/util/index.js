@@ -1,3 +1,5 @@
+/** @namespace util */
+
 import GLContext from '../gl/GLContext';
 
 // @ifdef DEBUG
@@ -15,6 +17,7 @@ export { default as Flags } from './Flags';
 /**
  * Logs an error to the console.
  *
+ * @memberof util
  * @param {...*} things to pass into `console.error`.
  */
 export function error(...args)
@@ -27,6 +30,7 @@ export function error(...args)
 /**
  * Logs a message to the console.
  *
+ * @memberof util
  * @param {...*} things to pass into `console.log`.
  */
 export function log(...args)
@@ -39,6 +43,7 @@ export function log(...args)
 /**
  * Gets the next unique id.
  *
+ * @memberof util
  * @return {number} The nexst unique id.
  */
 export function uid()
@@ -49,6 +54,7 @@ export function uid()
 /**
  * Fast replacement for splice that quickly removes elements from an array.
  *
+ * @memberof util
  * @param {Array<*>} array - The array to manipulate.
  * @param {number} startIdx - The starting index.
  * @param {number} removeCount - The number of elements to remove.
@@ -76,6 +82,7 @@ export function removeElements(array, startIdx = 0, removeCount = 1)
 /**
  * Utility to quickly create the indicies for a series of quads.
  *
+ * @memberof util
  * @param {number} size - Number of quads
  * @return {Uint16Array} indices
  */
@@ -109,6 +116,15 @@ void main(void)
 }
 `;
 
+/**
+ * Calculate the max number of if statements supported in a shader, up to
+ * a maximum cap.
+ *
+ * @memberof util
+ * @param {WebGLRenderingContext} gl - The rendering context
+ * @param {number} maxIfs - cap for the if checks.
+ * @return {number} The max ifs supported
+ */
 export function getMaxIfStatmentsInShader(gl, maxIfs)
 {
     const createTempContext = !gl;
@@ -161,6 +177,15 @@ export function getMaxIfStatmentsInShader(gl, maxIfs)
     return guess;
 }
 
+/**
+ * Builds and tried to compile a shader with the specified number of if-statements.
+ *
+ * @ignore
+ * @param {WebGLShader} shader - The shader program to use.
+ * @param {WebGLRenderingContext} gl - The rendering context.
+ * @param {number} max - Number of ifs to generate.
+ * @return {number} The compilation status.
+ */
 function testMaxIf(shader, gl, max)
 {
     const fragmentSrc = ifCheckShaderTemplate.replace(/\{\{if_statements\}\}/gi, generateIfTestSrc(max));
@@ -171,6 +196,13 @@ function testMaxIf(shader, gl, max)
     return gl.getShaderParameter(shader, gl.COMPILE_STATUS);
 }
 
+/**
+ * Generates a shader source with the specified number of if-statements.
+ *
+ * @ignore
+ * @param {number} max - Number of ifs to generate.
+ * @return {string} The shader source.
+ */
 function generateIfTestSrc(max)
 {
     let src = '';

@@ -7,6 +7,7 @@ import TransformComponent from './TransformComponent';
 
 /**
  * @class
+ * @memberof transform
  */
 export default class TransformUpdateSystem extends ecs.System
 {

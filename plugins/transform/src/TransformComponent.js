@@ -4,6 +4,7 @@ export default function TransformComponent(Base)
 {
     /**
      * @class TransformComponent
+     * @memberof transform
      */
     return class extends Base
     {

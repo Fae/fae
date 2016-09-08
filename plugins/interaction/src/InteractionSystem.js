@@ -6,6 +6,7 @@ const tempCoords = { x: 0, y: 0 };
 
 /**
  * @class
+ * @memberof interaction
  */
 export default class InteractionSystem extends ecs.System
 {

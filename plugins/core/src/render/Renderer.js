@@ -14,17 +14,18 @@ const defaultSystems = [];
  * and the current object renderer that is doing the rendering.
  *
  * @class
+ * @memberof render
  */
 export default class Renderer extends ECS
 {
     /**
      * Creates a new renderer.
      *
-     * @param {!HTMLCanvasElement|WebGLRenderingContext} context - The canvas to create a context from,
+     * @param {HTMLCanvasElement|WebGLRenderingContext} context - The canvas to create a context from,
      *  or the context to use to draw.
-     * @param {object} [options] - Options for the renderer
-     * @param {boolean} [options.clearBeforeRender=true] - Should we clear before each render?
-     * @param {boolean} [options.preserveDrawingBuffer=false] - Enables drawing buffer preservation,
+     * @param {object} options - Options for the renderer.
+     * @param {boolean} options.clearBeforeRender=true - Should we clear before each render?
+     * @param {boolean} options.preserveDrawingBuffer=false - Enables drawing buffer preservation,
      *  enable this if you need to call toDataUrl on the webgl context.
      */
     constructor(context, options = {})
@@ -186,12 +187,12 @@ export default class Renderer extends ECS
      * Add a system to the renderer.
      *
      * @param {System} system - The system to add.
-     * @param {boolean} [skipSort=false] - If true, will not sort the systems automatically.
+     * @param {boolean} skipSort - If true, will not sort the systems automatically.
      *  Setting this to true requires you call {@link Renderer#sortSystems} manually. This
      *  can be useful if you are adding a large batch of systems in a single frame and want
      *  to delay the sorting until after they are all added.
      */
-    addSystem(system, skipSort)
+    addSystem(system, skipSort = false)
     {
         super.addSystem(system);
 
@@ -206,7 +207,7 @@ export default class Renderer extends ECS
      * it is recommended not to Add/Remove entities many times per frame.
      *
      * @param {Entity} entity - The entity to add.
-     * @param {boolean} [skipSort=false] - If true, will not sort the entities automatically.
+     * @param {boolean} skipSort - If true, will not sort the entities automatically.
      *  Setting this to true requires you call {@link Renderer#sortEntities} manually. This
      *  can be useful if you are adding a large batch of entities in a single frame and want
      *  to delay the sorting until after they are all added.

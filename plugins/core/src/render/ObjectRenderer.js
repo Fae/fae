@@ -4,6 +4,7 @@
  *
  * @class
  * @abstract
+ * @memberof render
  */
 export default class ObjectRenderer
 {

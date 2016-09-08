@@ -2,6 +2,7 @@
  * Helper to store and calculate the UVs of a texture.
  *
  * @class
+ * @memberof textures
  */
 export default class TextureUVs
 {

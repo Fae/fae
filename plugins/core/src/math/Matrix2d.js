@@ -25,6 +25,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE. */
 
+/**
+ * @ignore
+ */
 const EPSILON = 0.000001;
 
 /**
@@ -55,6 +58,7 @@ const EPSILON = 0.000001;
  * It is a bit more interconnected than that, but thats basic gist.
  *
  * @class
+ * @memberof math
  */
 export default class Matrix2d
 {
@@ -119,10 +123,10 @@ export default class Matrix2d
      * Converts to the full 3x3 matrix form, optionally transposing.
      *
      * @param {boolean} transpose - Should we transpose the matrix?
-     * @param {Float32Array} [out] - An optional array to assign values to.
+     * @param {Float32Array} out - An optional array to assign values to.
      * @return {Float32Array} A 9-element array representing the 3x3 Matrix.
      */
-    toMat3Array(transpose = true, out)
+    toMat3Array(transpose = true, out = null)
     {
         if (!out && !this._mat3)
         {

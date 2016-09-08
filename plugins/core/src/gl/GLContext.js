@@ -1,8 +1,13 @@
+/**
+ * @namespace GLContext
+ * @memberof glutil
+ */
 export default {
     /**
      * Helper function to create a webGL Context.
      *
-     * @param {!HTMLCanvasElement} canvas - The canvas element that we will get the context from.
+     * @memberof glutil.GLContext
+     * @param {HTMLCanvasElement} canvas - The canvas element that we will get the context from.
      * @param {object} options - An options object that gets passed in to the canvas element containing
      *  the context attributes, see https://developer.mozilla.org/en/docs/Web/API/HTMLCanvasElement/getContext
      *  for the options available
