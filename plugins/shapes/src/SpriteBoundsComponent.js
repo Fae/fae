@@ -1,4 +1,4 @@
-import { BoundsComponent } from './BoundsComponent';
+import BoundsComponent from './BoundsComponent';
 
 export default function SpriteBoundsComponent(Base)
 {
