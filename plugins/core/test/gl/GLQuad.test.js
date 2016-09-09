@@ -8,7 +8,7 @@ describe('core', function ()
             {
                 it('creates the proper indicies for 1 quad', function ()
                 {
-                    var indicies = Fae.glutil.GLQuad.createIndicesForQuads(1);
+                    var indicies = Fae.glutil.GLQuad.createIndices(1);
 
                     expect(indicies).to.eql(new Uint16Array([
                         0, 1, 2, 0, 2, 3,
@@ -17,7 +17,7 @@ describe('core', function ()
 
                 it('creates the proper indicies for 2 quads', function ()
                 {
-                    var indicies = Fae.glutil.GLQuad.createIndicesForQuads(2);
+                    var indicies = Fae.glutil.GLQuad.createIndices(2);
 
                     expect(indicies).to.eql(new Uint16Array([
                         0, 1, 2, 0, 2, 3,
