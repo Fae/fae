@@ -1,3 +1,5 @@
+import assign from 'core-js/fn/object/assign';
+
 /**
  * @class
  * @memberof text-canvas
@@ -225,7 +227,7 @@ export default class CanvasTextStyle
         this.wordWrapWidth = 100;
 
         // override properties based on params
-        Object.assign(this, style);
+        assign(this, style);
     }
 
     /**

@@ -28,9 +28,10 @@
   },
   "dependencies": {
     "@fae/ecs": "^1.0.2",
+    "bit-twiddle": "^1.0.2",
+    "core-js": "^2.4.1",
     "ismobilejs": "^0.4.0",
-    "mini-signals": "^1.1.1",
-    "bit-twiddle": "^1.0.2"
+    "mini-signals": "^1.1.1"
   },
   "devDependencies": {
     "@englercj/code-style": "^1.0.6",
