@@ -26,7 +26,7 @@ export default class BlurFilter extends Filter
      * @param {RenderTarget} output - The render target to use as output.
      * @param {boolean} clear - Should the output buffer be cleared before use?
      */
-    run(system, input, output, clear)
+    run(system, input, output /* , clear */)
     {
         const renderTarget = FilterUtils.getRenderTarget(this.renderer.gl);
 
@@ -47,7 +47,6 @@ export default class BlurFilter extends Filter
     {
         return this.blurXFilter.numPasses;
     }
-
 
     /**
      * Number of passes for the blur. Higher number produices a higher
@@ -72,7 +71,6 @@ export default class BlurFilter extends Filter
     {
         return this.blurXFilter.strength;
     }
-
 
     /**
      * Number of passes for the blur. Higher number produices a higher

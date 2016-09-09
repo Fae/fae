@@ -1,5 +1,3 @@
-import Signal from 'mini-signals';
-
 /**
  * @class
  * @memberof text-canvas

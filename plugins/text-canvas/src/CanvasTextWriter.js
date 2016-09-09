@@ -12,7 +12,7 @@ export default class CanvasTextWriter
 {
     /**
      * @param {HTMLCanvasElement} canvas - optional canvas to write to.
-     * @param {boolean} autoResize - When set the writer will automatically resize the
+     * @param {boolean} autoSize - When set the writer will automatically resize the
      *  canvas as needed. It defaults to `true` if you do not pass in a canvas element
      *  and `false` if you do pass in a canvas element.
      */
@@ -45,6 +45,7 @@ export default class CanvasTextWriter
      * Draws the text to the canvas.
      *
      * @param {string} text - The text to write.
+     * @param {CanvasTextStyle} style - The style to draw the text with.
      */
     write(text, style = CanvasTextWriter.defaultStyle)
     {
