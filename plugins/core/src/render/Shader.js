@@ -73,6 +73,8 @@ Shader.PRECISION = {
  */
 function checkPrecision(source)
 {
+    if (!source) return;
+
     const lines = source.split('\n');
 
     let commentOpen = false;

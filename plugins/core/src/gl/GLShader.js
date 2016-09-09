@@ -292,6 +292,8 @@ gl.getShaderInfoLog(): ${gl.getShaderInfoLog(shader)}
      */
     recompile(forceCompile = false)
     {
+        if (!this.vertexSrc || !this.fragmentSrc) return;
+
         this.program = GLShader.compileProgram(this.gl, this.vertexSrc, this.fragmentSrc, forceCompile);
         this.attributes = GLShader.extractAttributes(this.gl, this.program);
         this.uniforms = GLShader.generateUniformAccessObject(this.gl, GLShader.extractUniforms(this.gl, this.program));
