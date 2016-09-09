@@ -42,6 +42,7 @@
     "benchmark": "^2.1.1",
     "chai": "^3.5.0",
     "eslint": "^3.3.1",
+    "glslify-loader": "^1.0.2",
     "jaguarjs-jsdoc": "^1.0.0",
     "jsdoc": "git+https://github.com/jsdoc3/jsdoc.git#master",
     "karma": "^1.2.0",
@@ -53,10 +54,10 @@
     "karma-sinon-chai": "^1.2.3",
     "mocha": "^3.0.2",
     "preprocess-loader": "^0.2.0",
+    "raw-loader": "^0.5.1",
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0",
-    "webpack": "^1.13.2",
-    "webpack-glsl-loader": "^1.0.1"
+    "webpack": "^1.13.2"
   },
   "private": true
 }

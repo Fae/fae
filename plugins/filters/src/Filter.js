@@ -75,6 +75,8 @@ export default class Filter extends render.Shader
     }
 
     /**
+     * Runs the filter, performing the post-processing passes the filter defines.
+     *
      * @param {FilterRenderSystem} system - The render system.
      * @param {RenderTarget} input - The render target to use as input.
      * @param {RenderTarget} output - The render target to use as output.
@@ -104,6 +106,8 @@ export default class Filter extends render.Shader
 
         for (const k in values)
         {
+            if (!uniformData[k]) continue;
+
             if (uniformData[k].type === 'sampler2D')
             {
                 uniforms[k] = textureCount;

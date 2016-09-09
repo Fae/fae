@@ -54,8 +54,13 @@ module.exports = {
             },
             {
                 test: /\.(glsl|frag|vert)$/,
-                exclude: /(node_modules|vendor)/,
-                loader: 'webpack-glsl',
+                exclude: /node_modules/,
+                loaders: 'raw',
+            },
+            {
+                test: /\.(glsl|frag|vert)$/,
+                exclude: /node_modules/,
+                loaders: 'glslify',
             },
         ],
     },

@@ -19,7 +19,6 @@ export default class FilterRenderSystem extends ecs.System
         super(renderer, priority, frequency);
 
         this.quad = null;
-        this.tempRenderTarget = null;
 
         this._onContextChangeBinding = renderer.onContextChange.add(this._onContextChange, this);
 
@@ -79,7 +78,7 @@ export default class FilterRenderSystem extends ecs.System
         {
             const activeFilters = [];
             let flip = FilterUtils.activeRenderTarget;
-            let flop = FilterUtils.tempRenderTarget;
+            let flop = FilterUtils.getRenderTarget(this.renderer.gl);
             let i = 0;
 
             for (i = 0; i < entity.filters.length - 1; ++i)
@@ -103,6 +102,8 @@ export default class FilterRenderSystem extends ecs.System
             }
 
             activeFilters[i].run(this, flip, FilterUtils.initialRenderTarget, false);
+
+            FilterUtils.freeRenderTarget(flop);
         }
 
         // start obj renderer
