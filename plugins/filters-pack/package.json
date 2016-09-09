@@ -17,6 +17,7 @@
     "src/"
   ],
   "dependencies": {
-    "@fae/filters": "^1.0.0"
+    "@fae/filters": "^1.0.0",
+    "glsl-fast-gaussian-blur": "^1.0.2"
   }
 }
