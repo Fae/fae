@@ -4,7 +4,7 @@
 
 - [Overview](#overview)
 - [Philosophy](#philosophy)
-- [Getting Started][GettingStarted.md]
+- [Getting Started](GettingStarted.md)
 - [Building Plugins](BuildingPlugins.md)
  * [Composing Entities](ComposingEntities.md)
  * [Custom Components](CustomComponents.md)
