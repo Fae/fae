@@ -1,5 +1,11 @@
 import { render, util } from '@fae/core';
 
+const reservedUniforms = [
+    '__data',               // reserved key from the parsing of uniforms in the GLShader
+    'uSampler',             // reserved key as the input texture to a filter
+    'uProjectionMatrix',    // reserved key as the precalculated projection matrix
+];
+
 /**
  * @class
  * @memberof filters
@@ -59,8 +65,8 @@ export default class Filter extends render.Shader
 
         for (const k in uniforms)
         {
-            // __data is reserved, uSampler is input texture, uProjectionMatrix is set automatically
-            if (k === '__data' || k === 'uSampler' || k === 'uProjectionMatrix') continue;
+            // skip reserved names
+            if (reservedUniforms.indexOf(k) !== -1) continue;
 
             values[k] = uniforms[k];
         }

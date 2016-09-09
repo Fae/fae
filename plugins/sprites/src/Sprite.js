@@ -5,9 +5,8 @@ import SpriteComponent from './SpriteComponent';
 import SpriteRenderer from './SpriteRenderer';
 
 /**
- * A Sprite is a textured SceneObject. It is implemented as a quad
- * with a texture drawn on it. You can modify properties to make it
- * render differently, including assinging custom shaders.
+ * A Sprite is a textured entity. It is implemented as a quad
+ * with a texture drawn on it.
  *
  * @class
  * @mixes VisibilityComponent

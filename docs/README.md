@@ -4,7 +4,12 @@
 
 - [Overview](#overview)
 - [Philosophy](#philosophy)
-- [Get Started](#start)
+- [Getting Started][GettingStarted.md]
+- [Building Plugins](BuildingPlugins.md)
+ * [Composing Entities](ComposingEntities.md)
+ * [Custom Components](CustomComponents.md)
+ * [Custom Systems](CustomSystems.md)
+
 
 <a name="overview"></a>
 ## Overview
@@ -82,22 +87,8 @@ elsewhere. For example, components can be reused over and over (with their assoc
 in new Entities as much as is imaginable. You don't have to extend the `Sprite` class to
 have the `SpriteRenderer` render your texture. You just need the right components and system!
 
-<a name="start"></a>
-## Get Started
-
-If you are ready to get started with Fae, you can head over to the [Getting Started][start]
-guide.
-
-If you want to get started builing plugins for Fae or contributing to the core suite, please
-take a moment to read this document in its entirity as well as our [Contributing Guide][contributing]
-and [Code of Conduct][coc]. It may take a few minutes to read through it all, but it will
-make the community better and your time working with Fae easier to do so.
-
 <!-- Links -->
 
-[start]: GettingStarted.md
-[contributing]: ../.github/CONTRIBUTING.md
-[coc]: ../CODE_OF_CONDUCT.md
 [modularity]: https://en.wikipedia.org/wiki/Modularity
 [unix-phil]: https://en.wikipedia.org/wiki/Unix_philosophy
 [ecs]: https://en.wikipedia.org/wiki/Entity_component_system

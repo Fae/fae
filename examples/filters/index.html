@@ -11,50 +11,8 @@
             // custom sprite
             class FilteredSprite extends Fae.sprites.Sprite.with(
                 Fae.filters.FilterComponent,
-                Fae.shapes.BoundsComponent
-            ) {
-                _updateBounds() {
-                    this._bounds.clear();
-
-                    if (!this.visible) return;
-
-                    const trim = sprite._texture.trim;
-                    const orig = sprite._texture.orig;
-
-                    if (!trim || (trim.width === orig.width && trim.height === orig.height)) {
-                        this._bounds.addQuad(this.vertexData);
-                    }
-                    else {
-                        const wt = sprite.transform.worldTransform;
-                        const a = wt.a;
-                        const b = wt.b;
-                        const c = wt.c;
-                        const d = wt.d;
-                        const tx = wt.tx;
-                        const ty = wt.ty;
-
-                        const w0 = (orig.width) * (1 - sprite._anchorX);
-                        const w1 = (orig.width) * -sprite._anchorX;
-
-                        const h0 = orig.height * (1 - sprite._anchorY);
-                        const h1 = orig.height * -sprite._anchorY;
-
-                        this._bounds.addQuad([
-                            (a * w1) + (c * h1) + tx,
-                            (d * h1) + (b * w1) + ty,
-
-                            (a * w0) + (c * h1) + tx,
-                            (d * h1) + (b * w0) + ty,
-
-                            (a * w0) + (c * h0) + tx,
-                            (d * h0) + (b * w0) + ty,
-
-                            (a * w1) + (c * h0) + tx,
-                            (d * h0) + (b * w1) + ty,
-                        ]);
-                    }
-                }
-            }
+                Fae.shapes.SpriteBoundsComponent
+            ) { }
 
             // load an image and create a sprite
             const img = new Image();

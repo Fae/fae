@@ -21,13 +21,15 @@ export default function FilterComponent(Base)
             this.filters = [];
 
             /**
-             * The area to use to filter, relative to the object's frame.
+             * The area to use to filter, relative to the object's frame. Either this
+             * rectangle must exist, or the entity needs to have the bounds component.
+             *
+             * When rendering filters the system tries to get this value, and if it
+             * doesn't exist calls `getBounds()` instead.
              *
              * @member {Rectangle}
              */
             this.filterArea = null;
-
-            this.filterPadding = 0;
         }
     };
 }

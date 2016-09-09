@@ -14,20 +14,20 @@
 
 **Website**: Coming Soon<br />
 **Discord**: https://discord.gg/qghcMmr<br />
-**Docs/Guides**: Coming Soon<br />
+**Docs/Guides**: [Documentation](docs/README.md)<br />
 **Contribute**: [How to Contribute](#contributing)<br/>
 **Support**: [How to Support](#support)
 
 <a name="overview"></a>
 ## Overview
 
-Fae is meant to be a highly modular rendering framework. The primary target use-case for Fae is
+Fae is meant to be a highly modular ecosystem of modules. The primary target use-case for Fae is
 to be easily intregrable into larger application frameworks. However, the plugin library for Fae
 enables it to be useful to end users as well when used as a standalone framework.
 
 Fae contains some code that is originally based on [pixi.js](https://github.com/pixijs/pixi.js).
-However, Fae takes a different approach to rendering and modularity than pixi. Some notable differences
-in philosophy are:
+However, Fae takes a different approach to rendering and modularity than pixi. Some notable
+differences in philosophy are:
 
 - Fae is focused on WebGL
 - Fae uses a flat entity structure with z-ordering instead of a heirarchal scene tree
@@ -42,7 +42,7 @@ and a few other core design differences that result in a familiar but slightly d
 - [Get Involved](#get-involved)
 - [Overview](#overview)
 - [Download Fae](#download)
-- [Getting Started](#get-started)
+- [Getting Started](docs/GettingStarted.md)
 - [Support Fae](#support)
 - [Road Map](#roadmap)
 - [Contributing](#contributing)
@@ -101,11 +101,6 @@ For example:
 
 Note that only builds that succeed will have files on S3. If the build fails there will
 be no built files, so not every git-sha in the history may work.
-
-<a name="get-started"></a>
-## Getting Started
-
-Coming Soon.
 
 <a name="support"></a>
 ## Support

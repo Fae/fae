@@ -154,9 +154,9 @@ export default class FilterRenderSystem extends ecs.System
      */
     _setAutomaticUniforms(filter)
     {
-        if (filter.values.filterArea)
+        if (filter.values.uFilterArea)
         {
-            const area = filter.values.filterArea;
+            const area = filter.values.uFilterArea;
 
             area[0] = FilterUtils.activeRenderTarget.size.x;
             area[1] = FilterUtils.activeRenderTarget.size.y;
@@ -164,24 +164,15 @@ export default class FilterRenderSystem extends ecs.System
             area[3] = FilterUtils.activeBounds.y;
         }
 
-        if (filter.values.filterClamp)
+        if (filter.values.uFilterClamp)
         {
-            const clamp = filter.values.filterClamp;
+            const clamp = filter.values.uFilterClamp;
 
             clamp[0] = 0.5 / FilterUtils.activeRenderTarget.size.x;
             clamp[1] = 0.5 / FilterUtils.activeRenderTarget.size.y;
             clamp[2] = (FilterUtils.activeBounds.width - 0.5) / FilterUtils.activeRenderTarget.size.x;
             clamp[3] = (FilterUtils.activeBounds.height - 0.5) / FilterUtils.activeRenderTarget.size.y;
         }
-
-        // TODO: How do users set textures on a filter? Right now, the auto detection
-        // would accept a number. Maybe special handling at the `Shader` level to handle
-        // special types that are easier to work as objects?
-        // Maybe after shader inits, iterate through the uniform accessors and override
-        // ones of complex types (`sampler2D`, `mat3`, `vec2`, etc.)
-        //
-        // Pixi keeps filter props separate and copies them here, but I think this problem
-        // is on the shader level as well...
     }
 }
 
