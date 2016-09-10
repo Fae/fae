@@ -131,7 +131,7 @@ export default class FilterRenderSystem extends ecs.System
         {
             gl.disable(gl.SCISSOR_TEST);
             output.clear();
-            gl.disable(gl.SCISSOR_TEST);
+            gl.enable(gl.SCISSOR_TEST);
         }
 
         state.setShader(filter);
