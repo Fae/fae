@@ -42,7 +42,6 @@ and a few other core design differences that result in a familiar but slightly d
 - [Get Involved](#get-involved)
 - [Overview](#overview)
 - [Download Fae](#download)
-- [Getting Started](docs/GettingStarted.md)
 - [Support Fae](#support)
 - [Road Map](#roadmap)
 - [Contributing](#contributing)
