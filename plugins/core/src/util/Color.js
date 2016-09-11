@@ -261,8 +261,6 @@ export default class Color
     /**
      * Randomizes the color components to create a random color.
      *
-     * @param {number} alpha - An override for the alpha value, if set the color will use
-     * this instead of a random value.
      * @return {Color} returns itself.
      */
     randomize()
@@ -342,7 +340,6 @@ export default class Color
      * Checks for equality with another color.
      *
      * @param {Color} color - The color to check equality against.
-     * @param {boolean} ignoreAlpha -
      * @return {boolean} True if they are equal.
      */
     equals(color)

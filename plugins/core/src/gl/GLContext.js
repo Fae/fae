@@ -3,6 +3,11 @@
  * @memberof glutil
  */
 export default {
+    defaultOptions: {
+        alpah: true,
+        antialias: false,
+        premultipliedAlpha: true,
+    },
     /**
      * Helper function to create a webGL Context.
      *
@@ -13,7 +18,7 @@ export default {
      *  for the options available
      * @return {WebGLRenderingContext} the WebGL context
      */
-    create(canvas, options)
+    create(canvas, options = this.defaultOptions)
     {
         const gl = canvas.getContext('webgl2', options)
             || canvas.getContext('experimental-webgl2', options)

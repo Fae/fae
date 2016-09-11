@@ -138,7 +138,7 @@ export default class RenderTarget
      */
     clear(color = this.clearColor)
     {
-        this.framebuffer.clear(color.r, color.g, color.b, color.a);
+        this.framebuffer.clear(color.red, color.green, color.blue, color.alpha);
 
         return this;
     }
