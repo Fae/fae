@@ -58,6 +58,7 @@ export default class RenderTarget
         this.framebuffer = null;
 
         this.clearColor = Color.BLACK.clone();
+        this.clearAlpha = 1.0;
 
         this.size = new Vector2d();
 
@@ -133,12 +134,13 @@ export default class RenderTarget
      * Clears the target with a single color. Usually called each from to clear the buffer.
      * If you pass an array it must be in the format: `[red, green, blue, alpha]`.
      *
-     * @param {Color|number[]|Float32Array} color - The color to clear with.
+     * @param {Color} color - The color to clear with.
+     * @param {number} alpha - The alpha of the clear.
      * @return {RenderTarget} Returns itself.
      */
-    clear(color = this.clearColor)
+    clear(color = this.clearColor, alpha = this.clearAlpha)
     {
-        this.framebuffer.clear(color.red, color.green, color.blue, color.alpha);
+        this.framebuffer.clear(color.red, color.green, color.blue, alpha);
 
         return this;
     }
