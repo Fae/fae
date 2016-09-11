@@ -287,6 +287,7 @@ export default class TextureSource
         {
             glTexture = new glutil.GLTexture(renderer.gl);
             glTexture.premultiplyAlpha = true;
+            glTexture.upload(this._source);
 
             this._glTextures[renderer.uid] = glTexture;
 
