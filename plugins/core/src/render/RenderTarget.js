@@ -140,7 +140,13 @@ export default class RenderTarget
      */
     clear(color = this.clearColor, alpha = this.clearAlpha)
     {
+        const wasNormalized = color.normalized;
+
+        if (!wasNormalized) color.normalize();
+
         this.framebuffer.clear(color.red, color.green, color.blue, alpha);
+
+        if (!wasNormalized) color.denormalize();
 
         return this;
     }
